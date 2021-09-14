@@ -28,7 +28,7 @@
     <div id="wrapper">
 
         <!-- Sidebar -->
-		<ul th:replace="base :: menu_lateral"></ul>
+        <ul th:replace="base :: menu_lateral"></ul>
         <!-- End of Sidebar -->
 
         <!-- Content Wrapper -->
@@ -69,51 +69,33 @@
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <div class="d-sm-flex align-items-center justify-content-between mb-4 ">
-                        <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                        <h1 class="h3 mb-0 text-gray-800">Todas as Atividades</h1>
                         <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
                                 class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
                     </div>
 
-                    <!-- Content Row -->
-                    <div class="row">
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <a th:href="@{/todas}" class="btn btn-primary btn-icon-split btn-lg">
-                                <span class="icon text-white-50">
-                                    <i class="fas fa-flag"></i>
-                                </span>
-                                <span class="text">Procure por uma atividade</span>
-                            </a>
-                        </div>
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <a th:href="@{/atividadesForm}" class="btn btn-primary btn-icon-split btn-lg">
-                                <span class="icon text-white-50">
-                                    <i class="fas fa-flag"></i>
-                                </span>
-                                <span class="text">Cadastrar atividade</span>
-                            </a>
-                        </div>
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <a th:href="@{/userAtividades}" class="btn btn-primary btn-icon-split btn-lg">
-                                <span class="icon text-white-50">
-                                    <i class="fas fa-flag"></i>
-                                </span>
-                                <span class="text">Minhas atividades</span>
-                            </a>
-                        </div>
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <a href="#" class="btn btn-primary btn-icon-split btn-lg">
-                                <span class="icon text-white-50">
-                                    <i class="fas fa-flag"></i>
-                                </span>
-                                <span class="text">Últimas atividades</span>
-                            </a>
-                        </div>
-                    </div>
+                    <div class="col-lg-11 mb-4">
 
-                    <!-- Content Row -->
+                        <!-- Atividades -->
+                        <div class="card shadow mb-4" th:each="atividade : ${atividades}">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary" th:text="${atividade.nomeAtividade}">Nome da atividade</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="text-center">
+                                    <img class="img-fluid px-3 px-sm-4 mt-3 mb-4" style="width: 25rem;"
+                                        src="img/undraw_posting_photo.svg" alt="...">
+                                </div>
+                                <p>Local: <span th:text="${atividade.enderecoLocal} + ', ' + ${atividade.cidade} + ', ' + ${atividade.uf}"></span></p>
+                                <p>Tipo: <span th:text="${atividade.tipoAtividade}"></span></p>
+                                <p>Descrição: <span th:text="${atividade.descricao}"></span></p>
+                                <p>Quando: <span th:text="${#temporals.format(atividade.dataAtividade, 'dd/MM/yyyy')}"></span></p>
+                                <p>Cadastrado por: <span th:text="${atividade.nomeCompletoUsuario}"></span></p>
+                                <a target="_blank" rel="nofollow" href="https://undraw.co/">Participar &rarr;</a>
+                            </div>
+                        </div>
 
-                    <div class="row">
 
                     </div>
 

@@ -1,10 +1,15 @@
 package com.example.demo.model;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
@@ -35,6 +40,13 @@ public class User {
 	
 	private Boolean enabled;
 	
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.LAZY)
+	private List<Atividade> atividades;
+	
+	
+	public Long getId() {
+		return id;
+	}
 	public String getPrimeiroNome() {
 		return primeiroNome;
 	}
