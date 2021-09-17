@@ -14,6 +14,8 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "users")
 public class User {
@@ -41,6 +43,7 @@ public class User {
 	private Boolean enabled;
 	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.LAZY)
+	@JsonIgnore
 	private List<Atividade> atividades;
 	
 	

@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import java.io.IOException;
 import java.security.Principal;
 import java.time.LocalDate;
 import java.util.List;
@@ -20,12 +21,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.example.demo.api.CoordenadasApi;
 import com.example.demo.dto.RequisicaoNovaAtividade;
 import com.example.demo.model.Atividade;
 import com.example.demo.model.EstadoAtividade;
 import com.example.demo.model.User;
 import com.example.demo.repository.AtividadeRepository;
 import com.example.demo.repository.UserRepository;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.maps.GeocodingApi;
+import com.google.maps.errors.ApiException;
+import com.google.maps.model.GeocodingResult;
 
 @Controller
 @RequestMapping
@@ -75,7 +82,7 @@ public class AtividadeController {
 		
 		if (atividade.getDataAtividade().isBefore(LocalDate.now()))
 			atividade.setEstadoAtividade(EstadoAtividade.JÁ_OCORRIDO);
-
+		
 		atividadeRepository.save(atividade);
 		
 		return "redirect:/userAtividades";
@@ -92,7 +99,7 @@ public class AtividadeController {
 	
 	@GetMapping("/userAtividadesConfirmadas")
 	public String minhasAtividadesConfirmadas(Model model, Principal principal) {				
-		List<Atividade> atividades = atividadeRepository.findAllByUsuarioConfirmado(principal.getName());
+		List<Atividade> atividades = atividadeRepository.findAllByUsuarioEEstado(principal.getName(), EstadoAtividade.CONFIRMADO);
 		
 		model.addAttribute("atividades", atividades);
 		
@@ -101,7 +108,7 @@ public class AtividadeController {
 	
 	@GetMapping("/userAtividadesCanceladas")
 	public String minhasAtividadesCanceladas(Model model, Principal principal) {
-		List<Atividade> atividades = atividadeRepository.findAllByUsuarioCancelado(principal.getName());
+		List<Atividade> atividades = atividadeRepository.findAllByUsuarioEEstado(principal.getName(), EstadoAtividade.CANCELADO);
 		
 		model.addAttribute("atividades", atividades);
 		
@@ -110,7 +117,7 @@ public class AtividadeController {
 	
 	@GetMapping("/userAtividadesOcorridas")
 	public String minhasAtividadesJaOcorridas(Model model, Principal principal) {
-		List<Atividade> atividades = atividadeRepository.findAllByUsuarioJaOcorrido(principal.getName());
+		List<Atividade> atividades = atividadeRepository.findAllByUsuarioEEstado(principal.getName(), EstadoAtividade.JÁ_OCORRIDO);
 		
 		model.addAttribute("atividades", atividades);
 		
@@ -132,4 +139,13 @@ public class AtividadeController {
 		
 		return mav;
 	}
+	
+	
+	public void obterCoordenadas(String endereco) throws ApiException, InterruptedException, IOException {
+		GeocodingResult[] results = GeocodingApi.geocode(CoordenadasApi.getContexto(), endereco).await();
+		Gson gson = new GsonBuilder().setPrettyPrinting().create();
+		
+		System.out.println(gson.toJson(results[0].geometry.location));
+	}
+	
 }

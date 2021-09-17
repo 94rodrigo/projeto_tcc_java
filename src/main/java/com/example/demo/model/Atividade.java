@@ -1,5 +1,6 @@
 package com.example.demo.model;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -14,7 +15,14 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.example.demo.api.CoordenadasApi;
 import com.example.demo.dto.RequisicaoNovaAtividade;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.maps.GeocodingApi;
+import com.google.maps.errors.ApiException;
+import com.google.maps.model.GeocodingResult;
 
 @Entity
 @Table(name = "atividades")
@@ -47,12 +55,12 @@ public class Atividade {
 	private EstadoAtividade estadoAtividade;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
+	@JsonIgnore
 	private User user;
 	
 	@Column(name = "user_email")
 	private String userEmail;
 
-	
 	public Long getId() {
 		return id;
 	}
@@ -162,4 +170,22 @@ public class Atividade {
 		return requisicao;
 	}
 	
+	public String getEnderecoMapas() {
+		String enderecoNormal = enderecoLocal + ", " + cidade + ", " + uf;
+		String enderecoConvertido = enderecoNormal.replace("%", "%25").replace(" ", "%20").replace("\"", "%22").replace("<", "%3C")
+			.replace(">", "%3E").replace("#", "%23").replace("|", "%7C");
+		return enderecoConvertido;
+	}
+	
+	public String getEnderecoCompleto() {
+		return enderecoLocal + ", " + cidade + ", " + uf + ", Brasil";
+	}
+	
+	public String getCoordenadas() throws ApiException, InterruptedException, IOException {
+		GeocodingResult[] results = GeocodingApi.geocode(CoordenadasApi.getContexto(), getEnderecoCompleto()).await();
+		Gson gson = new GsonBuilder().setPrettyPrinting().create();
+		
+		String json = gson.toJson(results[0].geometry.location);
+		return json;
+	}
 }
