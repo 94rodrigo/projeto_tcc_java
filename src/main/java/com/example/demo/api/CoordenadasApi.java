@@ -10,12 +10,12 @@ import com.google.maps.GeoApiContext;
 @Component
 public class CoordenadasApi {
 
-	private static final String API_KEY = "AIzaSyD7rq2Nx5IvUcJUWpGBm6iaxamNvOL5oy8";
+	
 	private static GeoApiContext contexto = null;
 	
 	@Bean
 	@Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
-	public GeoApiContext getGeoApiContext() {
+	public GeoApiContext getGeoApiContext(String API_KEY) {
 		System.out.println("passei por aqui");
 		if (contexto == null) {
 			contexto = new GeoApiContext.Builder().apiKey(API_KEY).build();
