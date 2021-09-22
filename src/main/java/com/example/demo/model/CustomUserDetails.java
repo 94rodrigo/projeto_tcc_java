@@ -53,4 +53,7 @@ public class CustomUserDetails implements UserDetails{
 		return user.getPrimeiroNome() + " " + user.getUltimoNome();
 	}
 
+	public User getUser() {
+		return user;
+	}
 }

@@ -1,9 +1,14 @@
 package com.example.demo.model;
 
 import java.io.IOException;
+import java.security.Principal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -12,11 +17,17 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+
 import com.example.demo.api.CoordenadasApi;
 import com.example.demo.dto.RequisicaoNovaAtividade;
+import com.example.demo.repository.AtividadeRepository;
+import com.example.demo.repository.UserRepository;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -60,6 +71,9 @@ public class Atividade {
 	
 	@Column(name = "user_email")
 	private String userEmail;
+	
+	@ManyToMany(cascade = CascadeType.ALL, mappedBy = "atividadesQueUsuariosParticipa")
+	private List<User> usuariosCadastradosNaAtividade = new ArrayList<>();
 
 	public Long getId() {
 		return id;
@@ -188,4 +202,25 @@ public class Atividade {
 		String json = gson.toJson(results[0].geometry.location);
 		return json;
 	}
+	
+	public List<User> getUsuariosCadastradosNaAtividade() {
+		return usuariosCadastradosNaAtividade;
+	}
+
+	public void setUsuariosCadastradosNaAtividade(List<User> usuariosCadastradosNaAtividade) {
+		this.usuariosCadastradosNaAtividade = usuariosCadastradosNaAtividade;
+	}
+
+	public void incluirUsuario(User user) {
+		usuariosCadastradosNaAtividade.add(user);
+	}
+	
+	public Integer getUsuariosAtividade() {
+		return usuariosCadastradosNaAtividade.size(); 
+	}
+	
+	public Boolean getUsuarioParticipando(User user) {
+		return usuariosCadastradosNaAtividade.contains(user);
+	}
+	
 }

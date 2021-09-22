@@ -45,9 +45,10 @@ public class AtividadeController {
 	private UserRepository userRepository;
 	
 	@GetMapping("/todas")
-	public String todasAsAtividades(Model model) {
-		List<Atividade> atividades = atividadeRepository.findAll();
+	public String todasAsAtividades(Model model, Principal principal) {
+		List<Atividade> atividades = atividadeRepository.findAllByDataAtual(EstadoAtividade.CONFIRMADO);
 		model.addAttribute("atividades", atividades);
+		model.addAttribute("usuarioLogado", userRepository.findByEmail(principal.getName()));
 		return "atividade/atividades_todas";
 	}
 	
@@ -99,7 +100,7 @@ public class AtividadeController {
 	
 	@GetMapping("/userAtividadesConfirmadas")
 	public String minhasAtividadesConfirmadas(Model model, Principal principal) {				
-		List<Atividade> atividades = atividadeRepository.findAllByUsuarioEEstado(principal.getName(), EstadoAtividade.CONFIRMADO);
+		List<Atividade> atividades = atividadeRepository.findAllByUsuarioEDataAtual(principal.getName());
 		
 		model.addAttribute("atividades", atividades);
 		
@@ -117,8 +118,7 @@ public class AtividadeController {
 	
 	@GetMapping("/userAtividadesOcorridas")
 	public String minhasAtividadesJaOcorridas(Model model, Principal principal) {
-		List<Atividade> atividades = atividadeRepository.findAllByUsuarioEEstado(principal.getName(), EstadoAtividade.JÁ_OCORRIDO);
-		
+		List<Atividade> atividades = atividadeRepository.findAllByUsuarioEDataAnterior(principal.getName());		
 		model.addAttribute("atividades", atividades);
 		
 		return "atividade/minhas_atividades";
@@ -140,6 +140,11 @@ public class AtividadeController {
 		return mav;
 	}
 	
+	@RequestMapping(path = "/atividade/{id}/cancelar", method = RequestMethod.POST)
+	public String cancelarAtividade(@PathVariable Long id) {
+		atividadeRepository.alterarEstadoAtividade(EstadoAtividade.CANCELADO, id);
+		return "redirect:/userAtividades";
+	}
 	
 	public void obterCoordenadas(String endereco) throws ApiException, InterruptedException, IOException {
 		GeocodingResult[] results = GeocodingApi.geocode(CoordenadasApi.getContexto(), endereco).await();

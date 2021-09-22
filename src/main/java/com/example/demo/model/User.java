@@ -1,5 +1,6 @@
 package com.example.demo.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -9,6 +10,9 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
@@ -45,6 +49,13 @@ public class User {
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.LAZY)
 	@JsonIgnore
 	private List<Atividade> atividades;
+	
+	@ManyToMany
+	@JoinTable(
+			name = "user_atividades",
+			joinColumns = {@JoinColumn(name = "user_id")},
+			inverseJoinColumns = {@JoinColumn(name = "atividade_id")})
+	private List<Atividade> atividadesQueUsuariosParticipa = new ArrayList<>();
 	
 	
 	public Long getId() {
@@ -83,4 +94,27 @@ public class User {
 	public String getNomeCompleto() {
 		return primeiroNome + " " + ultimoNome;
 	}
+	
+	public void adicionarAtividade(Atividade atividade) {
+		atividadesQueUsuariosParticipa.add(atividade);
+	}
+	
+	public Integer getAtividadeUsuarios() {
+		return atividadesQueUsuariosParticipa.size(); 
+	}
+	
+	public User getUser() {
+		return this;
+	}
+	public List<Atividade> getAtividadesQueUsuariosParticipa() {
+		return atividadesQueUsuariosParticipa;
+	}
+	public void setAtividadesQueUsuariosParticipa(List<Atividade> atividadesQueUsuariosParticipa) {
+		this.atividadesQueUsuariosParticipa = atividadesQueUsuariosParticipa;
+	}
+	
+	public Boolean isUsuarioConfirmado(Atividade atividade) {
+		return this.atividadesQueUsuariosParticipa.contains(atividade);
+	}
+	
 }

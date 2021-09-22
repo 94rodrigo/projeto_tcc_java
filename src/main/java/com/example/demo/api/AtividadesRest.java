@@ -28,4 +28,5 @@ public class AtividadesRest {
 	public List<Atividade> getAtividadesConfirmadas(){
 		return atividadeRepository.findAllByEstado(EstadoAtividade.CONFIRMADO);
 	}
+	
 }
