@@ -91,7 +91,7 @@
                     <div class="col-lg-11 mb-4" id="atividades">
 
                         <!-- Atividades -->
-                        <div class="card shadow mb-4" th:each="atividade : ${atividades}">
+                        <div class="card shadow mb-4 mt-4" th:each="atividade : ${atividades}">
                             <div class="card-header py-3">
                                 <h6 class="m-0 font-weight-bold text-primary" th:text="${atividade.nomeAtividade}">Nome da atividade</h6>
                             </div>
@@ -107,12 +107,12 @@
                                 <div th:with="usuario=${#authentication.getPrincipal().getUser().getEmail()}">
                                 	<div th:if="${atividade.usuariosCadastradosNaAtividade.contains(usuarioLogado)}">
 		                                <form th:action="@{'/atividade/cancelar_participacao/{id}'(id=${atividade.id})}" method="post">
-		                                	<button type="submit">Cancelar participação &rarr;</button>
+		                                	<button class="btn btn-danger" type="submit">Cancelar participação &rarr;</button>
 		                                </form>
                                 	</div>
                                 	<div th:unless="${atividade.usuariosCadastradosNaAtividade.contains(usuarioLogado)}">
 		                                <form th:action="@{'atividade/participar/{id}'(id=${atividade.id})}" method="post">
-		                                	<button type="submit">Participar &rarr;</button>
+		                                	<button class="btn btn-success" type="submit">Participar &rarr;</button>
 		                                </form>
                                 	</div>
                                 </div>
