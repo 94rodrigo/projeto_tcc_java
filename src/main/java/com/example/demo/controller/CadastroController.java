@@ -2,7 +2,6 @@ package com.example.demo.controller;
 
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +39,7 @@ public class CadastroController {
 	}
 	
 	@PostMapping("/cadastro")
-	public String novoUsuario(@Valid User user, BindingResult result, HttpServletRequest request) {
+	public String novoUsuario(@Valid User user, BindingResult result, Model model) {
 		User usuarioExiste = userService.findByEmail(user.getEmail());
 		System.out.println(usuarioExiste);
 		
@@ -57,8 +56,11 @@ public class CadastroController {
 			return "cadastro";
 		}
 		
+		model.addAttribute("message", "Valid form");
 		String encodedPassword = bCryptPasswordEncoder.encode(user.getSenha());
+		String encodedPasswordConfirm = bCryptPasswordEncoder.encode(user.getConfirmacaoSenha());
 		user.setSenha(encodedPassword);
+		user.setConfirmacaoSenha(encodedPasswordConfirm);
 		user.setEnabled(true);
 		userService.saveUser(user);
 		

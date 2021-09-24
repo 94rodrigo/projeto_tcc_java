@@ -18,8 +18,16 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
+import com.example.demo.validadores.FieldMatch;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+@FieldMatch.List({
+	@FieldMatch(
+		field = "senha",
+		fieldMatch = "confirmacaoSenha",
+		message = "Senhas digitadas devem ser idênticas"
+	)
+})
 @Entity
 @Table(name = "users")
 public class User {
@@ -43,6 +51,9 @@ public class User {
 	
 	@NotBlank
 	private String senha;
+	
+	@NotBlank
+	private String confirmacaoSenha;
 	
 	private Boolean enabled;
 	
@@ -85,6 +96,12 @@ public class User {
 	public void setSenha(String senha) {
 		this.senha = senha;
 	}
+	public String getConfirmacaoSenha() {
+		return confirmacaoSenha;
+	}
+	public void setConfirmacaoSenha(String confirmacaoSenha) {
+		this.confirmacaoSenha = confirmacaoSenha;
+	}
 	public Boolean getEnabled() {
 		return enabled;
 	}
@@ -116,5 +133,4 @@ public class User {
 	public Boolean isUsuarioConfirmado(Atividade atividade) {
 		return this.atividadesQueUsuariosParticipa.contains(atividade);
 	}
-	
 }

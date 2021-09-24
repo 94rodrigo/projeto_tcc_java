@@ -1,12 +1,10 @@
 package com.example.demo.model;
 
 import java.io.IOException;
-import java.security.Principal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -21,13 +19,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-
 import com.example.demo.api.CoordenadasApi;
 import com.example.demo.dto.RequisicaoNovaAtividade;
-import com.example.demo.repository.AtividadeRepository;
-import com.example.demo.repository.UserRepository;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -88,7 +81,12 @@ public class Atividade {
 	}
 
 	public String getTipoAtividade() {
-		return tipoAtividade;
+		String[] tipos = {"Corrida", "Caminhada", "Ciclismo", "Esportes coletivos", "Natação", "Musculação", "Treino funcional", "Outros"};
+		int posicao = (Integer.parseInt(tipoAtividade) - 1); 
+		if (posicao < 0 || posicao >= tipos.length)
+			return null;
+		
+		return tipos[posicao];
 	}
 
 	public void setTipoAtividade(String tipoAtividade) {
