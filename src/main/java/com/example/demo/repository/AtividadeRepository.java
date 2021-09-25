@@ -38,5 +38,6 @@ public interface AtividadeRepository extends JpaRepository<Atividade, Long>{
 	@Query("update Atividade a set a.estadoAtividade = :estado where a.id = :id")
 	void alterarEstadoAtividade(@Param("estado") EstadoAtividade estado, @Param("id") Long id);
 	
-	
+	@Query("select a from Atividade a where a.nomeAtividade like %?1%")
+	List<Atividade> buscaNomeAtividadeOuDescricao(String keyword);
 }

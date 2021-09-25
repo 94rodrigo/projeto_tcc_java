@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,6 +29,7 @@ import com.example.demo.model.EstadoAtividade;
 import com.example.demo.model.User;
 import com.example.demo.repository.AtividadeRepository;
 import com.example.demo.repository.UserRepository;
+import com.example.demo.service.AtividadeService;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.maps.GeocodingApi;
@@ -43,6 +45,9 @@ public class AtividadeController {
 	
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	private AtividadeService atividadeService;
 	
 	@GetMapping("/todas")
 	public String todasAsAtividades(Model model, Principal principal) {
@@ -151,6 +156,19 @@ public class AtividadeController {
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		
 		System.out.println(gson.toJson(results[0].geometry.location));
+	}
+	
+	@RequestMapping("/resultados")
+	private String resultadosBusca(Model model, @Param("keyword") String keyword, Principal principal) {
+		List<Atividade> atividades = atividadeService.listarResultados(keyword);
+		model.addAttribute("atividades", atividades);
+		model.addAttribute("keyword", keyword);
+		model.addAttribute("usuarioLogado", userRepository.findByEmail(principal.getName()));
+		System.out.println(keyword);
+		for (Atividade atividade : atividades) {
+			System.out.println(atividade.getNomeAtividade());
+		}
+		return "atividade/atividades_todas";
 	}
 	
 }
