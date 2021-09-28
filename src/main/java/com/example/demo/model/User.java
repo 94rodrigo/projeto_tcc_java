@@ -49,10 +49,17 @@ public class User {
 	@Column(unique = true)
 	private String email;
 	
+	@Pattern(regexp = "^[A-Z]{2}$")
+	private String uf;
+	
+	@NotBlank
+	private String municipio;
+	
 	@NotBlank
 	private String senha;
 	
 	@NotBlank
+	@Column(name = "confirmacao_senha")
 	private String confirmacaoSenha;
 	
 	private Boolean enabled;
@@ -68,6 +75,9 @@ public class User {
 			inverseJoinColumns = {@JoinColumn(name = "atividade_id")})
 	private List<Atividade> atividadesQueUsuariosParticipa = new ArrayList<>();
 	
+	
+	public User() {
+	}
 	
 	public Long getId() {
 		return id;
@@ -132,5 +142,26 @@ public class User {
 	
 	public Boolean isUsuarioConfirmado(Atividade atividade) {
 		return this.atividadesQueUsuariosParticipa.contains(atividade);
+	}
+	public String getUf() {
+		return uf;
+	}
+	public void setUf(String uf) {
+		this.uf = uf;
+	}
+	public String getMunicipio() {
+		return municipio;
+	}
+	public void setMunicipio(String municipio) {
+		this.municipio = municipio;
+	}
+	public List<Atividade> getAtividades() {
+		return atividades;
+	}
+	public void setAtividades(List<Atividade> atividades) {
+		this.atividades = atividades;
+	}
+	public void setId(Long id) {
+		this.id = id;
 	}
 }

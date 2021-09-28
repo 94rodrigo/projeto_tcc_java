@@ -57,13 +57,12 @@ public class CadastroController {
 		}
 		
 		model.addAttribute("message", "Valid form");
+		System.out.println("Controller: " + user.getSenha().equals(user.getConfirmacaoSenha()));
 		String encodedPassword = bCryptPasswordEncoder.encode(user.getSenha());
-		String encodedPasswordConfirm = bCryptPasswordEncoder.encode(user.getConfirmacaoSenha());
 		user.setSenha(encodedPassword);
-		user.setConfirmacaoSenha(encodedPasswordConfirm);
+		user.setConfirmacaoSenha(encodedPassword);
 		user.setEnabled(true);
 		userService.saveUser(user);
-		
 		return "login";
 	}
 }

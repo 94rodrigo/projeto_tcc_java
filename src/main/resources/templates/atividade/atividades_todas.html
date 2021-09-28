@@ -221,6 +221,7 @@
 	    
 	    function coordenadasMedias(locations) {
 	        let coordenadas = [];
+	        
 	        let longitude = 0;
 	        let latitude = 0;
 	        locations.forEach(element => {
@@ -232,7 +233,21 @@
 	        coordenadas.push(longitude / locations.length);
 	        return coordenadas;
 	    }
-	
+	    
+	    function success(pos){
+	        let crd = pos.coords;
+	        let vetor = [];
+	        vetor.push(crd.latitude);
+	        vetor.push(crd.longitude);
+	        return vetor;
+	    }
+	    
+	    function error(err){
+	        console.warn(`ERROR ${err.code}: ${err.message}`);
+	        return null;
+	    }
+	    
+		
 	</script>
     
     <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>

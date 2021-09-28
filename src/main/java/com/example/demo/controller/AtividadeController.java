@@ -164,10 +164,6 @@ public class AtividadeController {
 		model.addAttribute("atividades", atividades);
 		model.addAttribute("keyword", keyword);
 		model.addAttribute("usuarioLogado", userRepository.findByEmail(principal.getName()));
-		System.out.println(keyword);
-		for (Atividade atividade : atividades) {
-			System.out.println(atividade.getNomeAtividade());
-		}
 		return "atividade/atividades_todas";
 	}
 	
