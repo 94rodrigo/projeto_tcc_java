@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -87,6 +88,15 @@ public class Atividade {
 			return null;
 		
 		return tipos[posicao];
+	}
+	
+	public String[] getArrayTipos() {
+		String[] tipos = {"Corrida", "Caminhada", "Ciclismo", "Esportes coletivos", "Natação", "Musculação", "Treino funcional", "Outros"};
+		return tipos;
+	}
+	
+	public int getNumeroAtividade(String tipo) {
+		return Arrays.asList(getArrayTipos()).indexOf(tipo);
 	}
 
 	public void setTipoAtividade(String tipoAtividade) {

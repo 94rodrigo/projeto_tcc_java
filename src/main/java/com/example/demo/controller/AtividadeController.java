@@ -50,10 +50,19 @@ public class AtividadeController {
 	private AtividadeService atividadeService;
 	
 	@GetMapping("/todas")
-	public String todasAsAtividades(Model model, Principal principal) {
-		List<Atividade> atividades = atividadeRepository.findAllByDataAtual(EstadoAtividade.CONFIRMADO);
+	public String todasAsAtividades(Model model, Principal principal, String tipo) {
+//		List<Atividade> atividades = atividadeRepository.findAllByDataAtual(EstadoAtividade.CONFIRMADO);
+		User usuarioLogado = userRepository.findByEmail(principal.getName());
+		String municipio = usuarioLogado.getMunicipio();
+		String uf = usuarioLogado.getUf();
+		List<Atividade> atividades = atividadeRepository.findAllByDataAtualMunicipioUf(EstadoAtividade.CONFIRMADO, municipio, uf);
+
 		model.addAttribute("atividades", atividades);
-		model.addAttribute("usuarioLogado", userRepository.findByEmail(principal.getName()));
+		model.addAttribute("usuarioLogado", usuarioLogado);
+		
+//		model.addAttribute("tipoBusca", tipo);
+//		System.out.println(tipo);
+		
 		return "atividade/atividades_todas";
 	}
 	
@@ -84,12 +93,15 @@ public class AtividadeController {
 		atividade.setUser(user);
 		atividade.setUserEmail(user.getEmail());
 		atividade.setEstadoAtividade(EstadoAtividade.CONFIRMADO);
+		user.adicionarAtividade(atividade);
+		atividade.incluirUsuario(user);
 		
 		
 		if (atividade.getDataAtividade().isBefore(LocalDate.now()))
 			atividade.setEstadoAtividade(EstadoAtividade.JÁ_OCORRIDO);
 		
 		atividadeRepository.save(atividade);
+		userRepository.save(user);
 		
 		return "redirect:/userAtividades";
 	}
@@ -158,12 +170,40 @@ public class AtividadeController {
 		System.out.println(gson.toJson(results[0].geometry.location));
 	}
 	
+//	@RequestMapping("/resultados")
+//	private String resultadosBusca(Model model, @Param("keyword") String keyword, Principal principal) {
+//		List<Atividade> atividades = atividadeService.listarResultados(keyword);
+//		model.addAttribute("atividades", atividades);
+//		model.addAttribute("keyword", keyword);
+//		model.addAttribute("usuarioLogado", userRepository.findByEmail(principal.getName()));
+//		return "atividade/atividades_todas";
+//	}
+	
 	@RequestMapping("/resultados")
-	private String resultadosBusca(Model model, @Param("keyword") String keyword, Principal principal) {
-		List<Atividade> atividades = atividadeService.listarResultados(keyword);
+	private String resultadosBuscaPesquisa(Model model, @Param("keyword") String keyword, @Param("tipoBusca") String tipoBusca, Principal principal) {
+		List<Atividade> atividades;
+		
+		
+		switch (tipoBusca) {
+		case "0":
+			atividades = atividadeService.listarResultadosPorNomeOuDescricao(keyword);
+			break;
+		case "1":
+			atividades = atividadeService.listarResultadosPorTipoDeAtividade(keyword);
+			break;
+		case "2":
+			atividades = atividadeService.listarResultadosPorLocal(keyword);
+			break;
+		default:
+			return null;
+		}
+		
 		model.addAttribute("atividades", atividades);
 		model.addAttribute("keyword", keyword);
+		model.addAttribute("tipoBusca", tipoBusca);
+		System.out.println("Palavra buscada: " + keyword);
 		model.addAttribute("usuarioLogado", userRepository.findByEmail(principal.getName()));
+		System.out.println("Tipo: " + tipoBusca);
 		return "atividade/atividades_todas";
 	}
 	

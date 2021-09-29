@@ -1,5 +1,6 @@
 package com.example.demo.model;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,8 +19,14 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
+import com.example.demo.api.CoordenadasApi;
 import com.example.demo.validadores.FieldMatch;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.maps.GeocodingApi;
+import com.google.maps.errors.ApiException;
+import com.google.maps.model.GeocodingResult;
 
 @FieldMatch.List({
 	@FieldMatch(
@@ -163,5 +170,17 @@ public class User {
 	}
 	public void setId(Long id) {
 		this.id = id;
+	}
+	
+	public String getCidadeEstado() {
+		return getMunicipio() + ", " + getUf();
+	}
+	
+	public String getCoordenadas() throws ApiException, InterruptedException, IOException {
+		GeocodingResult[] results = GeocodingApi.geocode(CoordenadasApi.getContexto(), getCidadeEstado()).await();
+		Gson gson = new GsonBuilder().setPrettyPrinting().create();
+		
+		String json = gson.toJson(results[0].geometry.location);
+		return json;
 	}
 }

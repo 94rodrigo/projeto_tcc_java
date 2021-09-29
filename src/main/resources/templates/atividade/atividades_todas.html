@@ -93,6 +93,7 @@
                                 <p>Cadastrado por: <span th:text="${atividade.nomeCompletoUsuario}"></span></p>
                                 <p>Participantes: <span th:text="${atividade.usuariosAtividade}"></span> confirmados</p>
                                 <p hidden id="coordenadas"><span th:text="${atividade.coordenadas}"></span></p>
+                                <p hidden id="coordenadasCentro"><span th:text="${usuarioLogado.coordenadas}"></span></p>
                                 <div th:with="usuario=${#authentication.getPrincipal().getUser().getEmail()}">
                                 	<div th:if="${atividade.usuariosCadastradosNaAtividade.contains(usuarioLogado)}">
 		                                <form th:action="@{'/atividade/cancelar_participacao/{id}'(id=${atividade.id})}" method="post">
@@ -194,7 +195,7 @@
 	    function initMap() {
 	        const map = new google.maps.Map(document.getElementById("map"), {
 	            zoom: 13,
-	            center: { lat: coordenadasMedias(coordenadasJson('#coordenadas'))[0], lng: coordenadasMedias(coordenadasJson('#coordenadas'))[1] },
+	            center: { lat: coordenadasMedias(coordenadasJson('#coordenadasCentro'))[0], lng: coordenadasMedias(coordenadasJson('#coordenadasCentro'))[1] },
 	        });
 	        // Create an array of alphabetical characters used to label the markers.
 	        const labels = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
