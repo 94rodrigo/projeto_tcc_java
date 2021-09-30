@@ -109,16 +109,50 @@ public class AtividadeController {
 	@GetMapping("/userAtividades")
 	public String minhasAtividades(Model model, Principal principal) {
 		List<Atividade> atividades = atividadeRepository.findAllByUsuario(principal.getName());
-		
 		model.addAttribute("atividades", atividades);
 		
 		return "atividade/minhas_atividades";
 	}
 	
+	@GetMapping("/atividadesOcorridas")
+	public String atividadesOcorridas(Model model, Principal principal) {
+		User usuarioLogado = userRepository.findByEmail(principal.getName());
+		String municipio = usuarioLogado.getMunicipio();
+		String uf = usuarioLogado.getUf();
+		List<Atividade> atividades = atividadeRepository.findAllByDataAtualMunicipioUfDataAnterior(EstadoAtividade.JÁ_OCORRIDO, municipio, uf);
+		model.addAttribute("atividades", atividades);
+		model.addAttribute("usuarioLogado", usuarioLogado);
+		
+		return "atividade/atividades_todas";
+	}
+	
+	@GetMapping("/atividadesGeral")
+	public String atividadesTodosOsEstados(Model model, Principal principal) {
+		User usuarioLogado = userRepository.findByEmail(principal.getName());
+		String municipio = usuarioLogado.getMunicipio();
+		String uf = usuarioLogado.getUf();
+		List<Atividade> atividades = atividadeRepository.findAllByMunicipioUfTodas(municipio, uf);
+		model.addAttribute("atividades", atividades);
+		model.addAttribute("usuarioLogado", usuarioLogado);
+		
+		return "atividade/atividades_todas";
+	}
+	
+	@GetMapping("/atividadesCanceladas")
+	public String atividadesCanceladas(Model model, Principal principal) {
+		User usuarioLogado = userRepository.findByEmail(principal.getName());
+		String municipio = usuarioLogado.getMunicipio();
+		String uf = usuarioLogado.getUf();
+		List<Atividade> atividades = atividadeRepository.findAllByDataAtualMunicipioUfCancelado(EstadoAtividade.CANCELADO, municipio, uf);
+		model.addAttribute("atividades", atividades);
+		model.addAttribute("usuarioLogado", usuarioLogado);
+		
+		return "atividade/atividades_todas";
+	}
+	
 	@GetMapping("/userAtividadesConfirmadas")
 	public String minhasAtividadesConfirmadas(Model model, Principal principal) {				
 		List<Atividade> atividades = atividadeRepository.findAllByUsuarioEDataAtual(principal.getName());
-		
 		model.addAttribute("atividades", atividades);
 		
 		return "atividade/minhas_atividades";
@@ -127,7 +161,6 @@ public class AtividadeController {
 	@GetMapping("/userAtividadesCanceladas")
 	public String minhasAtividadesCanceladas(Model model, Principal principal) {
 		List<Atividade> atividades = atividadeRepository.findAllByUsuarioEEstado(principal.getName(), EstadoAtividade.CANCELADO);
-		
 		model.addAttribute("atividades", atividades);
 		
 		return "atividade/minhas_atividades";
@@ -182,8 +215,6 @@ public class AtividadeController {
 	@RequestMapping("/resultados")
 	private String resultadosBuscaPesquisa(Model model, @Param("keyword") String keyword, @Param("tipoBusca") String tipoBusca, Principal principal) {
 		List<Atividade> atividades;
-		
-		
 		switch (tipoBusca) {
 		case "0":
 			atividades = atividadeService.listarResultadosPorNomeOuDescricao(keyword);
@@ -197,13 +228,10 @@ public class AtividadeController {
 		default:
 			return null;
 		}
-		
 		model.addAttribute("atividades", atividades);
 		model.addAttribute("keyword", keyword);
 		model.addAttribute("tipoBusca", tipoBusca);
-		System.out.println("Palavra buscada: " + keyword);
 		model.addAttribute("usuarioLogado", userRepository.findByEmail(principal.getName()));
-		System.out.println("Tipo: " + tipoBusca);
 		return "atividade/atividades_todas";
 	}
 	

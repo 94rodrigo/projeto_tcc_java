@@ -8,8 +8,6 @@ import org.springframework.stereotype.Service;
 import com.example.demo.model.Atividade;
 import com.example.demo.repository.AtividadeRepository;
 
-import javassist.compiler.ast.Keyword;
-
 @Service
 public class AtividadeService {
 	
