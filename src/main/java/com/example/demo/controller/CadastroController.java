@@ -41,7 +41,6 @@ public class CadastroController {
 	@PostMapping("/cadastro")
 	public String novoUsuario(@Valid User user, BindingResult result, Model model) {
 		User usuarioExiste = userService.findByEmail(user.getEmail());
-		System.out.println(usuarioExiste);
 		
 		if (usuarioExiste != null) {
 			usuarioExiste.setPrimeiroNome(user.getPrimeiroNome());

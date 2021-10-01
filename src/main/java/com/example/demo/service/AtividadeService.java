@@ -70,5 +70,10 @@ public class AtividadeService {
 		}
 		return atividadeRepository.findAll();
 	}
+	
+	public void deletarAtividade(Long id) {
+		atividadeRepository.deleteUserAtividadeByAtividadeId(id);
+		atividadeRepository.deleteById(id);
+	}
 
 }

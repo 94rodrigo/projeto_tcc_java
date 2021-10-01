@@ -74,7 +74,7 @@ public class AtividadeController {
 	
 	@PostMapping("/atividadesFormGravar")
 	public String novaAtividade(@Valid RequisicaoNovaAtividade requisicao, BindingResult result, HttpServletRequest request) {
-		
+
 		System.out.println(result.hasErrors());
 		if (result.hasErrors()) {
 			System.out.println(result.hasErrors());
@@ -176,7 +176,7 @@ public class AtividadeController {
 	
 	@RequestMapping(path = "delete/{id}", method = RequestMethod.POST)
 	public String deletar(@PathVariable Long id) {
-		atividadeRepository.deleteById(id);
+		atividadeService.deletarAtividade(id);
 		return "redirect:/userAtividades";
 	}
 	

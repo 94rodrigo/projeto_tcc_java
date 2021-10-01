@@ -64,4 +64,11 @@ public interface AtividadeRepository extends JpaRepository<Atividade, Long>{
 	
 	@Query("select a from Atividade a where a.tipoAtividade like %?1%")
 	List<Atividade> buscaPorTipoAtividade(String keyword);
+	
+	
+	
+	@Transactional
+	@Modifying
+	@Query(value = "delete from user_atividades where atividade_id = ?1", nativeQuery = true)
+	void deleteUserAtividadeByAtividadeId(Long id_atividade);
 }
