@@ -44,7 +44,13 @@ public class CadastroController {
 		System.out.println(usuarioExiste);
 		
 		if (usuarioExiste != null) {
-			return "cadastro";
+			usuarioExiste.setPrimeiroNome(user.getPrimeiroNome());
+			usuarioExiste.setUltimoNome(user.getUltimoNome());
+			usuarioExiste.setEmail(user.getEmail());
+			usuarioExiste.setUf(user.getUf());
+			usuarioExiste.setMunicipio(user.getMunicipio());
+			userService.saveUser(usuarioExiste);
+			return "dashboard";
 		}
 		
 		if (result.hasErrors()) {
