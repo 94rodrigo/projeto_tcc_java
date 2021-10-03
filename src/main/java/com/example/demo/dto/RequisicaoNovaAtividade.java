@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 import javax.persistence.Column;
+import javax.persistence.Id;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -16,6 +17,7 @@ public class RequisicaoNovaAtividade {
 
 	private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 	
+	@Id
 	private Long id;
 	
 	@NotBlank
@@ -94,7 +96,7 @@ public class RequisicaoNovaAtividade {
 	public Long getId() {
 		return id;
 	}
-	public void setAtividadeId(Long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 	
@@ -107,10 +109,21 @@ public class RequisicaoNovaAtividade {
 		atividade.setUf(this.uf);
 		atividade.setDescricao(this.descricao);
 		atividade.setEnderecoLocal(this.enderecoLocal);
-		System.out.println("atividadeId: " + this.id);
-		atividade.setId(this.id);
-		System.out.println("atividadeId: " + this.id);
 		
+		return atividade;
+	}
+	
+	public Atividade toAtividade(Atividade atividade) {
+		System.out.println(this.id);
+		atividade.setId(this.id);
+		System.out.println(this.nomeAtividade);
+		atividade.setNomeAtividade(this.nomeAtividade);
+		atividade.setTipoAtividade(this.tipoAtividade);
+		atividade.setUf(this.uf);
+		atividade.setCidade(this.cidade);
+		atividade.setEnderecoLocal(this.enderecoLocal);
+		atividade.setDataAtividade(this.dataAtividade);
+		atividade.setDescricao(this.descricao);
 		return atividade;
 	}
 }

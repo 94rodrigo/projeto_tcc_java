@@ -49,6 +49,8 @@ public class AtividadeController {
 	@Autowired
 	private AtividadeService atividadeService;
 	
+	private Long idAtividade;
+	
 	@GetMapping("/todas")
 	public String todasAsAtividades(Model model, Principal principal, String tipo) {
 //		List<Atividade> atividades = atividadeRepository.findAllByDataAtual(EstadoAtividade.CONFIRMADO);
@@ -73,8 +75,17 @@ public class AtividadeController {
 	}
 	
 	@PostMapping("/atividadesFormGravar")
-	public String novaAtividade(@Valid RequisicaoNovaAtividade requisicao, BindingResult result, HttpServletRequest request) {
-
+	public String novaAtividade(@Valid RequisicaoNovaAtividade requisicaoNovaAtividade, BindingResult result, HttpServletRequest request, Model model) {
+		
+		if (idAtividade != null) {
+			Atividade atividade2 = atividadeRepository.findById(idAtividade).get();
+			requisicaoNovaAtividade.setId(idAtividade);
+			atividade2 = requisicaoNovaAtividade.toAtividade(atividade2);
+			atividadeRepository.save(atividade2);
+			idAtividade = null;
+			return "redirect:/userAtividades";
+		}
+		
 		System.out.println(result.hasErrors());
 		if (result.hasErrors()) {
 			System.out.println(result.hasErrors());
@@ -88,7 +99,7 @@ public class AtividadeController {
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		User user = userRepository.findByEmail(username);
 		
-		Atividade atividade = requisicao.toAtividade();
+		Atividade atividade = requisicaoNovaAtividade.toAtividade();
 		
 		atividade.setUser(user);
 		atividade.setUserEmail(user.getEmail());
@@ -183,12 +194,15 @@ public class AtividadeController {
 	@GetMapping(path = "/atividadesFormAlteracao/{id}")
 	public ModelAndView atividadesFormAlteracao(@PathVariable Long id) {
 		ModelAndView mav = new ModelAndView("atividade/form");
-		Atividade atividade = atividadeRepository.findById(id).get();
+		Atividade requisicaoNovaAtividade = atividadeRepository.findById(id).get();
+		idAtividade = requisicaoNovaAtividade.getId();
 		
-		mav.addObject("requisicaoNovaAtividade", atividade);
+		mav.addObject("requisicaoNovaAtividade", requisicaoNovaAtividade);
 		
 		return mav;
 	}
+	
+	@PostMapping("/")
 	
 	@RequestMapping(path = "/atividade/{id}/cancelar", method = RequestMethod.POST)
 	public String cancelarAtividade(@PathVariable Long id) {

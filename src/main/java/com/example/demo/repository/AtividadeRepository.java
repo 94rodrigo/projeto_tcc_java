@@ -1,5 +1,6 @@
 package com.example.demo.repository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -65,7 +66,13 @@ public interface AtividadeRepository extends JpaRepository<Atividade, Long>{
 	@Query("select a from Atividade a where a.tipoAtividade like %?1%")
 	List<Atividade> buscaPorTipoAtividade(String keyword);
 	
-	
+	@Query("select a from Atividade a where a.nomeAtividade = :nomeAtividade and "
+			+ "a.tipoAtividade = :tipoAtividade and a.uf = :uf and a.cidade = :cidade "
+			+ "and a.enderecoLocal = :enderecoLocal and a.dataAtividade = :dataAtividade "
+			+ "and a.descricao = :descricao")
+	Atividade buscaSemId(@Param("nomeAtividade") String nomeAtividade, @Param("tipoAtividade") String tipoAtividade, 
+			@Param("uf") String uf, @Param("cidade") String cidade, @Param("enderecoLocal") String enderecoLocal,
+			@Param("dataAtividade") LocalDate dataAtividade, @Param("descricao") String descricao);
 	
 	@Transactional
 	@Modifying

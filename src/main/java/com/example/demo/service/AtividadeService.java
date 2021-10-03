@@ -66,7 +66,7 @@ public class AtividadeService {
 	
 	public List<Atividade> listarResultadosPorLocal(String keyword){
 		if (keyword != null) {
-			return atividadeRepository.buscaPorTipoAtividade(keyword);
+			return atividadeRepository.buscaLocal(keyword);
 		}
 		return atividadeRepository.findAll();
 	}

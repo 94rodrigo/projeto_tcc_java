@@ -99,25 +99,35 @@
                             <div class="card-body">
                          
                                 <p>Local: <span id="enderecolocal" th:text="${atividade.enderecoLocal} + ', ' + ${atividade.cidade} + ', ' + ${atividade.uf}"></span></p>
-                                <p>Tipo: <span th:text="${atividade.tipoAtividade}"></span></p>
+                                <p>Tipo: <span th:text="${atividade.nomeTipoAtividade}"></span></p>
                                 <p>Descrição: <span th:text="${atividade.descricao}"></span></p>
                                 <p>Quando: <span th:text="${#temporals.format(atividade.dataAtividade, 'dd/MM/yyyy')}"></span></p>
                                 <p>Cadastrado por: <span th:text="${atividade.nomeCompletoUsuario}"></span></p>
                                 <p>Participantes: <span th:text="${atividade.usuariosAtividade}"></span> confirmados</p>
                                 <p hidden id="coordenadas"><span th:text="${atividade.coordenadas}"></span></p>
                                 <p hidden id="coordenadasCentro"><span th:text="${usuarioLogado.coordenadas}"></span></p>
-                                <div th:with="usuario=${#authentication.getPrincipal().getUser().getEmail()}">
-                                	<div th:if="${atividade.usuariosCadastradosNaAtividade.contains(usuarioLogado)}">
-		                                <form th:action="@{'/atividade/cancelar_participacao/{id}'(id=${atividade.id})}" method="post">
-		                                	<button class="btn btn-danger" type="submit">Cancelar participação &rarr;</button>
-		                                </form>
+                                <div th:if="${atividade.ocorridoOuCancelado}">
+                                	<div th:if="${atividade.ocorrido}">
+	                                	<a class="btn btn-secondary">Evento já aconteceu</a>
                                 	</div>
-                                	<div th:unless="${atividade.usuariosCadastradosNaAtividade.contains(usuarioLogado)}">
-		                                <form th:action="@{'atividade/participar/{id}'(id=${atividade.id})}" method="post">
-		                                	<button class="btn btn-success" type="submit">Participar &rarr;</button>
-		                                </form>
+                                	<div th:if="${atividade.cancelado}">
+	                                	<a class="btn btn-secondary">Evento cancelado</a>
                                 	</div>
                                 </div>
+                                <div th:unless="${atividade.ocorridoOuCancelado}">
+	                                <div th:with="usuario=${#authentication.getPrincipal().getUser().getEmail()}">
+	                                	<div th:if="${atividade.usuariosCadastradosNaAtividade.contains(usuarioLogado)}">
+			                                <form th:action="@{'/atividade/cancelar_participacao/{id}'(id=${atividade.id})}" method="post">
+			                                	<button class="btn btn-danger" type="submit">Cancelar participação &rarr;</button>
+			                                </form>
+	                                	</div>
+	                                	<div th:unless="${atividade.usuariosCadastradosNaAtividade.contains(usuarioLogado)}">
+			                                <form th:action="@{'atividade/participar/{id}'(id=${atividade.id})}" method="post">
+			                                	<button class="btn btn-success" type="submit">Participar &rarr;</button>
+			                                </form>
+	                                	</div>
+	                                </div>
+                               	</div>
                             </div>
                         </div>
 

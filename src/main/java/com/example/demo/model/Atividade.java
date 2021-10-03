@@ -80,8 +80,12 @@ public class Atividade {
 	public void setNomeAtividade(String nomeAtividade) {
 		this.nomeAtividade = nomeAtividade;
 	}
-
+	
 	public String getTipoAtividade() {
+		return tipoAtividade;
+	}
+
+	public String getNomeTipoAtividade() {
 		String[] tipos = {"Corrida", "Caminhada", "Ciclismo", "Esportes coletivos", "Natação", "Musculação", "Treino funcional", "Outros"};
 		int posicao = (Integer.parseInt(tipoAtividade) - 1); 
 		if (posicao < 0 || posicao >= tipos.length)
@@ -181,6 +185,7 @@ public class Atividade {
 	
 	public RequisicaoNovaAtividade toRequisicao() {
 		RequisicaoNovaAtividade requisicao = new RequisicaoNovaAtividade();
+		requisicao.setId(id);
 		requisicao.setNomeAtividade(nomeAtividade);
 		requisicao.setCidade(cidade);
 		requisicao.setDataAtividade(dataAtividade.format(FORMATTER));
@@ -230,5 +235,19 @@ public class Atividade {
 	public Boolean getUsuarioParticipando(User user) {
 		return usuariosCadastradosNaAtividade.contains(user);
 	}
+	
+	public Boolean getOcorridoOuCancelado() {
+		return getOcorrido() ||	getCancelado();
+	}
+
+	public Boolean getCancelado() {
+		return estadoAtividade.equals(EstadoAtividade.CANCELADO);
+	}
+
+	public Boolean getOcorrido() {
+		return dataAtividade.isBefore(LocalDate.now())
+				|| estadoAtividade.equals(EstadoAtividade.JÁ_OCORRIDO);
+	}
+	
 	
 }

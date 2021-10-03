@@ -71,6 +71,9 @@
                                 <h1 class="h4 text-gray-900 mb-4">Cadastro de atividade</h1>
                             </div>
                             <form class="user" th:action="@{/atividadesFormGravar}" th:object="${requisicaoNovaAtividade}" method="post">
+                               	<div class="form-group">
+									<input type="hidden" th:field="*{id}" />                                    
+                               	</div>
                                 <div class="form-group">
                                     <input type="text" th:field="*{nomeAtividade}" th:errorclass="is-invalid" class="form-control form-control-user"
                                         placeholder="Nome da atividade">
@@ -157,9 +160,6 @@
 	                            <button type="submit" class="btn btn-primary btn-user btn-block">
 	                               Cadastrar atividade
 	                            </button>
-								<div class="form-group">
-									<input type="hidden" th:field="*{id}" />                                    
-                                </div>
                             </form>
 
                         </div>
