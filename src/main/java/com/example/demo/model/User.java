@@ -71,6 +71,8 @@ public class User {
 	
 	private Boolean enabled;
 	
+	private String resetPasswordToken;
+
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.LAZY)
 	@JsonIgnore
 	private List<Atividade> atividades;
@@ -182,5 +184,13 @@ public class User {
 		
 		String json = gson.toJson(results[0].geometry.location);
 		return json;
+	}
+	
+	public String getResetPasswordToken() {
+		return resetPasswordToken;
+	}
+	
+	public void setResetPasswordToken(String resetPasswordToken) {
+		this.resetPasswordToken = resetPasswordToken;
 	}
 }

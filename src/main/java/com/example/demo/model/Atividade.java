@@ -248,6 +248,4 @@ public class Atividade {
 		return dataAtividade.isBefore(LocalDate.now())
 				|| estadoAtividade.equals(EstadoAtividade.JÁ_OCORRIDO);
 	}
-	
-	
 }

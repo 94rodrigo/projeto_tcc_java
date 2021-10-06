@@ -121,6 +121,15 @@ public class AtividadeController {
 	public String minhasAtividades(Model model, Principal principal) {
 		List<Atividade> atividades = atividadeRepository.findAllByUsuario(principal.getName());
 		model.addAttribute("atividades", atividades);
+		for (Atividade atividade : atividades) {
+			if (atividade.getDataAtividade().isBefore(LocalDate.now()) && !atividade.getEstadoAtividade().equals(EstadoAtividade.CANCELADO)) {
+				atividade.setEstadoAtividade(EstadoAtividade.JÁ_OCORRIDO);
+				atividadeRepository.save(atividade);
+			} else if (atividade.getDataAtividade().isAfter(LocalDate.now()) && atividade.getEstadoAtividade().equals(EstadoAtividade.JÁ_OCORRIDO)) {
+				atividade.setEstadoAtividade(EstadoAtividade.CONFIRMADO);
+				atividadeRepository.save(atividade);
+			}
+		}
 		
 		return "atividade/minhas_atividades";
 	}
@@ -163,7 +172,7 @@ public class AtividadeController {
 	
 	@GetMapping("/userAtividadesConfirmadas")
 	public String minhasAtividadesConfirmadas(Model model, Principal principal) {				
-		List<Atividade> atividades = atividadeRepository.findAllByUsuarioEDataAtual(principal.getName());
+		List<Atividade> atividades = atividadeRepository.findAllByUsuarioEDataAtual(principal.getName(), EstadoAtividade.CONFIRMADO);
 		model.addAttribute("atividades", atividades);
 		
 		return "atividade/minhas_atividades";
@@ -179,7 +188,7 @@ public class AtividadeController {
 	
 	@GetMapping("/userAtividadesOcorridas")
 	public String minhasAtividadesJaOcorridas(Model model, Principal principal) {
-		List<Atividade> atividades = atividadeRepository.findAllByUsuarioEDataAnterior(principal.getName());		
+		List<Atividade> atividades = atividadeRepository.findAllByUsuarioEDataAnterior(principal.getName());
 		model.addAttribute("atividades", atividades);
 		
 		return "atividade/minhas_atividades";

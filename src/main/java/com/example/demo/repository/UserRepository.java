@@ -25,4 +25,5 @@ public interface UserRepository extends JpaRepository<User, Long>{
 	@Query(value = "delete from user_atividades where user_id = ?1 and atividade_id = ?2", nativeQuery = true)
 	void deleteByIdUserAtividades(Long id_user, Long id_atividade);
 	
+	public User findByResetPasswordToken(String token);
 }

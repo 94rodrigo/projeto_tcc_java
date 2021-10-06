@@ -25,8 +25,8 @@ public interface AtividadeRepository extends JpaRepository<Atividade, Long>{
 	@Query("select a from Atividade a join a.user u where u.email = :email and a.estadoAtividade = :estado")
 	List<Atividade> findAllByUsuarioEEstado(@Param("email")String email, @Param("estado") EstadoAtividade estado);
 	
-	@Query("select a from Atividade a join a.user u where u.email = :email and a.dataAtividade >= date(now())")
-	List<Atividade> findAllByUsuarioEDataAtual(@Param("email")String email);
+	@Query("select a from Atividade a join a.user u where u.email = :email and a.dataAtividade >= date(now()) and a.estadoAtividade = :estado")
+	List<Atividade> findAllByUsuarioEDataAtual(@Param("email")String email, @Param("estado") EstadoAtividade estado);
 	
 	@Query("select a from Atividade a join a.user u where u.email = :email and a.dataAtividade < date(now())")
 	List<Atividade> findAllByUsuarioEDataAnterior(@Param("email")String email);
