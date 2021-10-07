@@ -211,8 +211,6 @@ public class AtividadeController {
 		return mav;
 	}
 	
-	@PostMapping("/")
-	
 	@RequestMapping(path = "/atividade/{id}/cancelar", method = RequestMethod.POST)
 	public String cancelarAtividade(@PathVariable Long id) {
 		atividadeRepository.alterarEstadoAtividade(EstadoAtividade.CANCELADO, id);
@@ -258,4 +256,13 @@ public class AtividadeController {
 		return "atividade/atividades_todas";
 	}
 	
+	@RequestMapping(path = "/atividade/{id}", method = RequestMethod.GET)
+	public String infoAtividade(@PathVariable Long id, Model model) {
+		Atividade atividade = atividadeRepository.findById(id).get();
+		List<User> usuarios = atividade.getUsuariosCadastradosNaAtividade();
+		
+		model.addAttribute("atividade", atividade);
+		model.addAttribute("usuarios", usuarios);
+		return "atividade/atividade_informacoes";
+	}
 }

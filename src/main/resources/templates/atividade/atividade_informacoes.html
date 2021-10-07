@@ -12,15 +12,15 @@
     <title>SB Admin 2 - Dashboard</title>
 
     <!-- Custom fonts for this template-->
-    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
 
     <!-- Custom styles for this template-->
-    <link href="css/sb-admin-2.min.css" rel="stylesheet">
+    <link href="/css/sb-admin-2.min.css" rel="stylesheet" type="text/css">
     
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+    <!-- <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
     <script src="https://unpkg.com/@google/markerclustererplus@4.0.1/dist/markerclustererplus.min.js"></script>
     
     <style type="text/css">
@@ -29,11 +29,11 @@
         height: 400px;
         width: 100%;
       }
-    </style>
+    </style>  -->
 
 </head>
 
-<body id="page-top" onload="onLoad()">
+<body id="page-top"> <!-- onload="onLoad()"  -->
 
     <!-- Page Wrapper -->
     <div id="wrapper">
@@ -70,72 +70,61 @@
 
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">Todas as Atividades</h1>
-                         <div class="dropdown mb-4">
-                            <button class="btn-sm btn-primary shadow-sm dropdown-toggle" type="button"
-                                id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
-                                aria-expanded="false">
-                                Filtros
-                            </button>
-                            <div class="dropdown-menu animated--fade-in"
-                                aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item" th:href="@{/atividadesGeral}">Todos</a>
-                                <a class="dropdown-item" th:href="@{/todas}">Confirmados</a>
-                                <a class="dropdown-item" th:href="@{/atividadesOcorridas}">Já ocorrido</a>
-                                <a class="dropdown-item" th:href="@{/atividadesCanceladas}">Cancelados</a>
-                            </div>
-                        </div>
+                        <h1 class="h3 mb-0 text-gray-800">Informações</h1>
                     </div>
 					
-					<div th:if="${atividades.isEmpty()}">
-						<h4>Nenhuma atividade encontrada</h4>
-					</div>
-					<div th:unless="${atividades.isEmpty()}">
-						<div id="map"></div>
-			
-	                    <div class="col-lg-11 mb-4" id="atividades">
-	
-	                        <!-- Atividades -->
-	                        <div class="card shadow mb-4 mt-4" th:each="atividade : ${atividades}">
-	                            <div class="card-header py-3">
-	                                <a th:href="@{'/atividade/{id}'(id=${atividade.id})}" class="m-0 font-weight-bold text-primary" th:text="${atividade.nomeAtividade}">Nome da atividade</a>
-	                            </div>
-	                            <div class="card-body">
-	                         
-	                                <p>Local: <span id="enderecolocal" th:text="${atividade.enderecoLocal} + ', ' + ${atividade.cidade} + ', ' + ${atividade.uf}"></span></p>
-	                                <p>Tipo: <span th:text="${atividade.nomeTipoAtividade}"></span></p>
-	                                <p>Descrição: <span th:text="${atividade.descricao}"></span></p>
-	                                <p>Quando: <span th:text="${#temporals.format(atividade.dataAtividade, 'dd/MM/yyyy')}"></span></p>
-	                                <p>Cadastrado por: <span th:text="${atividade.nomeCompletoUsuario}"></span></p>
-	                                <p>Participantes: <span th:text="${atividade.usuariosAtividade}"></span> confirmados</p>
-	                                <p hidden id="coordenadas"><span th:text="${atividade.coordenadas}"></span></p>
-	                                <p hidden id="coordenadasCentro"><span th:text="${usuarioLogado.coordenadas}"></span></p>
-	                                <div th:if="${atividade.ocorridoOuCancelado}">
-	                                	<div th:if="${atividade.ocorrido}">
-		                                	<a class="btn btn-secondary">Evento já aconteceu</a>
+                    <div class="col-lg-11 mb-4" id="atividade">
+
+                        <!-- Atividades -->
+                        <div class="card shadow mb-4">
+                           	<div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary" th:text="${atividade.nomeAtividade}">Nome da atividade</h6>
+                           	</div>
+                           	<div class="card-body">
+                                <p>Local: <span id="enderecolocal" th:text="${atividade.enderecoLocal} + ', ' + ${atividade.cidade} + ', ' + ${atividade.uf}"></span></p>
+                                <p>Tipo: <span th:text="${atividade.nomeTipoAtividade}"></span></p>
+                                <p>Descrição: <span th:text="${atividade.descricao}"></span></p>
+                                <p>Quando: <span th:text="${#temporals.format(atividade.dataAtividade, 'dd/MM/yyyy')}"></span></p>
+                                <p>Cadastrado por: <span th:text="${atividade.nomeCompletoUsuario}"></span></p>
+                                <p>Participantes: <span th:text="${atividade.usuariosAtividade}"></span> confirmados</p>
+                                
+                                <div th:if="${atividade.ocorridoOuCancelado}">
+                                	<div th:if="${atividade.ocorrido}">
+	                                	<a class="btn btn-secondary">Evento já aconteceu</a>
+                                	</div>
+                                	<div th:if="${atividade.cancelado}">
+	                                	<a class="btn btn-secondary">Evento cancelado</a>
+                                	</div>
+                                </div>
+                                <div th:unless="${atividade.ocorridoOuCancelado}">
+	                                <div th:with="usuario=${#authentication.getPrincipal().getUser().getEmail()}">
+	                                	<div th:if="${atividade.usuariosCadastradosNaAtividade.contains(usuarioLogado)}">
+			                                <form th:action="@{'/atividade/cancelar_participacao/{id}'(id=${atividade.id})}" method="post">
+			                                	<button class="btn btn-danger" type="submit">Cancelar participação &rarr;</button>
+			                                </form>
 	                                	</div>
-	                                	<div th:if="${atividade.cancelado}">
-		                                	<a class="btn btn-secondary">Evento cancelado</a>
+	                                	<div th:unless="${atividade.usuariosCadastradosNaAtividade.contains(usuarioLogado)}">
+			                                <form th:action="@{'atividade/participar/{id}'(id=${atividade.id})}" method="post">
+			                                	<button class="btn btn-success" type="submit">Participar &rarr;</button>
+			                                </form>
 	                                	</div>
 	                                </div>
-	                                <div th:unless="${atividade.ocorridoOuCancelado}">
-		                                <div th:with="usuario=${#authentication.getPrincipal().getUser().getEmail()}">
-		                                	<div th:if="${atividade.usuariosCadastradosNaAtividade.contains(usuarioLogado)}">
-				                                <form th:action="@{'/atividade/cancelar_participacao/{id}'(id=${atividade.id})}" method="post">
-				                                	<button class="btn btn-danger" type="submit">Cancelar participação &rarr;</button>
-				                                </form>
-		                                	</div>
-		                                	<div th:unless="${atividade.usuariosCadastradosNaAtividade.contains(usuarioLogado)}">
-				                                <form th:action="@{'atividade/participar/{id}'(id=${atividade.id})}" method="post">
-				                                	<button class="btn btn-success" type="submit">Participar &rarr;</button>
-				                                </form>
-		                                	</div>
-		                                </div>
-	                               	</div>
-	                            </div>
-	                        </div>
-						</div>
-                    </div>
+                               	</div>
+                           	</div>
+                          </div>
+                          <div class="card shadow mb-4" th:each="usuario : ${usuarios}">
+                                <!-- Card Header - Accordion -->
+                                <a href="#collapseCardExample" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample">
+                                    <h6 class="m-0 font-weight-bold text-primary" th:text="'Pessoas confirmadas (' + ${atividade.usuariosAtividade} + ')'"></h6>
+                                </a>
+                                <!-- Card Content - Collapse -->
+                                <div class="collapse " id="collapseCardExample" style="">
+                                    <div class="card-body">
+                                        <h6 th:text="${usuario.nomeCompleto}"></h6>
+                                    </div>
+                                </div>
+                            </div>
+					</div>
 
                 </div>
                 <!-- /.container-fluid -->
@@ -168,23 +157,23 @@
     <div th:replace="base :: logout_modal"></div>
 
     <!-- Bootstrap core JavaScript-->
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/vendor/jquery/jquery.min.js"></script>
+    <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
     <!-- Core plugin JavaScript-->
-    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="/vendor/jquery-easing/jquery.easing.min.js"></script>
 
     <!-- Custom scripts for all pages-->
-    <script src="js/sb-admin-2.min.js"></script>
+    <script src="/js/sb-admin-2.min.js"></script>
 
     <!-- Page level plugins -->
-    <script src="vendor/chart.js/Chart.min.js"></script>
+    <script src="/vendor/chart.js/Chart.min.js"></script>
 
     <!-- Page level custom scripts -->
-    <script src="js/demo/chart-area-demo.js"></script>
-    <script src="js/demo/chart-pie-demo.js"></script>
+    <script src="/js/demo/chart-area-demo.js"></script>
+    <script src="/js/demo/chart-pie-demo.js"></script>
     
-	<script>
+	<!-- <script>
 	    function onLoad() {
 	        var app = new Vue(
 	            {
@@ -274,12 +263,13 @@
 	    }
 	    
 		
-	</script>
+	</script>  -->
     
     <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <script src="https://unpkg.com/@googlemaps/markerclustererplus/dist/index.min.js"></script>
+    <!-- <script src="https://unpkg.com/@googlemaps/markerclustererplus/dist/index.min.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg&callback=initMap&v=weekly&channel=2" async></script>
+     -->
     
 
 </body>

@@ -26,4 +26,6 @@ public interface UserRepository extends JpaRepository<User, Long>{
 	void deleteByIdUserAtividades(Long id_user, Long id_atividade);
 	
 	public User findByResetPasswordToken(String token);
+	
+//	List<User> findUserByAtividadeId();
 }
