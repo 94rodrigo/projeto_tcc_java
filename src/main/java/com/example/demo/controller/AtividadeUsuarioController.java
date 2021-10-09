@@ -42,4 +42,25 @@ public class AtividadeUsuarioController {
 		return "redirect:/todas";
 	}
 	
+	@PostMapping("/atividade/participar_info/{id}")
+	public String participarInfo(@PathVariable Long id, Principal principal) {
+		User user = userRepository.findByEmail(principal.getName());
+		Atividade atividade = atividadeRepository.findById(id).get();
+		user.adicionarAtividade(atividade);
+		atividade.incluirUsuario(user);
+		atividadeRepository.save(atividade);
+		userRepository.save(user);
+		System.out.println(user.getAtividadesQueUsuariosParticipa());
+		return "redirect:/atividade/{id}";
+	}
+	
+	@PostMapping("/atividade/cancelar_participacao_info/{id}")
+	public String cancelarParticipacaoInfo(@PathVariable Long id, Principal principal) {
+		User user = userRepository.findByEmail(principal.getName());
+		Atividade atividade = atividadeRepository.findById(id).get();
+		userRepository.deleteByIdUserAtividades(user.getId(), atividade.getId());
+		
+		return "redirect:/atividade/{id}";
+	}
+	
 }

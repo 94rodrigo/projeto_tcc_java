@@ -70,60 +70,34 @@
 
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">Informações</h1>
+                        <h1 class="h3 mb-0 text-gray-800">Últimas atividades</h1>
                     </div>
 					
                     <div class="col-lg-11 mb-4" id="atividade">
 
-                        <!-- Atividades -->
-                        <div class="card shadow mb-4">
-                           	<div class="card-header py-3">
-                                <h6 class="m-0 font-weight-bold text-primary" th:text="${atividade.nomeAtividade}">Nome da atividade</h6>
-                           	</div>
-                           	<div class="card-body">
-                                <p>Local: <span id="enderecolocal" th:text="${atividade.enderecoLocal} + ', ' + ${atividade.cidade} + ', ' + ${atividade.uf}"></span></p>
-                                <p>Tipo: <span th:text="${atividade.nomeTipoAtividade}"></span></p>
-                                <p>Descrição: <span th:text="${atividade.descricao}"></span></p>
-                                <p>Quando: <span th:text="${#temporals.format(atividade.dataAtividade, 'dd/MM/yyyy')}"></span></p>
-                                <p>Cadastrado por: <span th:text="${atividade.nomeCompletoUsuario}"></span></p>
-                                <p>Participantes: <span th:text="${atividade.usuariosAtividade}"></span> confirmados</p>
-                                
-                                <div th:if="${atividade.ocorridoOuCancelado}">
-                                	<div th:if="${atividade.ocorrido}">
-	                                	<a class="btn btn-secondary">Evento já aconteceu</a>
-                                	</div>
-                                	<div th:if="${atividade.cancelado}">
-	                                	<a class="btn btn-secondary">Evento cancelado</a>
-                                	</div>
-                                </div>
-                                <div th:unless="${atividade.ocorridoOuCancelado}">
-	                                <div th:with="usuario=${#authentication.getPrincipal().getUser().getEmail()}">
-	                                	<div th:if="${atividade.usuariosCadastradosNaAtividade.contains(usuarioLogado)}">
-			                                <form th:action="@{'/atividade/cancelar_participacao_info/{id}'(id=${atividade.id})}" method="post">
-			                                	<button class="btn btn-danger" type="submit">Cancelar participação &rarr;</button>
-			                                </form>
-	                                	</div>
-	                                	<div th:unless="${atividade.usuariosCadastradosNaAtividade.contains(usuarioLogado)}">
-			                                <form th:action="@{'/atividade/participar_info/{id}'(id=${atividade.id})}" method="post">
-			                                	<button class="btn btn-success" type="submit">Participar &rarr;</button>
-			                                </form>
-	                                	</div>
-	                                </div>
-                               	</div>
-                           	</div>
-                          </div>
-                          <div class="card shadow mb-4" th:each="usuario : ${usuarios}">
-                                <!-- Card Header - Accordion -->
-                                <a href="#collapseCardExample" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample">
-                                    <h6 class="m-0 font-weight-bold text-primary" th:text="'Pessoas confirmadas (' + ${atividade.usuariosAtividade} + ')'"></h6>
-                                </a>
-                                <!-- Card Content - Collapse -->
-                                <div class="collapse " id="collapseCardExample" style="">
-                                    <div class="card-body">
-                                        <h6 th:text="${usuario.nomeCompleto}"></h6>
-                                    </div>
-                                </div>
-                            </div>
+                        <!-- Content Row -->
+							<table class="table">
+								<thead>
+									<tr>
+										<th scope="col">#</th>
+										<th scope="col">Atividade</th>
+										<th scope="col">Tipo</th>
+										<th scope="col">Data</th>
+										<th scope="col">Cidade</th>
+									</tr>
+								</thead>
+                        		<div th:each="atividade : ${atividadesQueUsuariosParticipa}">
+								<tbody>
+									<tr>
+										<th scope="row" th:text="${atividadesQueUsuariosParticipa.indexOf(atividade) + 1}"></th>
+										<td th:text="${atividade.nomeAtividade}"></td>
+										<td th:text="${atividade.nomeTipoAtividade}"></td>
+										<td th:text="${#temporals.format(atividade.dataAtividade, 'dd/MM/yyyy')}"></td>
+										<td th:text="${atividade.cidade} + ', ' + ${atividade.uf}"></td>
+									</tr>
+								</tbody>
+                       			</div>
+							</table>
 					</div>
 
                 </div>

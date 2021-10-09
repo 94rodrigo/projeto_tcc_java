@@ -2,6 +2,8 @@ package com.example.demo.model;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -143,6 +145,11 @@ public class User {
 		return this;
 	}
 	public List<Atividade> getAtividadesQueUsuariosParticipa() {
+		return atividadesQueUsuariosParticipa;
+	}
+	public List<Atividade> getAtividadesOrdenadasPorData() {
+		List<Atividade> ordemData = new ArrayList<>();
+		atividadesQueUsuariosParticipa.sort(Comparator.comparing(Atividade::getDataAtividade));
 		return atividadesQueUsuariosParticipa;
 	}
 	public void setAtividadesQueUsuariosParticipa(List<Atividade> atividadesQueUsuariosParticipa) {
