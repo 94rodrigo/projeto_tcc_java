@@ -107,7 +107,7 @@
                                 <p>Local: <span th:text="${atividade.enderecoLocal} + ', ' + ${atividade.cidade} + ', ' + ${atividade.uf}"></span></p>
                                 <p>Tipo: <span th:text="${atividade.nomeTipoAtividade}"></span></p>
                                 <p>Descrição: <span th:text="${atividade.descricao}"></span></p>
-                                <p>Quando: <span th:text="${#temporals.format(atividade.dataAtividade, 'dd/MM/yyyy')}"></span></p>
+                                <p>Quando: <span th:text="${#temporals.format(atividade.dataAtividade, 'dd/MM/yyyy')} + ' - '  + ${#temporals.format(atividade.dataAtividade, 'HH:mm')}"></span></p>
                                 <a th:href="@{'atividadesFormAlteracao/{id}'(id=${atividade.id})}">Alterar &rarr;</a>
                             </div>
                         </div>

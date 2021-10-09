@@ -29,7 +29,7 @@ public class UltimasAtividadesController {
 	public String paginaUltimasAtividades(Principal principal, Model model) {
 		User user = userService.findByEmail(principal.getName());
 		List<Atividade> atividadesQueUsuariosParticipa = user.getAtividadesQueUsuariosParticipa();
-		atividadesQueUsuariosParticipa.sort(Comparator.comparing(Atividade::getDataAtividade));
+		atividadesQueUsuariosParticipa.sort(Comparator.comparing(Atividade::getDataHorarioAtividade));
 		model.addAttribute("user", user);
 		model.addAttribute("atividadesQueUsuariosParticipa", atividadesQueUsuariosParticipa);
 		return "atividade/ultimas_atividades";

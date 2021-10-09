@@ -1,7 +1,10 @@
 package com.example.demo.dto;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
@@ -37,6 +40,10 @@ public class RequisicaoNovaAtividade {
 	@NotNull
 	@Pattern(regexp = "^\\d{2}/\\d{2}/\\d{4}$")
 	private String dataAtividade;
+	
+	@NotNull
+	@Pattern(regexp = "^\\d{2}:\\d{2}$")
+	private String horarioAtividade;
 	
 	private String descricao;
 	
@@ -102,10 +109,17 @@ public class RequisicaoNovaAtividade {
 	
 	public Atividade toAtividade() {
 		Atividade atividade = new Atividade();
+		String[] hora = this.horarioAtividade.split(":");
+		System.out.println("Horário: ");
+		for (String string : Arrays.asList(hora)) {
+			System.out.println(string + ":");
+		}
+		
 		atividade.setNomeAtividade(this.nomeAtividade);
 		atividade.setTipoAtividade(this.tipoAtividade);
 		atividade.setCidade(this.cidade);
-		atividade.setDataAtividade(LocalDate.parse(this.dataAtividade, FORMATTER));
+//		atividade.setDataAtividade(LocalDate.parse(this.dataAtividade, FORMATTER));
+		atividade.setDataHorarioAtividade(LocalDateTime.of(LocalDate.parse(this.dataAtividade, FORMATTER), LocalTime.of(Integer.parseInt(hora[0]), Integer.parseInt(hora[1]))));
 		atividade.setUf(this.uf);
 		atividade.setDescricao(this.descricao);
 		atividade.setEnderecoLocal(this.enderecoLocal);
@@ -114,16 +128,28 @@ public class RequisicaoNovaAtividade {
 	}
 	
 	public Atividade toAtividade(Atividade atividade) {
-		System.out.println(this.id);
+		String[] hora = this.horarioAtividade.split(":");
+		System.out.println("Horário: ");
+		for (String string : Arrays.asList(hora)) {
+			System.out.println(string + ":");
+		}
+		
 		atividade.setId(this.id);
-		System.out.println(this.nomeAtividade);
 		atividade.setNomeAtividade(this.nomeAtividade);
 		atividade.setTipoAtividade(this.tipoAtividade);
 		atividade.setUf(this.uf);
 		atividade.setCidade(this.cidade);
 		atividade.setEnderecoLocal(this.enderecoLocal);
-		atividade.setDataAtividade(this.dataAtividade);
+//		atividade.setDataAtividade(this.dataAtividade);
+		atividade.setDataHorarioAtividade(LocalDateTime.of(LocalDate.parse(this.dataAtividade, FORMATTER), LocalTime.of(Integer.parseInt(hora[0]), Integer.parseInt(hora[1]))));
 		atividade.setDescricao(this.descricao);
 		return atividade;
+	}
+	
+	public String getHorarioAtividade() {
+		return horarioAtividade;
+	}
+	public void setHorarioAtividade(String horarioAtividade) {
+		this.horarioAtividade = horarioAtividade;
 	}
 }

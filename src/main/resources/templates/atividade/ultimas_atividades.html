@@ -84,6 +84,7 @@
 										<th scope="col">Tipo</th>
 										<th scope="col">Data</th>
 										<th scope="col">Cidade</th>
+										<th scope="col">Pessoas</br>confirmadas</th>
 									</tr>
 								</thead>
                         		<div th:each="atividade : ${atividadesQueUsuariosParticipa}">
@@ -92,8 +93,9 @@
 										<th scope="row" th:text="${atividadesQueUsuariosParticipa.indexOf(atividade) + 1}"></th>
 										<td th:text="${atividade.nomeAtividade}"></td>
 										<td th:text="${atividade.nomeTipoAtividade}"></td>
-										<td th:text="${#temporals.format(atividade.dataAtividade, 'dd/MM/yyyy')}"></td>
+										<td th:text="${#temporals.format(atividade.dataAtividade, 'dd/MM/yyyy')} + ' - '  + ${#temporals.format(atividade.dataAtividade, 'HH:mm')}"></td>
 										<td th:text="${atividade.cidade} + ', ' + ${atividade.uf}"></td>
+										<td th:text="${atividade.usuariosAtividade}"></td>
 									</tr>
 								</tbody>
                        			</div>

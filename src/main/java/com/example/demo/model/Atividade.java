@@ -1,7 +1,7 @@
 package com.example.demo.model;
 
 import java.io.IOException;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -51,7 +51,9 @@ public class Atividade {
 	
 	private String enderecoLocal;
 	
-	private LocalDate dataAtividade;
+//	private LocalDate dataAtividade;
+	
+	private LocalDateTime dataHorarioAtividade;
 
 	private String descricao;
 	
@@ -123,16 +125,8 @@ public class Atividade {
 		this.cidade = cidade;
 	}
 
-	public LocalDate getDataAtividade() {
-		return dataAtividade;
-	}
-
-	public void setDataAtividade(LocalDate dataAtividade) {
-		this.dataAtividade = dataAtividade;
-	}
-	
-	public void setDataAtividade(String dataAtividade) {
-		this.dataAtividade = LocalDate.parse(dataAtividade, FORMATTER);
+	public LocalDateTime getDataAtividade() {
+		return dataHorarioAtividade;
 	}
 
 	public String getDescricao() {
@@ -188,7 +182,9 @@ public class Atividade {
 		requisicao.setId(id);
 		requisicao.setNomeAtividade(nomeAtividade);
 		requisicao.setCidade(cidade);
-		requisicao.setDataAtividade(dataAtividade.format(FORMATTER));
+//		requisicao.setDataAtividade(dataAtividade.format(FORMATTER));
+		requisicao.setDataAtividade(dataHorarioAtividade.format(FORMATTER));
+		requisicao.setHorarioAtividade(dataHorarioAtividade.getHour() + ":" + dataHorarioAtividade.getMinute());
 		requisicao.setDescricao(descricao);
 		requisicao.setEnderecoLocal(enderecoLocal);
 		requisicao.setEstadoAtividade(estadoAtividade);
@@ -245,7 +241,18 @@ public class Atividade {
 	}
 
 	public Boolean getOcorrido() {
-		return dataAtividade.isBefore(LocalDate.now())
+		return dataHorarioAtividade.isBefore(LocalDateTime.now())
 				|| estadoAtividade.equals(EstadoAtividade.JÁ_OCORRIDO);
 	}
+
+	public LocalDateTime getDataHorarioAtividade() {
+		return dataHorarioAtividade;
+	}
+
+	public void setDataHorarioAtividade(LocalDateTime dataHorarioAtividade) {
+		this.dataHorarioAtividade = dataHorarioAtividade;
+	}
+	
+	
+	
 }

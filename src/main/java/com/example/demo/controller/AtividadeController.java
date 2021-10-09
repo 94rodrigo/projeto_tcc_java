@@ -2,7 +2,8 @@ package com.example.demo.controller;
 
 import java.io.IOException;
 import java.security.Principal;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -58,7 +59,8 @@ public class AtividadeController {
 		String municipio = usuarioLogado.getMunicipio();
 		String uf = usuarioLogado.getUf();
 		List<Atividade> atividades = atividadeRepository.findAllByDataAtualMunicipioUf(EstadoAtividade.CONFIRMADO, municipio, uf);
-
+		atividades.sort(Comparator.comparing(Atividade::getDataHorarioAtividade));
+		
 		model.addAttribute("atividades", atividades);
 		model.addAttribute("usuarioLogado", usuarioLogado);
 		model.addAttribute("user", usuarioLogado);
@@ -111,7 +113,7 @@ public class AtividadeController {
 		atividade.incluirUsuario(user);
 		
 		
-		if (atividade.getDataAtividade().isBefore(LocalDate.now()))
+		if (atividade.getDataAtividade().isBefore(LocalDateTime.now()))
 			atividade.setEstadoAtividade(EstadoAtividade.JÁ_OCORRIDO);
 		
 		atividadeRepository.save(atividade);
@@ -127,10 +129,10 @@ public class AtividadeController {
 		model.addAttribute("user", user);
 		model.addAttribute("atividades", atividades);
 		for (Atividade atividade : atividades) {
-			if (atividade.getDataAtividade().isBefore(LocalDate.now()) && !atividade.getEstadoAtividade().equals(EstadoAtividade.CANCELADO)) {
+			if (atividade.getDataAtividade().isBefore(LocalDateTime.now()) && !atividade.getEstadoAtividade().equals(EstadoAtividade.CANCELADO)) {
 				atividade.setEstadoAtividade(EstadoAtividade.JÁ_OCORRIDO);
 				atividadeRepository.save(atividade);
-			} else if (atividade.getDataAtividade().isAfter(LocalDate.now()) && atividade.getEstadoAtividade().equals(EstadoAtividade.JÁ_OCORRIDO)) {
+			} else if (atividade.getDataAtividade().isAfter(LocalDateTime.now()) && atividade.getEstadoAtividade().equals(EstadoAtividade.JÁ_OCORRIDO)) {
 				atividade.setEstadoAtividade(EstadoAtividade.CONFIRMADO);
 				atividadeRepository.save(atividade);
 			}

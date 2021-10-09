@@ -112,16 +112,18 @@
                                	</div>
                            	</div>
                           </div>
-                          <div class="card shadow mb-4" th:each="usuario : ${usuarios}">
+                          <div class="card shadow mb-4">
                                 <!-- Card Header - Accordion -->
                                 <a href="#collapseCardExample" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample">
                                     <h6 class="m-0 font-weight-bold text-primary" th:text="'Pessoas confirmadas (' + ${atividade.usuariosAtividade} + ')'"></h6>
                                 </a>
                                 <!-- Card Content - Collapse -->
-                                <div class="collapse " id="collapseCardExample" style="">
-                                    <div class="card-body">
-                                        <h6 th:text="${usuario.nomeCompleto}"></h6>
-                                    </div>
+                                <div th:each="usuario : ${usuarios}">
+	                                <div class="collapse " id="collapseCardExample" style="">
+	                                    <div class="card-body">
+	                                        <h6 th:text="${usuario.nomeCompleto}"></h6>
+	                                    </div>
+	                                </div>
                                 </div>
                             </div>
 					</div>
