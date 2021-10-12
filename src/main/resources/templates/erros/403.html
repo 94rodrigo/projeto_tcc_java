@@ -68,39 +68,13 @@
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
 
-                    <!-- Page Heading -->
-                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">Últimas atividades</h1>
+                    <!-- 404 Error Text -->
+                    <div class="text-center">
+                        <div class="error mx-auto" data-text="403">403</div>
+                        <p class="lead text-gray-800 mb-5">Permissão negada!</p>
+                        <p class="text-gray-500 mb-0">Você não tem permissão para acessar a página solicitada...</p>
+                        <a th:href="@{/dashboard}">&larr; Voltar ao painel inicial</a>
                     </div>
-					
-                    <div class="col-lg-11 mb-4" id="atividade">
-
-                        <!-- Content Row -->
-							<table class="table">
-								<thead>
-									<tr>
-										<th scope="col">#</th>
-										<th scope="col">Atividade</th>
-										<th scope="col">Tipo</th>
-										<th scope="col">Data</th>
-										<th scope="col">Cidade</th>
-										<th scope="col">Pessoas</br>confirmadas</th>
-									</tr>
-								</thead>
-                        		<div th:each="atividade : ${atividadesQueUsuariosParticipa}">
-								<tbody>
-									<tr>
-										<th scope="row" th:text="${atividadesQueUsuariosParticipa.indexOf(atividade) + 1}"></th>
-										<td th:text="${atividade.nomeAtividade}"></td>
-										<td th:text="${atividade.nomeTipoAtividade}"></td>
-										<td th:text="${#temporals.format(atividade.dataAtividade, 'dd/MM/yyyy')} + ' - '  + ${#temporals.format(atividade.dataAtividade, 'HH:mm')}"></td>
-										<td th:text="${atividade.cidade} + ', ' + ${atividade.uf}"></td>
-										<td th:text="${atividade.usuariosAtividade}"></td>
-									</tr>
-								</tbody>
-                       			</div>
-							</table>
-					</div>
 
                 </div>
                 <!-- /.container-fluid -->

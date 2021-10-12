@@ -157,7 +157,7 @@
 	                                <div class="form-group col-sm-6">
 	                                    <input type="text" th:field="*{horarioAtividade}" th:errorclass="is-invalid" class="form-control form-control-user"
 	                                        placeholder="Horário (hh:mm)">
-	                                    <div class="invalid-feedback" th:errors="*{dataAtividade}">
+	                                    <div class="invalid-feedback" th:errors="*{horarioAtividade}">
 											Erros da hora da atividade
 										</div>
 	                                </div>
@@ -212,6 +212,9 @@
 	
 	<!-- Profile Modal-->
     <div th:replace="base :: profile_modal"></div>
+    
+    <!-- Modal novo usuário -->
+    <div th:replace="base :: new_user_modal"></div>
 
     <!-- Bootstrap core JavaScript-->
     <script src="/vendor/jquery/jquery.min.js"></script>

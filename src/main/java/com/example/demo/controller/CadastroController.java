@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.example.demo.model.Role;
 import com.example.demo.model.User;
+import com.example.demo.repository.RoleRepository;
 import com.example.demo.service.UserService;
 
 @Controller
@@ -27,6 +29,9 @@ public class CadastroController {
 	private UserService userService;
 	
 	@Autowired
+	private RoleRepository roleRepository;
+	
+	@Autowired
 	public CadastroController(BCryptPasswordEncoder bCryptPasswordEncoder, UserService userService) {
 		this.bCryptPasswordEncoder = bCryptPasswordEncoder;
 		this.userService = userService;
@@ -34,7 +39,7 @@ public class CadastroController {
 	
 	@GetMapping("/cadastro")
 	public String cadastro(Model model) {
-		model.addAttribute("user", new User());
+		model.addAttribute("novoUser", new User());
 		return "cadastro";
 	}
 	
@@ -61,12 +66,15 @@ public class CadastroController {
 			return "cadastro";
 		}
 		
+		Role roleUser = roleRepository.findById(2).get();
+		
 		model.addAttribute("message", "Valid form");
 		System.out.println("Controller: " + user.getSenha().equals(user.getConfirmacaoSenha()));
 		String encodedPassword = bCryptPasswordEncoder.encode(user.getSenha());
 		user.setSenha(encodedPassword);
 		user.setConfirmacaoSenha(encodedPassword);
 		user.setEnabled(true);
+		user.getRoles().add(roleUser);
 		userService.saveUser(user);
 		return "login";
 	}

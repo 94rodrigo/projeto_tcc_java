@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -86,6 +88,14 @@ public class User {
 			inverseJoinColumns = {@JoinColumn(name = "atividade_id")})
 	private List<Atividade> atividadesQueUsuariosParticipa = new ArrayList<>();
 	
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JoinTable(
+			name = "users_roles",
+			joinColumns = @JoinColumn(name = "id"),
+			inverseJoinColumns = @JoinColumn(name = "role_id")
+			)
+	private Set<Role> roles = new HashSet<>();
+	
 	
 	public User() {
 	}
@@ -148,7 +158,6 @@ public class User {
 		return atividadesQueUsuariosParticipa;
 	}
 	public List<Atividade> getAtividadesOrdenadasPorData() {
-		List<Atividade> ordemData = new ArrayList<>();
 		atividadesQueUsuariosParticipa.sort(Comparator.comparing(Atividade::getDataAtividade));
 		return atividadesQueUsuariosParticipa;
 	}
@@ -199,5 +208,13 @@ public class User {
 	
 	public void setResetPasswordToken(String resetPasswordToken) {
 		this.resetPasswordToken = resetPasswordToken;
+	}
+
+	public Set<Role> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(Set<Role> roles) {
+		this.roles = roles;
 	}
 }

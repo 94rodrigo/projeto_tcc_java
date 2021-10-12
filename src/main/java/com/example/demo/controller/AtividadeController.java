@@ -61,7 +61,12 @@ public class AtividadeController {
 		List<Atividade> atividades = atividadeRepository.findAllByDataAtualMunicipioUf(EstadoAtividade.CONFIRMADO, municipio, uf);
 		atividades.sort(Comparator.comparing(Atividade::getDataHorarioAtividade));
 		
+		for (Atividade atividade : atividades) {
+			System.out.println("Horário: " + atividade.getDataHorarioAtividade().getHour() + ":" + atividade.getDataHorarioAtividade().getMinute());
+		}
+		
 		model.addAttribute("atividades", atividades);
+		model.addAttribute("novoUser", new User());
 		model.addAttribute("usuarioLogado", usuarioLogado);
 		model.addAttribute("user", usuarioLogado);
 		
@@ -75,6 +80,7 @@ public class AtividadeController {
 	public String atividadesForm(Model model, Principal principal) {
 		User user = userRepository.findByEmail(principal.getName());
 		model.addAttribute("user", user);
+		model.addAttribute("novoUser", new User());
 		model.addAttribute("requisicaoNovaAtividade", new RequisicaoNovaAtividade());
 		return "atividade/form";
 	}
@@ -108,13 +114,11 @@ public class AtividadeController {
 		
 		atividade.setUser(user);
 		atividade.setUserEmail(user.getEmail());
-		atividade.setEstadoAtividade(EstadoAtividade.CONFIRMADO);
+		atividade.setEstadoAtividade(EstadoAtividade.PENDENTE);
 		user.adicionarAtividade(atividade);
 		atividade.incluirUsuario(user);
 		
-		
-		if (atividade.getDataAtividade().isBefore(LocalDateTime.now()))
-			atividade.setEstadoAtividade(EstadoAtividade.JÁ_OCORRIDO);
+		model.addAttribute("user", user);
 		
 		atividadeRepository.save(atividade);
 		userRepository.save(user);
@@ -128,6 +132,7 @@ public class AtividadeController {
 		User user = userRepository.findByEmail(principal.getName());
 		model.addAttribute("user", user);
 		model.addAttribute("atividades", atividades);
+		model.addAttribute("novoUser", new User());
 		for (Atividade atividade : atividades) {
 			if (atividade.getDataAtividade().isBefore(LocalDateTime.now()) && !atividade.getEstadoAtividade().equals(EstadoAtividade.CANCELADO)) {
 				atividade.setEstadoAtividade(EstadoAtividade.JÁ_OCORRIDO);
@@ -150,6 +155,7 @@ public class AtividadeController {
 		model.addAttribute("atividades", atividades);
 		model.addAttribute("usuarioLogado", usuarioLogado);
 		model.addAttribute("user", usuarioLogado);
+		model.addAttribute("novoUser", new User());
 		
 		return "atividade/atividades_todas";
 	}
@@ -163,6 +169,7 @@ public class AtividadeController {
 		model.addAttribute("atividades", atividades);
 		model.addAttribute("usuarioLogado", usuarioLogado);
 		model.addAttribute("user", usuarioLogado);
+		model.addAttribute("novoUser", new User());
 		
 		return "atividade/atividades_todas";
 	}
@@ -176,6 +183,7 @@ public class AtividadeController {
 		model.addAttribute("atividades", atividades);
 		model.addAttribute("usuarioLogado", usuarioLogado);
 		model.addAttribute("user", usuarioLogado);
+		model.addAttribute("novoUser", new User());
 		
 		return "atividade/atividades_todas";
 	}
@@ -186,6 +194,7 @@ public class AtividadeController {
 		model.addAttribute("user", user);
 		List<Atividade> atividades = atividadeRepository.findAllByUsuarioEDataAtual(principal.getName(), EstadoAtividade.CONFIRMADO);
 		model.addAttribute("atividades", atividades);
+		model.addAttribute("novoUser", new User());
 		
 		return "atividade/minhas_atividades";
 	}
@@ -196,6 +205,7 @@ public class AtividadeController {
 		model.addAttribute("user", user);
 		List<Atividade> atividades = atividadeRepository.findAllByUsuarioEEstado(principal.getName(), EstadoAtividade.CANCELADO);
 		model.addAttribute("atividades", atividades);
+		model.addAttribute("novoUser", new User());
 		
 		return "atividade/minhas_atividades";
 	}
@@ -206,6 +216,7 @@ public class AtividadeController {
 		model.addAttribute("user", user);
 		List<Atividade> atividades = atividadeRepository.findAllByUsuarioEDataAnterior(principal.getName());
 		model.addAttribute("atividades", atividades);
+		model.addAttribute("novoUser", new User());
 		
 		return "atividade/minhas_atividades";
 	}
@@ -225,6 +236,7 @@ public class AtividadeController {
 		
 		mav.addObject("user", user);
 		mav.addObject("requisicaoNovaAtividade", requisicaoNovaAtividade);
+		mav.addObject("novoUser", new User());
 		
 		return mav;
 	}
@@ -272,6 +284,7 @@ public class AtividadeController {
 		model.addAttribute("tipoBusca", tipoBusca);
 		model.addAttribute("usuarioLogado", userRepository.findByEmail(principal.getName()));
 		model.addAttribute("user", userRepository.findByEmail(principal.getName()));
+		model.addAttribute("novoUser", new User());
 		return "atividade/atividades_todas";
 	}
 	
@@ -285,6 +298,7 @@ public class AtividadeController {
 		model.addAttribute("usuarios", usuarios);
 		model.addAttribute("usuarioLogado", usuarioLogado);
 		model.addAttribute("user", usuarioLogado);
+		model.addAttribute("novoUser", new User());
 		return "atividade/atividade_informacoes";
 	}
 }

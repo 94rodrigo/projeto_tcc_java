@@ -32,6 +32,7 @@ public class UltimasAtividadesController {
 		atividadesQueUsuariosParticipa.sort(Comparator.comparing(Atividade::getDataHorarioAtividade));
 		model.addAttribute("user", user);
 		model.addAttribute("atividadesQueUsuariosParticipa", atividadesQueUsuariosParticipa);
+		model.addAttribute("novoUser", new User());
 		return "atividade/ultimas_atividades";
 	}
 }

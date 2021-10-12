@@ -22,6 +22,7 @@ public class DashboardController {
 	public String home(Model model, Principal principal) {
 		User user = userRepository.findByEmail(principal.getName());
 		model.addAttribute("user", user);
+		model.addAttribute("novoUser", new User());
 		return "dashboard";
 	}
 	

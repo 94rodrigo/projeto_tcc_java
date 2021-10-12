@@ -17,6 +17,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.example.demo.model.CustomUserDetails;
+import com.example.demo.model.RolesEnum;
 import com.example.demo.service.CustomUserDetailsService;
 import com.example.demo.service.UserService;
 
@@ -33,6 +34,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 	}
 	
 	@Bean
+	public BCryptPasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
+	
+	@Bean
 	public DaoAuthenticationProvider authenticationProvider() {
 		DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
 		authProvider.setUserDetailsService(userDetailsService());
@@ -45,7 +51,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 		http
 			.authorizeRequests().antMatchers("/login/**", "/cadastro/**", "../static/**", "/forgot_password/**", "/reset_password/**", "/message/**")
 			.permitAll()
+			.antMatchers("/atividades_aprovacao/**", "/novo_usuario/**", "/aprovarAtividades/**").hasAnyAuthority(RolesEnum.ADMIN.name())
 			.anyRequest().authenticated()
+			.and()
+			.exceptionHandling().accessDeniedPage("/403")
 			.and()
 			.formLogin(form -> form
 					.loginPage("/login")
@@ -70,11 +79,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 		auth.authenticationProvider(authenticationProvider());
-	}
-	
-	@Bean
-	public BCryptPasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
 	}
 	
 }

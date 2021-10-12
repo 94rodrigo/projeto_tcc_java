@@ -13,6 +13,9 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.DateTimeFormat.ISO;
+
 import com.example.demo.model.Atividade;
 import com.example.demo.model.EstadoAtividade;
 
@@ -37,13 +40,15 @@ public class RequisicaoNovaAtividade {
 	@NotBlank
 	private String cidade;
 	
+//	@Pattern(regexp = "^\\d{2}/\\d{2}/\\d{4}$")
 	@NotNull
-	@Pattern(regexp = "^\\d{2}/\\d{2}/\\d{4}$")
-	private String dataAtividade;
+	@DateTimeFormat(pattern = "dd/MM/yyyy", iso = ISO.DATE)
+	private LocalDate dataAtividade;
 	
+//	@Pattern(regexp = "^\\d{2}:\\d{2}$")
+	@DateTimeFormat(pattern = "HH:mm", iso = ISO.TIME)
 	@NotNull
-	@Pattern(regexp = "^\\d{2}:\\d{2}$")
-	private String horarioAtividade;
+	private LocalTime horarioAtividade;
 	
 	private String descricao;
 	
@@ -76,10 +81,10 @@ public class RequisicaoNovaAtividade {
 	public void setCidade(String cidade) {
 		this.cidade = cidade;
 	}
-	public String getDataAtividade() {
+	public LocalDate getDataAtividade() {
 		return dataAtividade;
 	}
-	public void setDataAtividade(String dataAtividade) {
+	public void setDataAtividade(LocalDate dataAtividade) {
 		this.dataAtividade = dataAtividade;
 	}
 	public String getDescricao() {
@@ -109,17 +114,18 @@ public class RequisicaoNovaAtividade {
 	
 	public Atividade toAtividade() {
 		Atividade atividade = new Atividade();
-		String[] hora = this.horarioAtividade.split(":");
-		System.out.println("Horário: ");
-		for (String string : Arrays.asList(hora)) {
-			System.out.println(string + ":");
-		}
+//		String[] hora = this.horarioAtividade.split(":");
+//		System.out.println("Horário: ");
+//		for (String string : Arrays.asList(hora)) {
+//			System.out.println(string + ":");
+//		}
 		
 		atividade.setNomeAtividade(this.nomeAtividade);
 		atividade.setTipoAtividade(this.tipoAtividade);
 		atividade.setCidade(this.cidade);
 //		atividade.setDataAtividade(LocalDate.parse(this.dataAtividade, FORMATTER));
-		atividade.setDataHorarioAtividade(LocalDateTime.of(LocalDate.parse(this.dataAtividade, FORMATTER), LocalTime.of(Integer.parseInt(hora[0]), Integer.parseInt(hora[1]))));
+//		atividade.setDataHorarioAtividade(LocalDateTime.of(LocalDate.parse(this.dataAtividade, FORMATTER), LocalTime.of(Integer.parseInt(hora[0]), Integer.parseInt(hora[1]))));
+		atividade.setDataHorarioAtividade(LocalDateTime.of(dataAtividade, horarioAtividade));
 		atividade.setUf(this.uf);
 		atividade.setDescricao(this.descricao);
 		atividade.setEnderecoLocal(this.enderecoLocal);
@@ -128,11 +134,11 @@ public class RequisicaoNovaAtividade {
 	}
 	
 	public Atividade toAtividade(Atividade atividade) {
-		String[] hora = this.horarioAtividade.split(":");
-		System.out.println("Horário: ");
-		for (String string : Arrays.asList(hora)) {
-			System.out.println(string + ":");
-		}
+//		String[] hora = this.horarioAtividade.split(":");
+//		System.out.println("Horário: ");
+//		for (String string : Arrays.asList(hora)) {
+//			System.out.println(string + ":");
+//		}
 		
 		atividade.setId(this.id);
 		atividade.setNomeAtividade(this.nomeAtividade);
@@ -141,15 +147,16 @@ public class RequisicaoNovaAtividade {
 		atividade.setCidade(this.cidade);
 		atividade.setEnderecoLocal(this.enderecoLocal);
 //		atividade.setDataAtividade(this.dataAtividade);
-		atividade.setDataHorarioAtividade(LocalDateTime.of(LocalDate.parse(this.dataAtividade, FORMATTER), LocalTime.of(Integer.parseInt(hora[0]), Integer.parseInt(hora[1]))));
+//		atividade.setDataHorarioAtividade(LocalDateTime.of(LocalDate.parse(this.dataAtividade, FORMATTER), LocalTime.of(Integer.parseInt(hora[0]), Integer.parseInt(hora[1]))));
+		atividade.setDataHorarioAtividade(LocalDateTime.of(dataAtividade, horarioAtividade));
 		atividade.setDescricao(this.descricao);
 		return atividade;
 	}
 	
-	public String getHorarioAtividade() {
+	public LocalTime getHorarioAtividade() {
 		return horarioAtividade;
 	}
-	public void setHorarioAtividade(String horarioAtividade) {
+	public void setHorarioAtividade(LocalTime horarioAtividade) {
 		this.horarioAtividade = horarioAtividade;
 	}
 }

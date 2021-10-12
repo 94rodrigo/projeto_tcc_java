@@ -1,7 +1,9 @@
 package com.example.demo.model;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -182,9 +184,10 @@ public class Atividade {
 		requisicao.setId(id);
 		requisicao.setNomeAtividade(nomeAtividade);
 		requisicao.setCidade(cidade);
-//		requisicao.setDataAtividade(dataAtividade.format(FORMATTER));
-		requisicao.setDataAtividade(dataHorarioAtividade.format(FORMATTER));
-		requisicao.setHorarioAtividade(dataHorarioAtividade.getHour() + ":" + dataHorarioAtividade.getMinute());
+//		requisicao.setDataAtividade(dataHorarioAtividade.format(FORMATTER));
+//		requisicao.setHorarioAtividade(dataHorarioAtividade.getHour() + ":" + dataHorarioAtividade.getMinute());
+		requisicao.setDataAtividade(LocalDate.from(dataHorarioAtividade));
+		requisicao.setHorarioAtividade(LocalTime.from(dataHorarioAtividade));
 		requisicao.setDescricao(descricao);
 		requisicao.setEnderecoLocal(enderecoLocal);
 		requisicao.setEstadoAtividade(estadoAtividade);
