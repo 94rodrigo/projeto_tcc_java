@@ -2,7 +2,6 @@ package com.example.demo.model;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
@@ -21,9 +20,11 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 import com.example.demo.api.CoordenadasApi;
+import com.example.demo.service.RoleService;
 import com.example.demo.validadores.FieldMatch;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.gson.Gson;
@@ -42,7 +43,7 @@ import com.google.maps.model.GeocodingResult;
 @Entity
 @Table(name = "users")
 public class User {
-
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -216,5 +217,9 @@ public class User {
 
 	public void setRoles(Set<Role> roles) {
 		this.roles = roles;
+	}
+	
+	public void setRoles(String id) {
+		this.roles.add(RoleService.findRoleById(id));
 	}
 }

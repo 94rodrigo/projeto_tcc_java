@@ -287,16 +287,16 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Deseja sair?</h5>
                 <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">x</span>
                 </button>
             </div>
-            <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+            <div class="modal-body">Clique em "Sair" se você deseja encerrar sua sessão.</div>
             <div class="modal-footer">
-                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
                 <form id="form-login" th:action="@{/logout}" method="POST">
-                <button type="submit" class="btn btn-primary">Logout</button></form>
+                <button type="submit" class="btn btn-primary">Sair</button></form>
             </div>
         </div>
     </div>
@@ -386,7 +386,7 @@
 					<span aria-hidden="true">×</span>
 				</button>
 			</div>
-			<form class="user" th:action="@{/cadastro}" th:object="${novoUser}" method="post">
+			<form class="user" th:action="@{/adminCadastro}" th:object="${novoUser}" method="post">
 				<div class="modal-body">
 					<div class="form-group row">
 						<div class="col-sm-6 mb-3 mb-sm-0">
@@ -468,14 +468,14 @@
 					</div>
 					<div class="form-group">
 						<br><p>Tipo de usuário:</p>
-						<input type="radio" id="admin" name="tipo_usuario" value="ADMIN">
+						<input type="radio" checked="checked" th:field="*{roles}" id="admin" name="tipo_usuario" th:value="1" />
 						<label for="admin">Administrador</label><br>
-						<input type="radio" id="user" name="tipo_usuario" value="USER">
+						<input type="radio" th:field="*{roles}" id="user" name="tipo_usuario" th:value="2">
 						<label for="user">Usuário comum</label><br>
 					</div>
 					<br>
 					<button type="submit" class="btn btn-primary btn-user btn-block">
-						Register Account</button>
+						Registrar usuário</button>
 					
 				</div>
 			</form>

@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.example.demo.model.Role;
 import com.example.demo.model.User;
 import com.example.demo.repository.RoleRepository;
 import com.example.demo.service.UserService;
@@ -44,7 +44,7 @@ public class CadastroController {
 	}
 	
 	@PostMapping("/cadastro")
-	public String novoUsuario(@Valid User user, BindingResult result, Model model) {
+	public String novoUsuario(@Valid User user, BindingResult result, HttpServletRequest request, Model model) {
 		User usuarioExiste = userService.findByEmail(user.getEmail());
 		
 		if (usuarioExiste != null) {
@@ -63,10 +63,14 @@ public class CadastroController {
 			for (ObjectError objectError : allErrors) {
 				System.out.println(objectError.getDefaultMessage());
 			}
-			return "cadastro";
-		}
+			System.out.println(request.getHeader(null));
+			return "cadastro";				
+		} 
 		
-		Role roleUser = roleRepository.findById(2).get();
+				
+		if (user.getRoles().isEmpty()) {
+			user.getRoles().add(roleRepository.findById(2).get());
+		}
 		
 		model.addAttribute("message", "Valid form");
 		System.out.println("Controller: " + user.getSenha().equals(user.getConfirmacaoSenha()));
@@ -74,8 +78,39 @@ public class CadastroController {
 		user.setSenha(encodedPassword);
 		user.setConfirmacaoSenha(encodedPassword);
 		user.setEnabled(true);
-		user.getRoles().add(roleUser);
 		userService.saveUser(user);
+		
+		if (user.getRoles().contains(roleRepository.findById(1).get())) {
+			return "redirect:/dashboard";
+		}
+		
 		return "login";
+	}
+	
+	@PostMapping("/adminCadastro")
+	public String adminNovoUsuario(@Valid User novoUser, BindingResult result, HttpServletRequest request, Model model) {
+
+		if (result.hasErrors()) {
+			System.out.println(result.hasErrors());
+			List<ObjectError> allErrors = result.getAllErrors();
+			for (ObjectError objectError : allErrors) {
+				System.out.println(objectError.getDefaultMessage());
+			}
+			return "dashboard";				
+		}
+		
+		if (novoUser.getRoles().isEmpty()) {
+			novoUser.getRoles().add(roleRepository.findById(2).get());
+		}
+		
+		model.addAttribute("message", "Valid form");
+		System.out.println("Controller: " + novoUser.getSenha().equals(novoUser.getConfirmacaoSenha()));
+		String encodedPassword = bCryptPasswordEncoder.encode(novoUser.getSenha());
+		novoUser.setSenha(encodedPassword);
+		novoUser.setConfirmacaoSenha(encodedPassword);
+		novoUser.setEnabled(true);
+		userService.saveUser(novoUser);
+		
+		return "dashboard";
 	}
 }

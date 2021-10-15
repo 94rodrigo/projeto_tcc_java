@@ -51,7 +51,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 		http
 			.authorizeRequests().antMatchers("/login/**", "/cadastro/**", "../static/**", "/forgot_password/**", "/reset_password/**", "/message/**")
 			.permitAll()
-			.antMatchers("/atividades_aprovacao/**", "/novo_usuario/**", "/aprovarAtividades/**").hasAnyAuthority(RolesEnum.ADMIN.name())
+			.antMatchers("/atividades_aprovacao/**", "/novo_usuario/**", "/aprovarAtividades/**", "/adminCadastro/**").hasAnyAuthority(RolesEnum.ADMIN.name())
 			.anyRequest().authenticated()
 			.and()
 			.exceptionHandling().accessDeniedPage("/403")

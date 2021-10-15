@@ -23,13 +23,9 @@
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
     <script src="https://unpkg.com/@google/markerclustererplus@4.0.1/dist/markerclustererplus.min.js"></script>
     
-    <style type="text/css">
-      /* Set the size of the div element that contains the map */
-      #map {
-        height: 400px;
-        width: 100%;
-      }
-    </style>
+    <!-- Custom styles for this page -->
+    <link href="/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+    
 
 </head>
 
@@ -75,32 +71,54 @@
 					
                     <div class="col-lg-11 mb-4" id="atividade">
 
-                        <!-- Content Row -->
-							<table class="table">
-								<thead>
-									<tr>
-										<th scope="col">#</th>
-										<th scope="col">Atividade</th>
-										<th scope="col">Tipo</th>
-										<th scope="col">Data</th>
-										<th scope="col">Cidade</th>
-										<th scope="col">Pessoas</br>confirmadas</th>
-									</tr>
-								</thead>
-                        		<div th:each="atividade : ${atividadesQueUsuariosParticipa}">
-								<tbody>
-									<tr>
-										<th scope="row" th:text="${atividadesQueUsuariosParticipa.indexOf(atividade) + 1}"></th>
-										<td th:text="${atividade.nomeAtividade}"></td>
-										<td th:text="${atividade.nomeTipoAtividade}"></td>
-										<td th:text="${#temporals.format(atividade.dataAtividade, 'dd/MM/yyyy')} + ' - '  + ${#temporals.format(atividade.dataAtividade, 'HH:mm')}"></td>
-										<td th:text="${atividade.cidade} + ', ' + ${atividade.uf}"></td>
-										<td th:text="${atividade.usuariosAtividade}"></td>
-									</tr>
-								</tbody>
-                       			</div>
-							</table>
+                        
 					</div>
+					
+					<!-- -----------------------------------------------------------------------------------------------------------------  -->
+					
+					<!-- DataTales Example -->
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Próximas atividades</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>Atividade</th>
+                                            <th>Tipo</th>
+                                            <th>Data</th>
+                                            <th>Cidade</th>
+                                            <th>Pessoas confirmadas</th>
+                                        </tr>
+                                    </thead>
+                                    <tfoot>
+                                        <tr>
+                                            <th>Atividade</th>
+                                            <th>Tipo</th>
+                                            <th>Data</th>
+                                            <th>Cidade</th>
+                                            <th>Pessoas confirmadas</th>
+                                        </tr>
+                                    </tfoot>
+                                    <tbody>
+	                                    <div th:each="atividade : ${atividadesQueUsuariosParticipa}">
+                                        <tr>
+											<td th:text="${atividade.nomeAtividade}"></td>
+											<td th:text="${atividade.nomeTipoAtividade}"></td>
+											<td th:text="${#temporals.format(atividade.dataAtividade, 'dd/MM/yyyy')} + ' - '  + ${#temporals.format(atividade.dataAtividade, 'HH:mm')}"></td>
+											<td th:text="${atividade.cidade} + ', ' + ${atividade.uf}"></td>
+											<td th:text="${atividade.usuariosAtividade}"></td>
+										</tr>
+										</div>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+					
+					<!-- -----------------------------------------------------------------------------------------------------------------  -->
 
                 </div>
                 <!-- /.container-fluid -->
@@ -147,13 +165,15 @@
 
     <!-- Custom scripts for all pages-->
     <script src="/js/sb-admin-2.min.js"></script>
-
+    
+    
     <!-- Page level plugins -->
-    <script src="/vendor/chart.js/Chart.min.js"></script>
+    <script src="/vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="/vendor/datatables/dataTables.bootstrap4.min.js"></script>
 
     <!-- Page level custom scripts -->
-    <script src="/js/demo/chart-area-demo.js"></script>
-    <script src="/js/demo/chart-pie-demo.js"></script>
+    <script src="/js/demo/datatables-demo.js"></script>
+    
     
 	<script>
 	    function onLoad() {

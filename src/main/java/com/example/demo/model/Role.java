@@ -32,8 +32,13 @@ public class Role {
 	public RolesEnum getNome() {
 		return nome;
 	}
+	
+	public String getNomeString() {
+		return nome.name();
+	}
 
 	public void setNome(RolesEnum nome) {
 		this.nome = nome;
 	}
+	
 }
