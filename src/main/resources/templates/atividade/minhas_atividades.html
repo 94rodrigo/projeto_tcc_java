@@ -60,6 +60,7 @@
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
                         <h1 class="h3 mb-0 text-gray-800">Minhas Atividades</h1>
+                        <p th:if="${atividadeCadatradaEPendente}" class="ok"><script type="text/javascript">alert('Atividade cadastrada! \nAguarde aprovação pelos moderadores.');</script></p>
                         <div class="dropdown mb-4">
                             <button class="btn-sm btn-primary shadow-sm dropdown-toggle" type="button"
                                 id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
@@ -71,49 +72,63 @@
                                 <a class="dropdown-item" th:href="@{/userAtividades}">Todos</a>
                                 <a class="dropdown-item" th:href="@{/userAtividadesConfirmadas}">Confirmados</a>
                                 <a class="dropdown-item" th:href="@{/userAtividadesOcorridas}">Já ocorrido</a>
+                                <a class="dropdown-item" th:href="@{/userAtividadesPendentes}">Pendentes</a>
+                                <a class="dropdown-item" th:href="@{/userAtividadesRejeitadas}">Rejeitados</a>
                                 <a class="dropdown-item" th:href="@{/userAtividadesCanceladas}">Cancelados</a>
                             </div>
                         </div>
                     </div>
-
-                    <div class="col-lg-11 mb-4">
-
-                        <!-- Atividades -->
-                        <div class="card shadow mb-4" th:each="atividade : ${atividades}">
-                            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between"
-                            		th:classappend="${(atividade.estadoAtividade.name() == 'CANCELADO' ? 'bg-gradient-danger' : '') +
-                            		(atividade.estadoAtividade.name() == 'JÁ_OCORRIDO' ? 'bg-gradient-warning' : '')}">
-                                <h6 class="m-0 font-weight-bold text-primary" th:text="${atividade.nomeAtividade}">Nome da atividade</h6>
-                                <div class="dropdown no-arrow">
-                                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
-                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                                    </a>
-                                    <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
-                                        aria-labelledby="dropdownMenuLink">
-                                        <div class="dropdown-header">Ações:</div>
-                                        <a class="dropdown-item" href="#">Marcar como já ocorrido</a>
-                                        <form th:action="@{'atividade/{id}/cancelar'(id=${atividade.id})}" method="post"><button type="submit" class="dropdown-item">Cancelar</button></form>
-                                        <div class="dropdown-divider"></div>
-                                        <form th:action="@{'delete/{id}'(id=${atividade.id})}" method="post"><button type="submit" class="dropdown-item">Excluir</button></form>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card-body">
-                                <div class="text-center">
-                                    <img class="img-fluid px-3 px-sm-4 mt-3 mb-4" style="width: 25rem;"
-                                        src="img/undraw_posting_photo.svg" alt="...">
-                                </div>
-                                <p>Local: <span th:text="${atividade.enderecoLocal} + ', ' + ${atividade.cidade} + ', ' + ${atividade.uf}"></span></p>
-                                <p>Tipo: <span th:text="${atividade.nomeTipoAtividade}"></span></p>
-                                <p>Descrição: <span th:text="${atividade.descricao}"></span></p>
-                                <p>Quando: <span th:text="${#temporals.format(atividade.dataAtividade, 'dd/MM/yyyy')} + ' - '  + ${#temporals.format(atividade.dataAtividade, 'HH:mm')}"></span></p>
-                                <a th:href="@{'atividadesFormAlteracao/{id}'(id=${atividade.id})}">Alterar &rarr;</a>
-                            </div>
-                        </div>
-
-
-                    </div>
+					<p th:text="${message}"></p>
+					<div th:if="${atividades.isEmpty()}">
+						<h4>Nenhuma atividade encontrada</h4>
+					</div>
+					
+					<div th:unless="${atividades.isEmpty()}">
+	                    <div class="col-lg-11 mb-4">
+						
+						
+	                        <!-- Atividades -->
+	                        <div class="card shadow mb-4" th:each="atividade : ${atividades}">
+	                            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between"
+	                            		th:classappend="${(atividade.estadoAtividade.name() == 'CANCELADO' ? 'bg-gradient-danger' : '') +
+	                            		(atividade.estadoAtividade.name() == 'JÁ_OCORRIDO' ? 'bg-gradient-warning' : '')}">
+	                                <h6 class="m-0 font-weight-bold text-primary" th:text="${atividade.nomeAtividade}">Nome da atividade</h6>
+	                                <div class="dropdown no-arrow">
+	                                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+	                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+	                                        <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+	                                    </a>
+	                                    <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
+	                                        aria-labelledby="dropdownMenuLink">
+	                                        <div class="dropdown-header">Ações:</div>
+	                                        <div th:if="${!atividade.ocorrido}">
+		                                        <a class="dropdown-item" href="#">Marcar como já ocorrido</a>
+	                                        </div>
+	                                        <div th:if="${!atividade.cancelado}">
+		                                        <form th:action="@{'atividade/{id}/cancelar'(id=${atividade.id})}" method="post"><button type="submit" class="dropdown-item">Cancelar</button></form>
+	                                        </div>
+	                                        <div class="dropdown-divider"></div>
+	                                        <form th:action="@{'delete/{id}'(id=${atividade.id})}" method="post"><button type="submit" class="dropdown-item">Excluir</button></form>
+	                                    </div>
+	                                </div>
+	                            </div>
+	                            <div class="card-body">
+	                                <div class="text-center">
+	                                    <img class="img-fluid px-3 px-sm-4 mt-3 mb-4" style="width: 25rem;"
+	                                        src="img/undraw_posting_photo.svg" alt="...">
+	                                </div>
+	                                <p>Local: <span th:text="${atividade.enderecoLocal} + ', ' + ${atividade.cidade} + ', ' + ${atividade.uf}"></span></p>
+	                                <p>Tipo: <span th:text="${atividade.nomeTipoAtividade}"></span></p>
+	                                <p>Quando: <span th:text="${#temporals.format(atividade.dataAtividade, 'dd/MM/yyyy')} + ' - '  + ${#temporals.format(atividade.dataAtividade, 'HH:mm')}"></span></p>
+	                                <p>Situação: <span th:text="${atividade.estadoAtividadeNome}"></span></p>
+	                                <p>Descrição: <span th:text="${atividade.descricao}"></span></p>
+	                                <a th:href="@{'atividadesFormAlteracao/{id}'(id=${atividade.id})}">Alterar &rarr;</a>
+	                            </div>
+	                        </div>
+	
+	
+	                    </div>
+					</div>
 
                 </div>
                 <!-- /.container-fluid -->

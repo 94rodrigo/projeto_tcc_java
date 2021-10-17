@@ -52,6 +52,9 @@ public interface AtividadeRepository extends JpaRepository<Atividade, Long>{
 	@Query("select a from Atividade a join a.user u where a.cidade = :municipio and a.uf = :uf")
 	List<Atividade> findAllByMunicipioUfTodas(@Param("municipio") String municipio, @Param("uf") String uf);
 	
+	@Query("select a from Atividade a join a.user u where a.cidade = :municipio and a.estadoAtividade = :estado")
+	List<Atividade> findAllByMunicipioEstado(@Param("municipio") String municipio, @Param("estado") EstadoAtividade estado);
+	
 	@Transactional
 	@Modifying
 	@Query("update Atividade a set a.estadoAtividade = :estado where a.id = :id")

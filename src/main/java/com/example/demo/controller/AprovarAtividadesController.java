@@ -18,7 +18,7 @@ import com.example.demo.repository.AtividadeRepository;
 import com.example.demo.repository.UserRepository;
 
 @Controller
-@RequestMapping("/aprovarAtividades")
+@RequestMapping
 public class AprovarAtividadesController {
 
 	@Autowired
@@ -27,7 +27,7 @@ public class AprovarAtividadesController {
 	@Autowired
 	private UserRepository userRepository;
 	
-	@GetMapping
+	@GetMapping("/aprovarAtividades")
 	public String aprovarAtividadesPage(Principal principal, Model model) {
 		User user = userRepository.findByEmail(principal.getName());
 		List<Atividade> atividadesPendentes = atividadeRepository.findAllByEstado(EstadoAtividade.PENDENTE);
@@ -37,19 +37,15 @@ public class AprovarAtividadesController {
 		return "admin_pages/atividades_aprovacao";
 	}
 	
-	@PostMapping("/aprovar/{id}")
+	@PostMapping("/atividade/{id}/aprovar")
 	public String aprovarAtividade(@PathVariable Long id) {
-		Atividade atividadeEncontrada = atividadeRepository.findById(id).get();
-		atividadeEncontrada.setEstadoAtividade(EstadoAtividade.CONFIRMADO);
-		atividadeRepository.save(atividadeEncontrada);
+		atividadeRepository.alterarEstadoAtividade(EstadoAtividade.CONFIRMADO, id);
 		return "redirect:/aprovarAtividades";
 	}
 	
-	@PostMapping("/rejeitar/{id}")
+	@PostMapping("/atividade/{id}/rejeitar")
 	public String rejeitarAtividade(@PathVariable Long id) {
-		Atividade atividadeEncontrada = atividadeRepository.findById(id).get();
-		atividadeEncontrada.setEstadoAtividade(EstadoAtividade.REJEITADO);
-		atividadeRepository.save(atividadeEncontrada);
+		atividadeRepository.alterarEstadoAtividade(EstadoAtividade.REJEITADO, id);
 		return "redirect:/aprovarAtividades";
 	}
 }

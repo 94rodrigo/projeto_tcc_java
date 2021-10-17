@@ -83,8 +83,9 @@
                            	<div class="card-body">
                                 <p>Local: <span id="enderecolocal" th:text="${atividade.enderecoLocal} + ', ' + ${atividade.cidade} + ', ' + ${atividade.uf}"></span></p>
                                 <p>Tipo: <span th:text="${atividade.nomeTipoAtividade}"></span></p>
-                                <p>Descrição: <span th:text="${atividade.descricao}"></span></p>
                                 <p>Quando: <span th:text="${#temporals.format(atividade.dataAtividade, 'dd/MM/yyyy')}"></span></p>
+                                <p>Situação: <span th:text="${atividade.estadoAtividadeNome}"></span></p>
+                                <p>Descrição: <span th:text="${atividade.descricao}"></span></p>
                                 <p>Cadastrado por: <span th:text="${atividade.nomeCompletoUsuario}"></span></p>
                                 <p>Participantes: <span th:text="${atividade.usuariosAtividade}"></span> confirmados</p>
                                 

@@ -25,7 +25,7 @@ public class ErrorController {
 		User user = userRepository.findByEmail(principal.getName());
 		model.addAttribute("novoUser", new User());
 		model.addAttribute("user", user);
-		return "erros/403";
+		return "error/403";
 	}
 	
 	@GetMapping("/404")
@@ -33,6 +33,6 @@ public class ErrorController {
 		User user = userRepository.findByEmail(principal.getName());
 		model.addAttribute("novoUser", new User());
 		model.addAttribute("user", user);
-		return "erros/403";
+		return "error/403";
 	}
 }

@@ -104,8 +104,9 @@
 	                         
 	                                <p>Local: <span id="enderecolocal" th:text="${atividade.enderecoLocal} + ', ' + ${atividade.cidade} + ', ' + ${atividade.uf}"></span></p>
 	                                <p>Tipo: <span th:text="${atividade.nomeTipoAtividade}"></span></p>
-	                                <p>Descrição: <span th:text="${atividade.descricao}"></span></p>
 	                                <p>Quando: <span th:text="${#temporals.format(atividade.dataAtividade, 'dd/MM/yyyy')} + ' - '  + ${#temporals.format(atividade.dataAtividade, 'HH:mm')}"></span></p>
+	                                <p>Situação: <span th:text="${atividade.estadoAtividadeNome}"></span></p>
+	                                <p>Descrição: <span th:text="${atividade.descricao}"></span></p>
 	                                <p>Cadastrado por: <span th:text="${atividade.nomeCompletoUsuario}"></span></p>
 	                                <p>Participantes: <span th:text="${atividade.usuariosAtividade}"></span> confirmados</p>
 	                                <p hidden id="coordenadas"><span th:text="${atividade.coordenadas}"></span></p>
@@ -205,6 +206,11 @@
 	                }
 	            }
 	        );
+	        navigator.geolocation.getCurrentPosition(function(location) {
+	      	  console.log(location.coords.latitude);
+	      	  console.log(location.coords.longitude);
+	      	  console.log(location.coords.accuracy);
+	      	});
 	    }
 	    
 	    function coordenadasJson(seletor){
@@ -279,8 +285,19 @@
 	        return null;
 	    }
 	    
-		
+	    
+	    navigator.geolocation.getCurrentPosition(function(location) {
+    	  console.log(location.coords.latitude);
+    	  console.log(location.coords.longitude);
+    	  console.log(location.coords.accuracy);
+    	});
+		  
 	</script>
+    
+    
+    
+    
+    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>     
     
     <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>

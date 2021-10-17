@@ -150,6 +150,10 @@ public class Atividade {
 	public EstadoAtividade getEstadoAtividade() {
 		return estadoAtividade;
 	}
+	
+	public String getEstadoAtividadeNome() {
+		return getEstadoAtividade().name().replace("_", " ");
+	}
 
 	public void setEstadoAtividade(EstadoAtividade estadoAtividade) {
 		this.estadoAtividade = estadoAtividade;
@@ -241,6 +245,14 @@ public class Atividade {
 
 	public Boolean getCancelado() {
 		return estadoAtividade.equals(EstadoAtividade.CANCELADO);
+	}
+	
+	public Boolean getPendente() {
+		return estadoAtividade.equals(EstadoAtividade.PENDENTE);
+	}
+	
+	public Boolean getRejeitado() {
+		return estadoAtividade.equals(EstadoAtividade.REJEITADO);
 	}
 
 	public Boolean getOcorrido() {

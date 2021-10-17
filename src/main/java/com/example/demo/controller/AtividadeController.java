@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.demo.api.CoordenadasApi;
 import com.example.demo.dto.RequisicaoNovaAtividade;
@@ -52,8 +53,10 @@ public class AtividadeController {
 	
 	private Long idAtividade;
 	
+	private Boolean isAtividadeCadastradaEPendente = false;
+	
 	@GetMapping("/todas")
-	public String todasAsAtividades(Model model, Principal principal, String tipo) {
+	public String todasAsAtividades(Model model, Principal principal, String tipo) throws IOException {
 //		List<Atividade> atividades = atividadeRepository.findAllByDataAtual(EstadoAtividade.CONFIRMADO);
 		User usuarioLogado = userRepository.findByEmail(principal.getName());
 		String municipio = usuarioLogado.getMunicipio();
@@ -86,12 +89,16 @@ public class AtividadeController {
 	}
 	
 	@PostMapping("/atividadesFormGravar")
-	public String novaAtividade(@Valid RequisicaoNovaAtividade requisicaoNovaAtividade, BindingResult result, HttpServletRequest request, Model model) {
+	public String novaAtividade(@Valid RequisicaoNovaAtividade requisicaoNovaAtividade, BindingResult result, HttpServletRequest request, Model model, RedirectAttributes redirectAttributes) {
 		
 		if (idAtividade != null) {
 			Atividade atividade2 = atividadeRepository.findById(idAtividade).get();
 			requisicaoNovaAtividade.setId(idAtividade);
 			atividade2 = requisicaoNovaAtividade.toAtividade(atividade2);
+			System.out.println(result.hasErrors());
+			if (result.hasErrors()) {
+				return verificarErrosAtividade(result);
+			}
 			atividadeRepository.save(atividade2);
 			idAtividade = null;
 			return "redirect:/userAtividades";
@@ -99,12 +106,7 @@ public class AtividadeController {
 		
 		System.out.println(result.hasErrors());
 		if (result.hasErrors()) {
-			System.out.println(result.hasErrors());
-			List<ObjectError> allErrors = result.getAllErrors();
-			for (ObjectError objectError : allErrors) {
-				System.out.println(objectError.getDefaultMessage());
-			}
-			return "atividade/form";
+			return verificarErrosAtividade(result);
 		}
 		
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -123,13 +125,28 @@ public class AtividadeController {
 		atividadeRepository.save(atividade);
 		userRepository.save(user);
 		
+		isAtividadeCadastradaEPendente = true;
+		
+		
+		redirectAttributes.addFlashAttribute("message", "Successful!");
+		
 		return "redirect:/userAtividades";
+	}
+
+	private String verificarErrosAtividade(BindingResult result) {
+		System.out.println(result.hasErrors());
+		List<ObjectError> allErrors = result.getAllErrors();
+		for (ObjectError objectError : allErrors) {
+			System.out.println(objectError.getDefaultMessage());
+		}
+		return "atividade/form";
 	}
 	
 	@GetMapping("/userAtividades")
 	public String minhasAtividades(Model model, Principal principal) {
 		List<Atividade> atividades = atividadeRepository.findAllByUsuario(principal.getName());
 		User user = userRepository.findByEmail(principal.getName());
+		model.addAttribute("atividadeCadatradaEPendente", isAtividadeCadastradaEPendente);
 		model.addAttribute("user", user);
 		model.addAttribute("atividades", atividades);
 		model.addAttribute("novoUser", new User());
@@ -142,6 +159,7 @@ public class AtividadeController {
 				atividadeRepository.save(atividade);
 			}
 		}
+		isAtividadeCadastradaEPendente = false;
 		
 		return "atividade/minhas_atividades";
 	}
@@ -210,6 +228,28 @@ public class AtividadeController {
 		return "atividade/minhas_atividades";
 	}
 	
+	@GetMapping("/userAtividadesPendentes")
+	public String minhasAtividadesPendentes(Model model, Principal principal) {
+		User user = userRepository.findByEmail(principal.getName());
+		model.addAttribute("user", user);
+		List<Atividade> atividades = atividadeRepository.findAllByUsuarioEEstado(principal.getName(), EstadoAtividade.PENDENTE);
+		model.addAttribute("atividades", atividades);
+		model.addAttribute("novoUser", new User());
+		
+		return "atividade/minhas_atividades";
+	}
+	
+	@GetMapping("/userAtividadesRejeitadas")
+	public String minhasAtividadesRejeitadas(Model model, Principal principal) {
+		User user = userRepository.findByEmail(principal.getName());
+		model.addAttribute("user", user);
+		List<Atividade> atividades = atividadeRepository.findAllByUsuarioEEstado(principal.getName(), EstadoAtividade.REJEITADO);
+		model.addAttribute("atividades", atividades);
+		model.addAttribute("novoUser", new User());
+		
+		return "atividade/minhas_atividades";
+	}
+	
 	@GetMapping("/userAtividadesOcorridas")
 	public String minhasAtividadesJaOcorridas(Model model, Principal principal) {
 		User user = userRepository.findByEmail(principal.getName());
@@ -231,7 +271,7 @@ public class AtividadeController {
 	public ModelAndView atividadesFormAlteracao(@PathVariable Long id, Principal principal) {
 		ModelAndView mav = new ModelAndView("atividade/form");
 		User user = userRepository.findByEmail(principal.getName());
-		Atividade requisicaoNovaAtividade = atividadeRepository.findById(id).get();
+		RequisicaoNovaAtividade requisicaoNovaAtividade = atividadeRepository.findById(id).get().toRequisicao();
 		idAtividade = requisicaoNovaAtividade.getId();
 		
 		mav.addObject("user", user);
