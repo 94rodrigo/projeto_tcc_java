@@ -128,7 +128,7 @@ public class AtividadeController {
 		isAtividadeCadastradaEPendente = true;
 		
 		
-		redirectAttributes.addFlashAttribute("message", "Successful!");
+		redirectAttributes.addFlashAttribute("message", "Atividade \"" + atividade.getNomeAtividade() + "\" cadastrada. Aguarde aprovação pelos moderadores.");
 		
 		return "redirect:/userAtividades";
 	}

@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.example.demo.model.User;
 import com.example.demo.repository.RoleRepository;
 import com.example.demo.service.UserService;
+import com.google.maps.errors.ApiException;
 
 @Controller
 @RequestMapping
@@ -78,13 +80,32 @@ public class CadastroController {
 		user.setSenha(encodedPassword);
 		user.setConfirmacaoSenha(encodedPassword);
 		user.setEnabled(true);
+		user.setPermitiuLocalizacao(false);
+		try {
+			user.setUserCoordenadas(user.getCoordenadas());
+		} catch (ApiException | InterruptedException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		userService.saveUser(user);
+		
 		
 		if (user.getRoles().contains(roleRepository.findById(1).get())) {
 			return "redirect:/dashboard";
 		}
 		
 		return "login";
+	}
+	
+	@PostMapping("/atualizaCoordenadas")
+	public String atualizaCoordenadas(@Valid User user, BindingResult result, HttpServletRequest request, Model model) {
+		
+		model.addAttribute("message", "Valid form");
+		
+		System.out.println(user.getUserCoordenadas());
+		userService.saveUser(user);
+		
+		return "redirect:/todas";
 	}
 	
 	@PostMapping("/adminCadastro")

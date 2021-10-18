@@ -20,7 +20,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 import com.example.demo.api.CoordenadasApi;
@@ -97,6 +96,9 @@ public class User {
 			)
 	private Set<Role> roles = new HashSet<>();
 	
+	private String userCoordenadas;
+	private String cidadeProcurada;
+	private Boolean permitiuLocalizacao;
 	
 	public User() {
 	}
@@ -203,6 +205,24 @@ public class User {
 		return json;
 	}
 	
+	public String getLatitudeApi() throws ApiException, InterruptedException, IOException {
+		GeocodingResult[] results = GeocodingApi.geocode(CoordenadasApi.getContexto(), getCidadeEstado()).await();
+		Gson gson = new GsonBuilder().setPrettyPrinting().create();
+		
+		String json = gson.toJson(results[0].geometry.location.lat);
+		System.out.println("Latitude: " + json);
+		return json;
+	}
+	
+	public String getLongitudeApi() throws ApiException, InterruptedException, IOException {
+		GeocodingResult[] results = GeocodingApi.geocode(CoordenadasApi.getContexto(), getCidadeEstado()).await();
+		Gson gson = new GsonBuilder().setPrettyPrinting().create();
+		
+		String json = gson.toJson(results[0].geometry.location.lng);
+		System.out.println("Longitude: " + json);
+		return json;
+	}
+
 	public String getResetPasswordToken() {
 		return resetPasswordToken;
 	}
@@ -222,4 +242,42 @@ public class User {
 	public void setRoles(String id) {
 		this.roles.add(RoleService.findRoleById(id));
 	}
+
+	public String getUserCoordenadas() {
+		return userCoordenadas;
+	}
+
+	public void setUserCoordenadas(String userCoordenadas) {
+		this.userCoordenadas = userCoordenadas;
+	}
+	
+	public String getCidadeProcurada(){
+		return cidadeProcurada;
+	}
+	
+	public void setCidadeProcurada() throws ApiException, InterruptedException, IOException {
+		if(this.getCidadeProcurada().isEmpty() || this.getCidadeProcurada() == null) {
+			cidadeProcurada = this.getMunicipio();
+		}else {
+			cidadeProcurada = obterCidadesPorCoordenadas();
+		}
+	}
+	
+	public String obterCidadesPorCoordenadas() throws ApiException, InterruptedException, IOException {
+		GeocodingResult[] results = GeocodingApi.geocode(CoordenadasApi.getContexto(), getCidadeEstado()).await();
+		Gson gson = new GsonBuilder().setPrettyPrinting().create();
+		
+		String json = gson.toJson(results[0].addressComponents[3].longName);
+		System.out.println("Cidade obtida: " + json);
+		return json;
+	}
+
+	public Boolean getPermitiuLocalizacao() {
+		return permitiuLocalizacao;
+	}
+
+	public void setPermitiuLocalizacao(Boolean permitiuLocalizacao) {
+		this.permitiuLocalizacao = permitiuLocalizacao;
+	}
+	
 }
