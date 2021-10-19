@@ -205,22 +205,22 @@ public class User {
 		return json;
 	}
 	
-	public String getLatitudeApi() throws ApiException, InterruptedException, IOException {
+	public Long getLatitudeApi() throws ApiException, InterruptedException, IOException {
 		GeocodingResult[] results = GeocodingApi.geocode(CoordenadasApi.getContexto(), getCidadeEstado()).await();
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		
 		String json = gson.toJson(results[0].geometry.location.lat);
 		System.out.println("Latitude: " + json);
-		return json;
+		return Long.valueOf(json);
 	}
 	
-	public String getLongitudeApi() throws ApiException, InterruptedException, IOException {
+	public Long getLongitudeApi() throws ApiException, InterruptedException, IOException {
 		GeocodingResult[] results = GeocodingApi.geocode(CoordenadasApi.getContexto(), getCidadeEstado()).await();
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		
 		String json = gson.toJson(results[0].geometry.location.lng);
 		System.out.println("Longitude: " + json);
-		return json;
+		return Long.valueOf(json);
 	}
 
 	public String getResetPasswordToken() {

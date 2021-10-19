@@ -103,6 +103,15 @@ public class CadastroController {
 		model.addAttribute("message", "Valid form");
 		
 		System.out.println(user.getUserCoordenadas());
+		
+		if (!user.getPermitiuLocalizacao()) {
+			try {
+				user.setUserCoordenadas(user.getCoordenadas());
+			} catch (ApiException | InterruptedException | IOException e) {
+				e.printStackTrace();
+			}
+		}
+		
 		userService.saveUser(user);
 		
 		return "redirect:/todas";

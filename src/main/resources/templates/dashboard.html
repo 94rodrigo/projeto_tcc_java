@@ -66,22 +66,24 @@
                     <div class="row">
                         <div class="col-xl-3 col-md-6 mb-4">
                         	<form th:action="@{/atualizaCoordenadas}" th:object="${user}" method="post">
-                        		<input type="text" th:field="*{id}">
-			                	<input type="text" id="coordenadasDoUsuario" th:field="*{userCoordenadas}">
-			                	<input type="text" id="usuarioPermitiu" th:field="*{permitiuLocalizacao}">
-			                	<input type="hidden" th:field="*{senha}">
-			                	<input type="hidden" th:field="*{confirmacaoSenha}">
-			                    <input class="form-control" type="hidden" th:field="*{primeiroNome}" id="primeiroNome" placeholder="nome"><br>
-			                    <input class="form-control" type="hidden" th:field="*{ultimoNome}" id="ultimoNome" placeholder="sobrenome"><br>
-			                    <input class="form-control" type="hidden" id="email" th:field="*{email}" placeholder="e-mail"><br>
-			                    <div class="row">
-			                        <div class="col-xl-3 col-md-6 mb-4">
-			                            <input type="hidden" class="form-control" th:field="*{uf}" name="uf" id="uf"><br>
-			                        </div>
-			                        <div class="col-xl-9 col-md-6 mb-4">
-			                            <input class="form-control" type="hidden" id="municipio" th:field="*{municipio}" placeholder="cidade">
-			                        </div>
-                  				</div>
+                        		<div hidden="hidden">
+	                        		<input type="text" th:field="*{id}">
+				                	<input type="text" id="coordenadasDoUsuario" th:field="*{userCoordenadas}">
+				                	<input type="text" id="usuarioPermitiu" th:field="*{permitiuLocalizacao}">
+				                	<input type="text" th:field="*{senha}">
+	                				<input type="text" th:field="*{confirmacaoSenha}">
+				                    <input type="text" th:field="*{primeiroNome}">
+				                    <input type="text" th:field="*{ultimoNome}">
+				                    <input type="text" th:field="*{email}">
+				                    <div class="row">
+				                        <div class="col-xl-3 col-md-6 mb-4">
+				                            <input hidden="hidden" type="text" class="form-control" th:field="*{uf}">
+				                        </div>
+				                        <div class="col-xl-9 col-md-6 mb-4">
+				                            <input hidden="hidden" class="form-control" type="text" th:field="*{municipio}">
+				                        </div>
+	                  				</div>
+                        		</div>
 			                	<button type="submit" class="btn btn-primary btn-icon-split btn-lg"><span class="text">Procure por uma atividade</span></button>
                         	</form>
                         </div>
@@ -234,10 +236,10 @@
 	                                    <span th:text="${proximaAtividadeCidade.enderecoLocal} + ', ' + ${proximaAtividadeCidade.cidade} + ', ' + ${proximaAtividadeCidade.uf}"></span><br>
 	                                    <span th:text="${proximaAtividadeCidade.usuariosAtividade}"></span> pessoas confirmadas
                                 	</div>
+	                                <div th:unless="${proximaAtividadeCidade != '-'}">
+	                                		<div class="h5 mb-0 font-weight-bold text-gray-800" th:text="'-'">18</div>
+	                               	</div>
                                 </div>
-                                <div th:unless="${proximaAtividadeCidade != '-'}">
-                                		<div class="h5 mb-0 font-weight-bold text-gray-800" th:text="'-'">18</div>
-                               	</div>
                             </div>
                         </div>
                         
@@ -295,7 +297,8 @@
 				if (error.code == error.PERMISSION_DENIED)
 			  		console.log('rejeitado');
 					document.querySelector('#usuarioPermitiu').value = false;
-			}
+			},
+			{ enableHighAccuracy: true, timeout: 10000000, maximumAge: 0 }
 		);
     </script>
     

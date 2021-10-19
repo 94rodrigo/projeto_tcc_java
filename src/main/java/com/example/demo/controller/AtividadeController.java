@@ -76,6 +76,7 @@ public class AtividadeController {
 //		model.addAttribute("tipoBusca", tipo);
 //		System.out.println(tipo);
 		
+		
 		return "atividade/atividades_todas";
 	}
 	
@@ -95,6 +96,13 @@ public class AtividadeController {
 			Atividade atividade2 = atividadeRepository.findById(idAtividade).get();
 			requisicaoNovaAtividade.setId(idAtividade);
 			atividade2 = requisicaoNovaAtividade.toAtividade(atividade2);
+			try {
+				atividade2.setCoordenadas(atividade2.getCoordenadasAtividade());
+				atividade2.setLatitude(atividade2.getLatitudeAtividade());
+				atividade2.setLongitude(atividade2.getLongitudeAtividade());
+			} catch (ApiException | InterruptedException | IOException e) {
+				e.printStackTrace();
+			}
 			System.out.println(result.hasErrors());
 			if (result.hasErrors()) {
 				return verificarErrosAtividade(result);
@@ -119,6 +127,13 @@ public class AtividadeController {
 		atividade.setEstadoAtividade(EstadoAtividade.PENDENTE);
 		user.adicionarAtividade(atividade);
 		atividade.incluirUsuario(user);
+		try {
+			atividade.setCoordenadas(atividade.getCoordenadasAtividade());
+			atividade.setLatitude(atividade.getLatitudeAtividade());
+			atividade.setLongitude(atividade.getLongitudeAtividade());
+		} catch (ApiException | InterruptedException | IOException e) {
+			e.printStackTrace();
+		}
 		
 		model.addAttribute("user", user);
 		

@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -35,8 +34,6 @@ import com.google.maps.model.GeocodingResult;
 @Table(name = "atividades")
 public class Atividade {
 
-	private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -52,8 +49,6 @@ public class Atividade {
 	private String cidade;
 	
 	private String enderecoLocal;
-	
-//	private LocalDate dataAtividade;
 	
 	private LocalDateTime dataHorarioAtividade;
 
@@ -72,6 +67,10 @@ public class Atividade {
 	
 	@ManyToMany(cascade = CascadeType.ALL, mappedBy = "atividadesQueUsuariosParticipa")
 	private List<User> usuariosCadastradosNaAtividade = new ArrayList<>();
+	
+	private String coordenadas;
+	private String latitude;
+	private String longitude;
 
 	public Long getId() {
 		return id;
@@ -188,8 +187,6 @@ public class Atividade {
 		requisicao.setId(id);
 		requisicao.setNomeAtividade(nomeAtividade);
 		requisicao.setCidade(cidade);
-//		requisicao.setDataAtividade(dataHorarioAtividade.format(FORMATTER));
-//		requisicao.setHorarioAtividade(dataHorarioAtividade.getHour() + ":" + dataHorarioAtividade.getMinute());
 		requisicao.setDataAtividade(LocalDate.from(dataHorarioAtividade));
 		requisicao.setHorarioAtividade(LocalTime.from(dataHorarioAtividade));
 		requisicao.setDescricao(descricao);
@@ -211,11 +208,27 @@ public class Atividade {
 		return enderecoLocal + ", " + cidade + ", " + uf + ", Brasil";
 	}
 	
-	public String getCoordenadas() throws ApiException, InterruptedException, IOException {
+	public String getCoordenadasAtividade() throws ApiException, InterruptedException, IOException {
 		GeocodingResult[] results = GeocodingApi.geocode(CoordenadasApi.getContexto(), getEnderecoCompleto()).await();
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		
 		String json = gson.toJson(results[0].geometry.location);
+		return json;
+	}
+	
+	public String getLatitudeAtividade() throws ApiException, InterruptedException, IOException {
+		GeocodingResult[] results = GeocodingApi.geocode(CoordenadasApi.getContexto(), getEnderecoCompleto()).await();
+		Gson gson = new GsonBuilder().setPrettyPrinting().create();
+		
+		String json = gson.toJson(results[0].geometry.location.lat);
+		return json;
+	}
+	
+	public String getLongitudeAtividade() throws ApiException, InterruptedException, IOException {
+		GeocodingResult[] results = GeocodingApi.geocode(CoordenadasApi.getContexto(), getEnderecoCompleto()).await();
+		Gson gson = new GsonBuilder().setPrettyPrinting().create();
+		
+		String json = gson.toJson(results[0].geometry.location.lng);
 		return json;
 	}
 	
@@ -268,6 +281,29 @@ public class Atividade {
 		this.dataHorarioAtividade = dataHorarioAtividade;
 	}
 	
-	
+
+	public String getCoordenadas() {
+		return coordenadas;
+	}
+
+	public void setCoordenadas(String coordenadas) {
+		this.coordenadas = coordenadas;
+	}
+
+	public String getLatitude() {
+		return latitude;
+	}
+
+	public void setLatitude(String latitude) {
+		this.latitude = latitude;
+	}
+
+	public String getLongitude() {
+		return longitude;
+	}
+
+	public void setLongitude(String longitude) {
+		this.longitude = longitude;
+	}
 	
 }
