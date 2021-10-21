@@ -66,7 +66,7 @@
                     <div class="row">
                         <div class="col-xl-3 col-md-6 mb-4">
                         	<form th:action="@{/atualizaCoordenadas}" th:object="${user}" method="post">
-                        		<div hidden="hidden">
+                        		<div >
 	                        		<input type="text" th:field="*{id}">
 				                	<input type="text" id="coordenadasDoUsuario" th:field="*{userCoordenadas}">
 				                	<input type="text" id="usuarioPermitiu" th:field="*{permitiuLocalizacao}">

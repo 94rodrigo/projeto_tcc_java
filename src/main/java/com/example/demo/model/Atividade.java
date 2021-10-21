@@ -21,6 +21,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.DynamicUpdate;
+
 import com.example.demo.api.CoordenadasApi;
 import com.example.demo.dto.RequisicaoNovaAtividade;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -32,6 +34,7 @@ import com.google.maps.model.GeocodingResult;
 
 @Entity
 @Table(name = "atividades")
+@DynamicUpdate(true)
 public class Atividade {
 
 	@Id
@@ -213,6 +216,7 @@ public class Atividade {
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		
 		String json = gson.toJson(results[0].geometry.location);
+		System.out.println(json);
 		return json;
 	}
 	

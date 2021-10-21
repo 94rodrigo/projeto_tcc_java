@@ -27,5 +27,11 @@ public interface UserRepository extends JpaRepository<User, Long>{
 	
 	public User findByResetPasswordToken(String token);
 	
+	@Transactional
+	@Modifying
+	@Query("update User u set u.permitiuLocalizacao = :permitiuLocalizacao, u.userCoordenadas = :userCoordenadas where u.email = :email")
+	public void atualizaLocalizacao(@Param("permitiuLocalizacao")Boolean permitiuLocalizacao,
+			@Param("userCoordenadas")String userCoordenadas, @Param("email")String email);
+	
 //	List<User> findUserByAtividadeId();
 }

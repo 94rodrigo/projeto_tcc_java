@@ -22,6 +22,9 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
+
 import com.example.demo.api.CoordenadasApi;
 import com.example.demo.service.RoleService;
 import com.example.demo.validadores.FieldMatch;
@@ -41,6 +44,8 @@ import com.google.maps.model.GeocodingResult;
 })
 @Entity
 @Table(name = "users")
+@DynamicUpdate(true)
+@DynamicInsert(true)
 public class User {
 	
 	@Id
@@ -77,7 +82,7 @@ public class User {
 	
 	private String resetPasswordToken;
 
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.LAZY)
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.EAGER)
 	@JsonIgnore
 	private List<Atividade> atividades;
 	

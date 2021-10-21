@@ -1,5 +1,7 @@
 package com.example.demo.service;
 
+import java.security.Principal;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -49,5 +51,20 @@ public class UserService {
         user.setConfirmacaoSenha(encodedPassword);
         user.setResetPasswordToken(null);
         userRepository.save(user);
+    }
+    
+    public void updateUsuario(User user, Principal principal) {
+    	user = userRepository.findByEmail(principal.getName());
+    	user.setAtividades(user.getAtividades());
+    	user.setAtividadesQueUsuariosParticipa(user.getAtividadesQueUsuariosParticipa());
+    	user.setSenha(user.getSenha());
+    	user.setConfirmacaoSenha(user.getSenha());
+    	user.setEmail(user.getEmail());
+    	user.setEnabled(true);
+    	user.setMunicipio(user.getMunicipio());
+    	user.setPrimeiroNome(user.getPrimeiroNome());
+    	user.setRoles(user.getRoles());
+    	user.setUf(user.getUf());
+    	user.setUltimoNome(user.getUltimoNome());
     }
 }
