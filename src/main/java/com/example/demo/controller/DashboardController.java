@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -65,6 +66,15 @@ public class DashboardController {
 		}
 		
 		List<Atividade> atividadesQueUsuariosParticipa = user.getAtividadesQueUsuariosParticipa();
+		for (Iterator<Atividade> iterator = atividadesQueUsuariosParticipa.iterator(); iterator.hasNext();) {
+			Atividade atividade = iterator.next();
+			if (!atividade.getEstadoAtividade().equals(EstadoAtividade.CONFIRMADO))
+				iterator.remove();
+		}
+//		for (Atividade atividade : atividadesQueUsuariosParticipa) {
+//			if (!atividade.getEstadoAtividade().equals(EstadoAtividade.CONFIRMADO))
+//				atividadesQueUsuariosParticipa.remove(atividade);
+//		}
 		
 		if (!atividadesQueUsuariosParticipa.isEmpty()) {
 			atividadesQueUsuariosParticipa.sort(Comparator.comparing(Atividade::getDataHorarioAtividade));

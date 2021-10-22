@@ -33,5 +33,11 @@ public interface UserRepository extends JpaRepository<User, Long>{
 	public void atualizaLocalizacao(@Param("permitiuLocalizacao")Boolean permitiuLocalizacao,
 			@Param("userCoordenadas")String userCoordenadas, @Param("email")String email);
 	
+	@Transactional
+	@Modifying
+	@Query("update User u set u.permitiuLocalizacao = :permitiuLocalizacao, u.userLatitude = :userLatitude, u.userLongitude = :userLongitude where u.email = :email")
+	public void atualizaLatitudeLongitude(@Param("permitiuLocalizacao")Boolean permitiuLocalizacao,
+			@Param("userLatitude")String userLatitude, @Param("userLongitude")String userLongitude, @Param("email")String email);
+	
 //	List<User> findUserByAtividadeId();
 }

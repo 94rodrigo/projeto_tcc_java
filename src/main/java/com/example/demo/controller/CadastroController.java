@@ -141,10 +141,14 @@ public class CadastroController {
 		
 		if (!user.getPermitiuLocalizacao()) {
 			user.setUserCoordenadas(user.getCoordenadas());
+			user.setUserLatitude(user.getLatitudeApi());
+			user.setUserLongitude(user.getLongitudeApi());
 			userRepository.atualizaLocalizacao(false, user.getCoordenadas(), principal.getName());
+			userRepository.atualizaLatitudeLongitude(false, user.getLatitudeApi(), user.getLongitudeApi(), principal.getName());
 			return "redirect:/todas";
 		}
 		userRepository.atualizaLocalizacao(true, user.getUserCoordenadas(), principal.getName());
+		userRepository.atualizaLatitudeLongitude(true, user.getUserLatitude(), user.getUserLongitude(), principal.getName());
 
 		return "redirect:/todas";
 	}

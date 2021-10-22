@@ -102,6 +102,8 @@ public class User {
 	private Set<Role> roles = new HashSet<>();
 	
 	private String userCoordenadas;
+	private String userLatitude;
+	private String userLongitude;
 	private String cidadeProcurada;
 	private Boolean permitiuLocalizacao;
 	
@@ -210,22 +212,22 @@ public class User {
 		return json;
 	}
 	
-	public Long getLatitudeApi() throws ApiException, InterruptedException, IOException {
+	public String getLatitudeApi() throws ApiException, InterruptedException, IOException {
 		GeocodingResult[] results = GeocodingApi.geocode(CoordenadasApi.getContexto(), getCidadeEstado()).await();
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		
 		String json = gson.toJson(results[0].geometry.location.lat);
 		System.out.println("Latitude: " + json);
-		return Long.valueOf(json);
+		return json;
 	}
 	
-	public Long getLongitudeApi() throws ApiException, InterruptedException, IOException {
+	public String getLongitudeApi() throws ApiException, InterruptedException, IOException {
 		GeocodingResult[] results = GeocodingApi.geocode(CoordenadasApi.getContexto(), getCidadeEstado()).await();
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		
 		String json = gson.toJson(results[0].geometry.location.lng);
 		System.out.println("Longitude: " + json);
-		return Long.valueOf(json);
+		return json;
 	}
 
 	public String getResetPasswordToken() {
@@ -284,5 +286,26 @@ public class User {
 	public void setPermitiuLocalizacao(Boolean permitiuLocalizacao) {
 		this.permitiuLocalizacao = permitiuLocalizacao;
 	}
+
+	public String getUserLatitude() {
+		return userLatitude;
+	}
+
+	public void setUserLatitude(String userLatitude) {
+		this.userLatitude = userLatitude;
+	}
+
+	public String getUserLongitude() {
+		return userLongitude;
+	}
+
+	public void setUserLongitude(String userLongitude) {
+		this.userLongitude = userLongitude;
+	}
+
+	public void setCidadeProcurada(String cidadeProcurada) {
+		this.cidadeProcurada = cidadeProcurada;
+	}
+	
 	
 }

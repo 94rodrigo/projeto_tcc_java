@@ -58,7 +58,31 @@ public class AtividadeController {
 	@GetMapping("/todas")
 	public String todasAsAtividades(Model model, Principal principal, String tipo) throws IOException {
 //		List<Atividade> atividades = atividadeRepository.findAllByDataAtual(EstadoAtividade.CONFIRMADO);
+		
 		User usuarioLogado = userRepository.findByEmail(principal.getName());
+		Double x1, x2, y1, y2;
+		
+		x1 = Double.valueOf(usuarioLogado.getUserLatitude());
+		x2 = Double.valueOf(usuarioLogado.getUserLongitude());
+		
+		model.addAttribute("novoUser", new User());
+		model.addAttribute("usuarioLogado", usuarioLogado);
+		model.addAttribute("user", usuarioLogado);
+		
+		if (usuarioLogado.getPermitiuLocalizacao()) {
+			List<Atividade> findAllByEstado = atividadeRepository.findAllByEstado(EstadoAtividade.CONFIRMADO);
+			for (Atividade atividade : findAllByEstado) {
+				y1 = Double.valueOf(atividade.getLatitude());
+				y2 = Double.valueOf(atividade.getLongitude());
+				if (calculaDistanciaPontos(x1, x2, y1, y2) >= 0.1) {
+					findAllByEstado.remove(atividade);
+				}
+			}
+			findAllByEstado.sort(Comparator.comparing(Atividade::getDataHorarioAtividade));
+			model.addAttribute("atividades", findAllByEstado);
+			return "atividade/atividades_todas";
+		}
+		
 		String municipio = usuarioLogado.getMunicipio();
 		String uf = usuarioLogado.getUf();
 		List<Atividade> atividades = atividadeRepository.findAllByDataAtualMunicipioUf(EstadoAtividade.CONFIRMADO, municipio, uf);
@@ -69,9 +93,6 @@ public class AtividadeController {
 		}
 		
 		model.addAttribute("atividades", atividades);
-		model.addAttribute("novoUser", new User());
-		model.addAttribute("usuarioLogado", usuarioLogado);
-		model.addAttribute("user", usuarioLogado);
 		
 //		model.addAttribute("tipoBusca", tipo);
 //		System.out.println(tipo);
@@ -355,5 +376,11 @@ public class AtividadeController {
 		model.addAttribute("user", usuarioLogado);
 		model.addAttribute("novoUser", new User());
 		return "atividade/atividade_informacoes";
+	}
+	
+	private Double calculaDistanciaPontos(Double a1, Double a2, Double b1, Double b2) {
+		Double a = Math.pow((a2 - b2), 2);
+		Double b = Math.pow((a1 - b1), 2);
+		return Math.sqrt(a + b);
 	}
 }
