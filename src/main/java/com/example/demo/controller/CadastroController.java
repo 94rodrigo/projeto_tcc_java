@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import java.io.IOException;
 import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -90,6 +91,7 @@ public class CadastroController {
 		user.setConfirmacaoSenha(encodedPassword);
 		user.setEnabled(true);
 		user.setPermitiuLocalizacao(false);
+		user.setCadastrado(LocalDateTime.now());
 		try {
 			user.setUserCoordenadas(user.getCoordenadas());
 		} catch (ApiException | InterruptedException | IOException e) {

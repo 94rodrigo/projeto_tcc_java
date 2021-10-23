@@ -1,6 +1,8 @@
 package com.example.demo.model;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.chrono.ChronoLocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -106,6 +108,7 @@ public class User {
 	private String userLongitude;
 	private String cidadeProcurada;
 	private Boolean permitiuLocalizacao;
+	private LocalDateTime cadastrado;
 	
 	public User() {
 	}
@@ -306,6 +309,17 @@ public class User {
 	public void setCidadeProcurada(String cidadeProcurada) {
 		this.cidadeProcurada = cidadeProcurada;
 	}
+
+	public LocalDateTime getCadastrado() {
+		return cadastrado;
+	}
+
+	public void setCadastrado(LocalDateTime cadastrado) {
+		this.cadastrado = cadastrado;
+	}
 	
+	public Boolean getHorarioNulo() {
+		return cadastrado == null || cadastrado.equals(LocalDateTime.of(0, 0, 0, 0, 0, 0, 0)) || cadastrado.isEqual(LocalDateTime.of(null, null));
+	}
 	
 }
