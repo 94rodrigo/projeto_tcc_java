@@ -28,8 +28,10 @@ import com.example.demo.api.CoordenadasApi;
 import com.example.demo.dto.RequisicaoNovaAtividade;
 import com.example.demo.model.Atividade;
 import com.example.demo.model.EstadoAtividade;
+import com.example.demo.model.LogDeAcoes;
 import com.example.demo.model.User;
 import com.example.demo.repository.AtividadeRepository;
+import com.example.demo.repository.LogRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.AtividadeService;
 import com.google.gson.Gson;
@@ -50,6 +52,9 @@ public class AtividadeController {
 	
 	@Autowired
 	private AtividadeService atividadeService;
+	
+	@Autowired
+	private LogRepository logRepository;
 	
 	private Long idAtividade;
 	
@@ -113,6 +118,9 @@ public class AtividadeController {
 	@PostMapping("/atividadesFormGravar")
 	public String novaAtividade(@Valid RequisicaoNovaAtividade requisicaoNovaAtividade, BindingResult result, HttpServletRequest request, Model model, RedirectAttributes redirectAttributes) {
 		
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		User user = userRepository.findByEmail(username);
+		
 		if (idAtividade != null) {
 			Atividade atividade2 = atividadeRepository.findById(idAtividade).get();
 			requisicaoNovaAtividade.setId(idAtividade);
@@ -129,6 +137,10 @@ public class AtividadeController {
 				return verificarErrosAtividade(result);
 			}
 			atividadeRepository.save(atividade2);
+			logRepository.save(new LogDeAcoes(
+					user,
+					atividade2,
+					"Atualizou atividade ".concat(atividade2.getNomeAtividade())));
 			idAtividade = null;
 			return "redirect:/userAtividades";
 		}
@@ -137,9 +149,6 @@ public class AtividadeController {
 		if (result.hasErrors()) {
 			return verificarErrosAtividade(result);
 		}
-		
-		String username = SecurityContextHolder.getContext().getAuthentication().getName();
-		User user = userRepository.findByEmail(username);
 		
 		Atividade atividade = requisicaoNovaAtividade.toAtividade();
 		
@@ -160,6 +169,7 @@ public class AtividadeController {
 		
 		atividadeRepository.save(atividade);
 		userRepository.save(user);
+		logRepository.save(new LogDeAcoes(user, atividade, "Cadastrou atividade: ".concat(atividade.getNomeAtividade())));
 		
 		isAtividadeCadastradaEPendente = true;
 		
@@ -299,7 +309,11 @@ public class AtividadeController {
 	
 	@RequestMapping(path = "delete/{id}", method = RequestMethod.POST)
 	public String deletar(@PathVariable Long id) {
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		User user = userRepository.findByEmail(username);
+		Atividade atividade = atividadeRepository.findById(id).get();
 		atividadeService.deletarAtividade(id);
+		logRepository.save(new LogDeAcoes(user, atividade, "Apagou atividade ".concat(atividade.getNomeAtividade())));
 		return "redirect:/userAtividades";
 	}
 	
@@ -320,6 +334,8 @@ public class AtividadeController {
 	@RequestMapping(path = "/atividade/{id}/cancelar", method = RequestMethod.POST)
 	public String cancelarAtividade(@PathVariable Long id) {
 		atividadeRepository.alterarEstadoAtividade(EstadoAtividade.CANCELADO, id);
+		Atividade atividade = atividadeRepository.findById(id).get();
+		logRepository.save(new LogDeAcoes(null, atividade, "Alterou o status da atividade ".concat(atividade.getNomeAtividade()).concat(" para ".concat(EstadoAtividade.CANCELADO.name()))));
 		return "redirect:/userAtividades";
 	}
 	

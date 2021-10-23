@@ -49,9 +49,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http
-			.authorizeRequests().antMatchers("/login/**", "/cadastro/**", "../static/**", "/forgot_password/**", "/reset_password/**", "/message/**")
+			.authorizeRequests().antMatchers("/", "/login/**", "/cadastro/**", "../static/**", "/forgot_password/**", "/reset_password/**", "/message/**")
 			.permitAll()
-			.antMatchers("/atividades_aprovacao/**", "/novo_usuario/**", "/aprovarAtividades/**", "/adminCadastro/**").hasAnyAuthority(RolesEnum.ADMIN.name())
+			.antMatchers("/atividades_aprovacao/**", "/novo_usuario/**", "/aprovarAtividades/**", "/adminCadastro/**", "/logAdmin/**").hasAnyAuthority(RolesEnum.ADMIN.name())
 			.anyRequest().authenticated()
 			.and()
 			.exceptionHandling().accessDeniedPage("/403")
@@ -66,7 +66,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 			)
 			.logout(logout -> {
 				logout.logoutUrl("/logout")
-					.logoutSuccessUrl("/login");
+					.logoutSuccessUrl("/");
 			});
 	}
 	
