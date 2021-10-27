@@ -43,6 +43,8 @@ public interface UserRepository extends JpaRepository<User, Long>{
 	@Modifying
 	@Query("update User u set u.enabled = :enabled where u.email = :email")
 	public void ativaOuInativaUsuario(@Param("enabled")Boolean enabled, @Param("email")String email);
+
+	public boolean existsByEmail(String email);
 	
 //	List<User> findUserByAtividadeId();
 }

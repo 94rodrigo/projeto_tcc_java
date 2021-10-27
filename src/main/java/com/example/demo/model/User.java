@@ -21,6 +21,8 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
@@ -30,6 +32,8 @@ import org.hibernate.annotations.DynamicUpdate;
 import com.example.demo.api.CoordenadasApi;
 import com.example.demo.service.RoleService;
 import com.example.demo.validadores.FieldMatch;
+import com.example.demo.validadores.UniqueEmail;
+import com.example.demo.validadores.ValidPassword;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -45,7 +49,7 @@ import com.google.maps.model.GeocodingResult;
 	)
 })
 @Entity
-@Table(name = "users")
+@Table(name = "users", uniqueConstraints = {@UniqueConstraint(columnNames = "email")})
 @DynamicUpdate(true)
 @DynamicInsert(true)
 public class User {
@@ -63,17 +67,19 @@ public class User {
 	private String ultimoNome;
 	
 	@NotBlank
-	@Pattern(regexp = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@+[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$")
+	@UniqueEmail
+	@Email(message = "E-mail inválido!")
 	@Column(unique = true)
 	private String email;
 	
-	@Pattern(regexp = "^[A-Z]{2}$")
+	@Pattern(regexp = "^[A-Z]{2}$", message = "Campo obrigatório")
 	private String uf;
 	
 	@NotBlank
 	private String municipio;
 	
 	@NotBlank
+	@ValidPassword(message = "Deve conter pelo menos 8 caracteres, com ao menos 1 letra e 1 número")
 	private String senha;
 	
 	@NotBlank
@@ -109,6 +115,10 @@ public class User {
 	private String cidadeProcurada;
 	private Boolean permitiuLocalizacao;
 	private LocalDateTime cadastrado;
+	
+	@OneToMany(mappedBy = "user")
+	@JsonIgnore
+	private List<LogDeAcoes> listaDeLogs;
 	
 	public User() {
 	}
