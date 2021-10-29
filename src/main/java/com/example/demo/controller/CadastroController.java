@@ -62,8 +62,9 @@ public class CadastroController {
 			usuarioExiste.setUf(user.getUf());
 			usuarioExiste.setMunicipio(user.getMunicipio());
 			usuarioExiste.setEnabled(true);
+			
 			userService.saveUser(usuarioExiste);
-			return "dashboard";
+			return "redirect:/dashboard";
 		}
 
 		if (result.hasErrors()) {

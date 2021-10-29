@@ -75,11 +75,11 @@
                 <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
                 Configurações
             </a>
-            <a class="dropdown-item" href="#">
-                <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-                Log de atividades
-            </a>
             <div sec:authorize="hasAnyAuthority('ADMIN')">
+	            <a class="dropdown-item" th:href="@{/logAdmin}">
+	                <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
+	                Log de atividades
+	            </a>
 	            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#newUserModal">
 	                <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
 	                Cadastrar usuário
@@ -232,9 +232,11 @@
             </div>
             <form class="user" th:action="@{/cadastro}" th:object="${user}" method="POST">
                 <div class="modal-body">
-                	<input type="hidden" th:field="*{id}">
-                	<input type="hidden" th:field="*{senha}">
-                	<input type="hidden" th:field="*{confirmacaoSenha}">
+                	<div hidden="hidden">
+	                	<input type="text" th:field="*{id}">
+	                	<input type="text" th:field="*{senha}">
+	                	<input type="text" th:field="*{confirmacaoSenha}">
+                	</div>
                     <label for="primeiroNome">Nome</label><br>
                     <input class="form-control" type="text" th:field="*{primeiroNome}" id="primeiroNome" placeholder="nome"><br>
                     <label for="sobrenome">Sobrenome</label><br>

@@ -46,5 +46,13 @@ public interface UserRepository extends JpaRepository<User, Long>{
 
 	public boolean existsByEmail(String email);
 	
+	@Transactional
+	@Modifying
+	@Query("update User u set u.primeiroNome = :primeiroNome, u.ultimoNome = :ultimoNome, u.email = :email,"
+			+ "u.uf = :uf, u.municipio = :municipio where u.id = :id")
+	public void atualizaUsuario(@Param("primeiroNome")String primeiroNome,
+			@Param("ultimoNome") String ultimoNome, @Param("email") String email, @Param("uf") String uf,
+			@Param("municipio") String municipio, @Param("id") String id);
+	
 //	List<User> findUserByAtividadeId();
 }

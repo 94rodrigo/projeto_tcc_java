@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.model.Atividade;
+import com.example.demo.model.EstadoAtividade;
 import com.example.demo.repository.AtividadeRepository;
 
 @Service
@@ -66,7 +67,7 @@ public class AtividadeService {
 	
 	public List<Atividade> listarResultadosPorLocal(String keyword){
 		if (keyword != null) {
-			return atividadeRepository.buscaLocal(keyword);
+			return atividadeRepository.buscaLocal(keyword, EstadoAtividade.CONFIRMADO);
 		}
 		return atividadeRepository.findAll();
 	}

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 
 <head>
     <meta charset="utf-8">
@@ -18,16 +18,16 @@
 
     <!-- Custom styles for this template-->
     <link href="/css/sb-admin-2.min.css" rel="stylesheet" type="text/css">
-    
+
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
     <script src="https://unpkg.com/@google/markerclustererplus@4.0.1/dist/markerclustererplus.min.js"></script>
-    
+
     <style type="text/css">
-      /* Set the size of the div element that contains the map */
-      #map {
-        height: 400px;
-        width: 100%;
-      }
+        /* Set the size of the div element that contains the map */
+        #map {
+            height: 400px;
+            width: 100%;
+        }
     </style>
 
 </head>
@@ -71,114 +71,142 @@
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
                         <h1 class="h3 mb-0 text-gray-800">Informações do usuário</h1>
                     </div>
-					
+
                     <div class="col-lg-11 mb-4" id="usuarioCadastro">
 
                         <!-- usuarioCadastros -->
                         <div class="card shadow mb-4">
-                           	<div class="card-header py-3">
-                                <h6 class="m-0 font-weight-bold text-primary" th:text="${usuarioCadastro.nomeCompleto}">usuarioCadastro</h6>
-                           	</div>
-                           	<div class="card-body">
-                                <p>E-mail: <span th:text="${usuarioCadastro.email}"></span></p>
-                                <p>Cidade: <span th:text="${usuarioCadastro.municipio} + ', ' + ${usuarioCadastro.uf}"></span></p><br>
-                                <p>Cadastrado em:
-                                	<div th:if="${usuarioCadastro.horarioNulo}">
-                                		<span th:text="' - '"></span>
-                                	</div> 
-                                	<div th:unless="${usuarioCadastro.horarioNulo}">
-                                		<span th:text="' ' + ${#temporals.format(usuarioCadastro.cadastrado, 'dd/MM/yyyy')} + ' - '  + ${#temporals.format(usuarioCadastro.cadastrado, 'HH:mm')}"></span>
-                                	</div>
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary" th:text="${usuarioCadastro.nomeCompleto}">
+                                    usuarioCadastro</h6>
+                            </div>
+                            <div class="card-body">
+                                <p>
+                                    E-mail: <span th:text="${usuarioCadastro.email}"></span>
                                 </p>
+                                <p>
+                                    Cidade: <span
+                                        th:text="${usuarioCadastro.municipio} + ', ' + ${usuarioCadastro.uf}"></span>
+                                </p>
+                                <br>
+                                <div th:if="${usuarioCadastro.getHorarioNulo()}">
+                                    <p>Cadastrado em: <span th:text="' - '"></span></p>
+                                </div>
+                                <div th:unless="${usuarioCadastro.getHorarioNulo()}">
+                                    <p>Cadastrado em: <span
+                                        th:text="' ' + ${#temporals.format(usuarioCadastro.cadastrado, 'dd/MM/yyyy')} + ' - '  + ${#temporals.format(usuarioCadastro.cadastrado, 'HH:mm')}"></span></p>
+                                </div>
                                 <div th:if="${usuarioCadastro.enabled}">
-                                	<form th:action="@{'/inativaUsuario/{id}'(id=${usuarioCadastro.id})}" method="post">
-	                                	<button class="btn btn-danger" type="submit">Inativar usuário</button>
-	                                </form>
+                                    <form th:action="@{'/inativaUsuario/{id}'(id=${usuarioCadastro.id})}" method="post">
+                                        <button class="btn btn-danger" type="submit">Inativar
+                                            usuário</button>
+                                    </form>
                                 </div>
                                 <div th:unless="${usuarioCadastro.enabled}">
-	                                <form th:action="@{'/ativaUsuario/{id}'(id=${usuarioCadastro.id})}" method="post">
-	                                	<button class="btn btn-success" type="submit">Ativar usuário</button>
-	                                </form>
-                               	</div>
-                           	</div>
-                          </div>
-                          <div class="card shadow mb-4">
-                                <!-- Card Header - Accordion -->
-                                <a href="#collapseCardExample" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample">
-                                    <h6 class="m-0 font-weight-bold text-primary" th:text="'Atividades que o usuário confirmou presença (' + ${usuarioParticipa.size()} + ')'"></h6>
-                                </a>
-                                <!-- Card Content - Collapse -->
-                                <div th:if="${usuarioParticipa != '-'}">
-	                                <div th:each="atividade : ${usuarioParticipa}">
-		                                <div class="collapse " id="collapseCardExample">
-		                                    <div class="card-body">
-		                                        <h6 th:text="${atividade.nomeAtividade} + ' - ' + ${#temporals.format(atividade.dataAtividade, 'dd/MM/yyyy')} + ' - '  + ${#temporals.format(atividade.dataAtividade, 'HH:mm')}"></h6>
-		                                    </div>
-		                                </div>
-	                                </div>
-	                                <div th:unless="${usuarioParticipa != '-'}">
-	                                	<div class="collapse " id="collapseCardExample">
-		                                	<div class="h5 mb-0 font-weight-bold text-gray-800" th:text="'-'">-</div>
-	                                	</div>
-	                                </div>
-                               </div>
+                                    <form th:action="@{'/ativaUsuario/{id}'(id=${usuarioCadastro.id})}" method="post">
+                                        <button class="btn btn-success" type="submit">Ativar
+                                            usuário</button>
+                                    </form>
+                                </div>
                             </div>
-                          <div class="card shadow mb-4">
-                                <!-- Card Header - Accordion -->
-                                <a href="#collapseCardExample" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample">
-                                    <h6 class="m-0 font-weight-bold text-primary" th:text="'Atividades que o usuário já participou (' + ${usuarioParticipou.size()} + ')'"></h6>
-                                </a>
-                                <!-- Card Content - Collapse -->
-                                <div th:if="${usuarioParticipou != '-'}">
-	                                <div th:each="atividade : ${usuarioParticipou}">
-		                                <div class="collapse " id="collapseCardExample">
-		                                    <div class="card-body">
-		                                        <h6 th:text="${atividade.nomeAtividade} + ' - ' + ${#temporals.format(atividade.dataAtividade, 'dd/MM/yyyy')} + ' - '  + ${#temporals.format(atividade.dataAtividade, 'HH:mm')}"></h6>
-		                                    </div>
-		                                </div>
-	                                </div>
-	                                <div th:unless="${usuarioParticipou != '-'}">
-										<div class="collapse " id="collapseCardExample">
-	                                		<div class="h5 mb-0 font-weight-bold text-gray-800" th:text="'-'">-</div>
-	                                	</div>
-	                                </div>
-                               </div>
+                        </div>
+                        <div class="card shadow mb-4">
+                            <!-- Card Header - Accordion -->
+                            <a href="#collapseCardExample1" class="d-block card-header py-3" data-toggle="collapse"
+                                role="button" aria-expanded="true" aria-controls="collapseCardExample1">
+                                <h6 class="m-0 font-weight-bold text-primary"
+                                    th:text="'Atividades que o usuário confirmou presença (' + ${usuarioParticipa.size()} + ')'">
+                                </h6>
+                            </a>
+                            <!-- Card Content - Collapse -->
+                            <div th:if="${usuarioParticipa != '-'}">
+                                <div th:each="atividade : ${usuarioParticipa}">
+                                    <div class="collapse " id="collapseCardExample1">
+                                        <div class="card-body">
+                                            <h6
+                                                th:text="${atividade.nomeAtividade} + ' - ' + ${#temporals.format(atividade.dataAtividade, 'dd/MM/yyyy')} + ' - '  + ${#temporals.format(atividade.dataAtividade, 'HH:mm')}">
+                                            </h6>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div th:unless="${usuarioParticipa != '-'}">
+                                    <div class="collapse " id="collapseCardExample">
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800" th:text="'-'">-</div>
+                                    </div>
+                                </div>
                             </div>
-					</div>
-
-                </div>
-                <!-- /.container-fluid -->
-
-            </div>
-            <!-- End of Main Content -->
-
-            <!-- Footer -->
-            <footer class="sticky-footer bg-white">
-                <div class="container my-auto">
-                    <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; Your Website 2021</span>
+                        </div>
+                        <div class="card shadow mb-4">
+                            <!-- Card Header - Accordion -->
+                            <a href="#collapseCardExample2" class="d-block card-header py-3" data-toggle="collapse"
+                                role="button" aria-expanded="true" aria-controls="collapseCardExample2">
+                                <h6 class="m-0 font-weight-bold text-primary"
+                                    th:text="'Atividades que o usuário já participou (' + ${usuarioParticipou.size()} + ')'">
+                                </h6>
+                            </a>
+                            <!-- Card Content - Collapse -->
+                            <div th:if="${usuarioParticipou != '-'}">
+                                <div th:each="atividade : ${usuarioParticipou}">
+                                    <div class="collapse " id="collapseCardExample2">
+                                        <div class="card-body">
+                                            <h6
+                                                th:text="${atividade.nomeAtividade} + ' - ' + ${#temporals.format(atividade.dataAtividade, 'dd/MM/yyyy')} + ' - '  + ${#temporals.format(atividade.dataAtividade, 'HH:mm')}">
+                                            </h6>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div th:unless="${usuarioParticipou != '-'}">
+                                    <div class="collapse " id="collapseCardExample">
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800" th:text="'-'">-</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card shadow mb-4">
+                            <!-- Card Header - Accordion -->
+                            <a href="#collapseCardExample3" class="d-block card-header py-3" data-toggle="collapse"
+                                role="button" aria-expanded="true" aria-controls="collapseCardExample3">
+                                <h6 class="m-0 font-weight-bold text-primary" th:text="'Log de atividades do usuário'">
+                                </h6>
+                            </a>
+                            <!-- Card Content - Collapse -->
+                            <div th:each="logUsuario : ${usuarioCadastro.listaDeLogs}">
+                                <div class="collapse " id="collapseCardExample3">
+                                    <div class="card-body">
+                                        <h6
+                                            th:text="${#temporals.format(logUsuario.horarioAcao, 'dd/MM/yyyy')} + ' - '  + ${#temporals.format(logUsuario.horarioAcao, 'HH:mm')} +  ' - ' + ${logUsuario.acao}">
+                                        </h6>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </footer>
-            <!-- End of Footer -->
+
+            </div>
+            <!-- /.container-fluid -->
 
         </div>
-        <!-- End of Content Wrapper -->
+        <!-- End of Main Content -->
+
+
+        <!-- End of Footer -->
 
     </div>
+    <!-- End of Content Wrapper -->
+
     <!-- End of Page Wrapper -->
 
     <!-- Scroll to Top Button-->
-    <a class="scroll-to-top rounded" href="#page-top">
-        <i class="fas fa-angle-up"></i>
+    <a class="scroll-to-top rounded" href="#page-top"> <i class="fas fa-angle-up"></i>
     </a>
 
     <!-- Logout Modal-->
     <div th:replace="base :: logout_modal"></div>
-    
+
     <!-- Profile Modal-->
     <div th:replace="base :: profile_modal"></div>
-    
+
     <!-- Modal novo usuário -->
     <div th:replace="base :: new_user_modal"></div>
 
@@ -191,10 +219,10 @@
 
     <!-- Custom scripts for all pages-->
     <script src="/js/sb-admin-2.min.js"></script>
-    
+
     <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    
+
 
 </body>
 

@@ -67,12 +67,6 @@ public class LogDeAcoes {
 	public String getNomeUsuario() {
 		return user.getNomeCompleto();
 	}
+
 	
-	public LocalDate getDataAcao() {
-		return horarioAcao.toLocalDate();
-	}
-	
-	public LocalTime getHoraAcao() {
-		return horarioAcao.toLocalTime();
-	}
 }

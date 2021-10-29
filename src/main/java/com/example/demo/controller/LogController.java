@@ -26,11 +26,11 @@ public class LogController {
 	
 	@GetMapping
 	public String logAcoes(Model model, Principal principal) {
-		List<LogDeAcoes> findAll = logRepository.findAll();
+		List<LogDeAcoes> logDeAcoes = logRepository.findAll();
 		User usuarioLogado = userRepository.findByEmail(principal.getName());
 		model.addAttribute("usuarioLogado", usuarioLogado);
 		model.addAttribute("user", usuarioLogado);
-		model.addAttribute("logDeAcoes", findAll);
+		model.addAttribute("logDeAcoes", logDeAcoes);
 		model.addAttribute("novoUser", new User());
 		return "admin_pages/log_acoes_admin";
 	}

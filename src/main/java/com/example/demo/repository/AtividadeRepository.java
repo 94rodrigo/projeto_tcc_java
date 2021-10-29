@@ -63,8 +63,8 @@ public interface AtividadeRepository extends JpaRepository<Atividade, Long>{
 	@Query("select a from Atividade a where a.nomeAtividade like %?1%")
 	List<Atividade> buscaNomeAtividadeOuDescricao(String keyword);
 	
-	@Query("select a from Atividade a where a.cidade like %?1% or a.enderecoLocal like %?1% or a.uf like %?1%")
-	List<Atividade> buscaLocal(String keyword);
+	@Query("select a from Atividade a where (a.cidade like %?1% or a.enderecoLocal like %?1% or a.uf like %?1%) and a.estadoAtividade = ?2")
+	List<Atividade> buscaLocal(String keyword, EstadoAtividade estado);
 	
 	@Query("select a from Atividade a where a.tipoAtividade like %?1%")
 	List<Atividade> buscaPorTipoAtividade(String keyword);

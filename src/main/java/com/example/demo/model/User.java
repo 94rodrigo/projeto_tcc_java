@@ -329,7 +329,19 @@ public class User {
 	}
 	
 	public Boolean getHorarioNulo() {
-		return cadastrado == null || cadastrado.equals(LocalDateTime.of(0, 0, 0, 0, 0, 0, 0)) || cadastrado.isEqual(LocalDateTime.of(null, null));
+		return cadastrado == null;
 	}
-	
+
+	public List<LogDeAcoes> getListaDeLogs() {
+		getLogOrdemDecrescente();
+		return listaDeLogs;
+	}
+
+	public void setListaDeLogs(List<LogDeAcoes> listaDeLogs) {
+		this.listaDeLogs = listaDeLogs;
+	}
+
+	public void getLogOrdemDecrescente(){
+		this.listaDeLogs.sort(Comparator.comparing(LogDeAcoes::getHorarioAcao).reversed());
+	}
 }

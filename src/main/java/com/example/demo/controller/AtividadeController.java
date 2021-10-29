@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -76,13 +77,16 @@ public class AtividadeController {
 		
 		if (usuarioLogado.getPermitiuLocalizacao()) {
 			List<Atividade> findAllByEstado = atividadeRepository.findAllByEstado(EstadoAtividade.CONFIRMADO);
-			for (Atividade atividade : findAllByEstado) {
+			for (Iterator<Atividade> iterator = findAllByEstado.iterator(); iterator.hasNext();) {
+				Atividade atividade = iterator.next();
 				y1 = Double.valueOf(atividade.getLatitude());
 				y2 = Double.valueOf(atividade.getLongitude());
 				if (calculaDistanciaPontos(x1, x2, y1, y2) >= 0.1) {
-					findAllByEstado.remove(atividade);
+					iterator.remove();
 				}
 			}
+
+
 			findAllByEstado.sort(Comparator.comparing(Atividade::getDataHorarioAtividade));
 			model.addAttribute("atividades", findAllByEstado);
 			return "atividade/atividades_todas";

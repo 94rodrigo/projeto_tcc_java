@@ -31,6 +31,9 @@ public class UsuarioInformacoesController {
 		List<Atividade> usuarioParticipa = new ArrayList<>();
 		List<Atividade> usuarioParticipou = new ArrayList<>();
 		
+		System.out.println(usuarioCadastro.getHorarioNulo());
+		System.out.println(usuarioCadastro.getCadastrado().getMonthValue());
+		
 		if (usuarioCadastro.getAtividadesQueUsuariosParticipa().isEmpty() || usuarioCadastro.getAtividadesQueUsuariosParticipa() == null) {
 			model.addAttribute("usuarioParticipa", "-");
 			model.addAttribute("usuarioParticipou", "-");
