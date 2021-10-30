@@ -42,6 +42,8 @@
                                         <h1 class="h4 text-gray-900 mb-4">Bem-vindo de volta!</h1>
                                     </div>
                                     <p th:if="${loginError}" class="error"><script type="text/javascript">alert('Login ou senha inválidos!');</script></p>
+                                    <p th:if="${message}" class="error"><script type="text/javascript">alert('Usuario cadastrado com sucesso!');</script></p>
+                                    <p th:if="${usuarioBanido}" class="error"><script type="text/javascript">alert('Usuario não pode acessar o sistema');</script></p>
                                     <p th:text="${msgError}" class="text-danger"></p>
                                     <form th:action="@{/login}" class="user" method="post">
                                         <div class="form-group">

@@ -75,13 +75,14 @@ public class CadastroController {
 			}
 			System.out.println(request.getHeader(null));
 			return "cadastro";
+		 } else {
+			 model.addAttribute("message", true);
 		}
 
 		if (user.getRoles().isEmpty()) {
 			user.getRoles().add(roleRepository.findById(2).get());
 		}
 
-		model.addAttribute("message", "Valid form");
 		System.out.println("Controller: " + user.getSenha().equals(user.getConfirmacaoSenha()));
 		String encodedPassword = bCryptPasswordEncoder.encode(user.getSenha());
 		user.setSenha(encodedPassword);
@@ -96,6 +97,7 @@ public class CadastroController {
 		}
 		userService.saveUser(user);
 
+		
 		if (user.getRoles().contains(roleRepository.findById(1).get())) {
 			return "redirect:/dashboard";
 		}
