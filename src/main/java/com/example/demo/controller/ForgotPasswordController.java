@@ -31,10 +31,13 @@ public class ForgotPasswordController {
 	@Autowired
 	private UserService userService;
 	
+	private Boolean emailEnviado = false;
+
 	@GetMapping("/forgot_password")
-	public String showForgotPasswordForm() {
+	public String showForgotPasswordForm(Model model) {
 		return "forgot_password_form";
 	}
+	
 	
 	@PostMapping("/forgot_password")
 	public String processForgotPassword(HttpServletRequest request, Model model) throws CustomerNotFoundException, MessagingException, UnsupportedEncodingException {
@@ -45,9 +48,12 @@ public class ForgotPasswordController {
 			userService.updateResetPasswordToken(token, email);
 			String resetPasswordLink = Utility.getSiteURL(request) + "/reset_password?token=" + token;
 	        sendEmail(email, resetPasswordLink);
-	        model.addAttribute("message", "We have sent a reset password link to your email. Please check.");
-		} catch (UsernameNotFoundException e) {
-			model.addAttribute("error", e.getMessage());
+	        if(emailEnviado)
+	        	model.addAttribute("mensagemEmail", emailEnviado);
+	        emailEnviado = false;
+			
+		} catch (UsernameNotFoundException | CustomerNotFoundException e) {
+			model.addAttribute("error", "Campo obrigatório!");
 		}
 		
 		return "forgot_password_form";
@@ -57,7 +63,7 @@ public class ForgotPasswordController {
 		MimeMessage message = mailSender.createMimeMessage();
 		MimeMessageHelper helper = new MimeMessageHelper(message);
 		
-		helper.setFrom("contact@shopme.com", "Shopme Support");
+		helper.setFrom("contato@recuperacao.com", "Recuperação de senha");
 	    helper.setTo(recipientEmail);
 	     
 	    String subject = "Aqui está o link para redefinir sua senha";
@@ -75,6 +81,7 @@ public class ForgotPasswordController {
 	    helper.setText(content, true);
 	     
 	    mailSender.send(message);
+	    this.emailEnviado = true;
 	}
 	
 	@GetMapping("/reset_password")
@@ -83,7 +90,7 @@ public class ForgotPasswordController {
 	    model.addAttribute("token", token);
 	    
 	    if (user == null) {
-	        model.addAttribute("message", "Invalid Token");
+	        model.addAttribute("message", "Token Inválido");
 	        return "message";
 	    }
 	     
@@ -96,15 +103,15 @@ public class ForgotPasswordController {
 	    String password = request.getParameter("password");
 	     
 	    User user = userService.getByResetPasswordToken(token);
-	    model.addAttribute("title", "Reset your password");
+	    model.addAttribute("title", "Redefinir sua senha");
 	     
 	    if (user == null) {
-	        model.addAttribute("message", "Invalid Token");
+	        model.addAttribute("message", "Token inválido");
 	        return "message";
 	    } else {           
 	        userService.updatePassword(user, password);
 	         
-	        model.addAttribute("message", "You have successfully changed your password.");
+	        model.addAttribute("message", "Você alterou sua senha com sucesso.");
 	    }
 	     
 	    return "login";
