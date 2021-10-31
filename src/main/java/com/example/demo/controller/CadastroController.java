@@ -15,10 +15,13 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.example.demo.model.LogDeAcoes;
 import com.example.demo.model.User;
+import com.example.demo.repository.LogRepository;
 import com.example.demo.repository.RoleRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.UserService;
@@ -38,6 +41,9 @@ public class CadastroController {
 	
 	@Autowired
 	private RoleRepository roleRepository;
+	
+	@Autowired
+	private LogRepository logRepository;
 
 	@Autowired
 	public CadastroController(BCryptPasswordEncoder bCryptPasswordEncoder, UserService userService) {
@@ -46,13 +52,13 @@ public class CadastroController {
 	}
 
 	@GetMapping("/cadastro")
-	public String cadastro(Model model) {
-		model.addAttribute("novoUser", new User());
+	public String cadastro(Model model, User user) {
+		model.addAttribute("novoUser", user);
 		return "cadastro";
 	}
 
 	@PostMapping("/cadastro")
-	public String novoUsuario(@Valid User user, BindingResult result, HttpServletRequest request, Model model) {
+	public String novoUsuario(@Valid @ModelAttribute("novoUser") User user, BindingResult result, HttpServletRequest request, Model model) {
 		User usuarioExiste = userService.findByEmail(user.getEmail());
 
 		if (usuarioExiste != null) {
@@ -62,8 +68,8 @@ public class CadastroController {
 			usuarioExiste.setUf(user.getUf());
 			usuarioExiste.setMunicipio(user.getMunicipio());
 			usuarioExiste.setEnabled(true);
-			
 			userService.saveUser(usuarioExiste);
+			logRepository.save(new LogDeAcoes(usuarioExiste, "Atualizou informações de cadastro"));
 			return "redirect:/dashboard";
 		}
 
@@ -73,7 +79,6 @@ public class CadastroController {
 			for (ObjectError objectError : allErrors) {
 				System.out.println(objectError.getDefaultMessage());
 			}
-			System.out.println(request.getHeader(null));
 			return "cadastro";
 		 } else {
 			 model.addAttribute("message", true);
@@ -83,6 +88,7 @@ public class CadastroController {
 			user.getRoles().add(roleRepository.findById(2).get());
 		}
 
+		
 		System.out.println("Controller: " + user.getSenha().equals(user.getConfirmacaoSenha()));
 		String encodedPassword = bCryptPasswordEncoder.encode(user.getSenha());
 		user.setSenha(encodedPassword);

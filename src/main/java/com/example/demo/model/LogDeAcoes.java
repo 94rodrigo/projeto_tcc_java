@@ -38,6 +38,12 @@ public class LogDeAcoes {
 		this.acao = acao;
 	}
 	
+	public LogDeAcoes(User user, String acao) {
+		this.user = user;
+		this.horarioAcao = LocalDateTime.now();
+		this.acao = acao;
+	}
+	
 	public LogDeAcoes() {}
 
 	public LocalDateTime getHorarioAcao() {
