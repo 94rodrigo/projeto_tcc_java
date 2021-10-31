@@ -71,7 +71,12 @@
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
                         <h1 class="h3 mb-0 text-gray-800">Todas as Atividades</h1>
-                        <p hidden id="coordenadasCentro"><span th:text="${usuarioLogado.userCoordenadas}"></span></p>
+                        <div th:if="${isBuscaLocal}">
+                        	<p hidden id="coordenadasCentro"><span th:text="${centroMapa}"></span></p>
+                        </div>
+                        <div th:unless="${isBuscaLocal}">
+	                        <p hidden id="coordenadasCentro"><span th:text="${usuarioLogado.userCoordenadas}"></span></p>
+                        </div>
                          <div class="dropdown mb-4">
                             <button class="btn-sm btn-primary shadow-sm dropdown-toggle" type="button"
                                 id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"

@@ -60,6 +60,7 @@ public class AtividadeController {
 	private Long idAtividade;
 	
 	private Boolean isAtividadeCadastradaEPendente = false;
+	private Boolean buscandoPorLocal = false;
 	
 	@GetMapping("/todas")
 	public String todasAsAtividades(Model model, Principal principal, String tipo) throws IOException {
@@ -360,7 +361,7 @@ public class AtividadeController {
 //	}
 	
 	@RequestMapping("/resultados")
-	private String resultadosBuscaPesquisa(Model model, @Param("keyword") String keyword, @Param("tipoBusca") String tipoBusca, Principal principal) {
+	private String resultadosBuscaPesquisa(Model model, @Param("keyword") String keyword, @Param("tipoBusca") String tipoBusca, Principal principal) throws ApiException, InterruptedException, IOException {
 		List<Atividade> atividades;
 		switch (tipoBusca) {
 		case "0":
@@ -370,6 +371,12 @@ public class AtividadeController {
 			atividades = atividadeService.listarResultadosPorTipoDeAtividade(keyword);
 			break;
 		case "2":
+			this.buscandoPorLocal = true;
+			if(this.buscandoPorLocal) {
+				model.addAttribute("isBuscaLocal", this.buscandoPorLocal);
+				model.addAttribute("centroMapa", Atividade.getCoordenadasPorNomeLocal(keyword));
+			}
+			this.buscandoPorLocal = false;
 			atividades = atividadeService.listarResultadosPorLocal(keyword);
 			break;
 		default:

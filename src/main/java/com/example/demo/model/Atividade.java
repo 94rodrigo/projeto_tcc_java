@@ -220,6 +220,15 @@ public class Atividade {
 		return json;
 	}
 	
+	public static String getCoordenadasPorNomeLocal(String local) throws ApiException, InterruptedException, IOException {
+		GeocodingResult[] results = GeocodingApi.geocode(CoordenadasApi.getContexto(), local).await();
+		Gson gson = new GsonBuilder().setPrettyPrinting().create();
+		
+		String json = gson.toJson(results[0].geometry.location);
+		System.out.println(json);
+		return json;
+	}
+	
 	public String getLatitudeAtividade() throws ApiException, InterruptedException, IOException {
 		GeocodingResult[] results = GeocodingApi.geocode(CoordenadasApi.getContexto(), getEnderecoCompleto()).await();
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
