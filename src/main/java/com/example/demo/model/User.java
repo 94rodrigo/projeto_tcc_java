@@ -100,7 +100,7 @@ public class User {
 			inverseJoinColumns = {@JoinColumn(name = "atividade_id")})
 	private List<Atividade> atividadesQueUsuariosParticipa = new ArrayList<>();
 	
-	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
 	@JoinTable(
 			name = "users_roles",
 			joinColumns = @JoinColumn(name = "id"),

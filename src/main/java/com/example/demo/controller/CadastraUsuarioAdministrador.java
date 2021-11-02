@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Scope;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 
@@ -28,6 +29,8 @@ public class CadastraUsuarioAdministrador {
 	@Autowired
 	private RoleRepository roleRepository;
 	
+	private BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+	
 	@Bean
 	@Scope("singleton")
 	public void cargaInicial() {
@@ -45,15 +48,17 @@ public class CadastraUsuarioAdministrador {
 			user.setEmail("admin@sistema.com.br");
 			user.setMunicipio("Santos");
 			user.setUf("SP");
-			user.setSenha("Q1w2e3r4t5y6");
-			user.setConfirmacaoSenha("Q1w2e3r4t5y6");
 			user.setEnabled(true);
 			user.setCadastrado(LocalDateTime.now());
-			user.getRoles().add(roleRepository.findById(1).get());
-			System.out.println("\nUsuario administrador salvo\nUsuario: admin@sistema.com.br\nSenha: Q1w2e3r4t5y6");
+			user.setSenha(bCryptPasswordEncoder.encode("Q1w2e3r4t5y6"));
+			user.setConfirmacaoSenha(bCryptPasswordEncoder.encode("Q1w2e3r4t5y6"));
+			user.getRoles().add(roleRepository.findByNome(RolesEnum.ADMIN));
 			userService.saveUser(user);
+			System.out.println("\n\n****************************************************************************\n\n");
+			System.out.println("Usuario administrador salvo\nUsuario: admin@sistema.com.br\nSenha: Q1w2e3r4t5y6");
+			System.out.println("\n\n****************************************************************************\n\n");
 		}else {
-			System.out.println("Usuario administrador já cadastrado: admin@sistema.com.br");
+			System.out.println("Usuario administrador já cadastrado: admin@sistema.com.br\n\n");
 		}
 	}
 	
@@ -62,11 +67,13 @@ public class CadastraUsuarioAdministrador {
 		if(roleRepository.findAll().isEmpty()) {
 			Role role1 = new Role(RolesEnum.ADMIN);
 			Role role2 = new Role(RolesEnum.USER);
-			System.out.println("\nRoles cadastradas:\n1 - ADMIN\n2 - USER");
+			System.out.println("\n\n****************************************************************************\n\n");
+			System.out.println("Roles cadastradas:\n1 - ADMIN\n2 - USER");
+			System.out.println("\n\n****************************************************************************\n\n");
 			roleRepository.save(role1);
 			roleRepository.save(role2);
 		}else {
-			System.out.println("Roles já cadastradas");
+			System.out.println("Roles já cadastradas\n\n");
 		}
 	}
 }
