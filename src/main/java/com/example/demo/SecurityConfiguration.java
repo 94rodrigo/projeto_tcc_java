@@ -21,8 +21,6 @@ import com.example.demo.service.CustomUserDetailsService;
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 	
-	@Autowired
-	private DataSource dataSource;
 	
 	@Bean
 	public UserDetailsService userDetailsService() {

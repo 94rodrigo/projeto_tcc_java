@@ -67,7 +67,7 @@
         <!-- Dropdown - User Information -->
         <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
             aria-labelledby="userDropdown">
-            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#profileModal">
+            <a class="dropdown-item" href="#profileModal" id="modalPerfil" data-toggle="modal" data-target="#profileModal">
                 <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                 Perfil
             </a>
@@ -230,7 +230,7 @@
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
-            <form class="user" th:action="@{/cadastro}" th:object="${user}" method="POST">
+            <form class="user" th:action="@{/atualizaUsuario}" th:object="${user}" method="POST">
                 <div class="modal-body">
                 	<div hidden="hidden">
 	                	<input type="text" th:field="*{id}">
@@ -238,15 +238,26 @@
 	                	<input type="text" th:field="*{confirmacaoSenha}">
                 	</div>
                     <label for="primeiroNome">Nome</label><br>
-                    <input class="form-control" type="text" th:field="*{primeiroNome}" id="primeiroNome" placeholder="nome"><br>
+                    <input class="form-control" type="text" th:field="*{primeiroNome}" th:errorclass="is-invalid" id="primeiroNome" placeholder="nome">
+                    <div class="invalid-feedback" th:errors="*{primeiroNome}">
+						Erros do primeiro nome
+					</div><br>
                     <label for="sobrenome">Sobrenome</label><br>
-                    <input class="form-control" type="text" th:field="*{ultimoNome}" id="ultimoNome" placeholder="sobrenome"><br>
-                    <label for="email">E-mail</label><br>
-                    <input class="form-control" type="text" id="email" th:field="*{email}" placeholder="e-mail"><br>
+                    <input type="text" th:field="*{ultimoNome}" th:errorclass="is-invalid" class="form-control" id="ultimoNome" placeholder="sobrenome">
+                    <div class="invalid-feedback" th:errors="*{ultimoNome}">
+						Erros do último nome
+					</div><br>
+                    <!-- <div hidden="hidden">
+	                    <label for="email">E-mail</label><br>
+	                    <input type="text" id="email" th:field="*{email}" th:errorclass="is-invalid" class="form-control" placeholder="e-mail">
+	                    <div class="invalid-feedback" th:errors="*{email}">
+							Erros do e-mail
+						</div><br>
+                    </div>  -->
                     <div class="row">
                         <div class="col-xl-3 col-md-6 mb-4">
                             <label for="uf">Estado</label>
-                            <select class="form-control" th:field="*{uf}" name="uf" id="uf">
+                            <select th:field="*{uf}" th:errorclass="is-invalid" class="form-control" name="uf" id="uf">
                                 <option th:value="0">UF</option>
                                 <option th:value="AC">AC</option>
                                 <option th:value="AL">AL</option>
@@ -276,10 +287,16 @@
                                 <option th:value="SE">SE</option>
                                 <option th:value="TO">TO</option>
                             </select>
+                            <div class="invalid-feedback" th:errors="*{uf}">
+								Erros de UF
+							</div>
                         </div>
                         <div class="col-xl-9 col-md-6 mb-4">
                             <label for="municipio">Cidade</label><br>
-                            <input class="form-control" type="text" id="municipio" th:field="*{municipio}" placeholder="cidade">
+                            <input type="text" id="municipio" th:field="*{municipio}" th:errorclass="is-invalid" class="form-control" placeholder="cidade">
+                            <div class="invalid-feedback" th:errors="*{municipio}">
+								Erros do municipio
+							</div>
                         </div>
                     </div><br>
                 </div>

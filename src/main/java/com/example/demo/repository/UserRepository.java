@@ -52,7 +52,15 @@ public interface UserRepository extends JpaRepository<User, Long>{
 			+ "u.uf = :uf, u.municipio = :municipio where u.id = :id")
 	public void atualizaUsuario(@Param("primeiroNome")String primeiroNome,
 			@Param("ultimoNome") String ultimoNome, @Param("email") String email, @Param("uf") String uf,
-			@Param("municipio") String municipio, @Param("id") String id);
+			@Param("municipio") String municipio, @Param("id") Long id);
+	
+	@Transactional
+	@Modifying
+	@Query("update User u set u.primeiroNome = :primeiroNome, u.ultimoNome = :ultimoNome,"
+			+ "u.uf = :uf, u.municipio = :municipio where u.email = :emailAtual")
+	public void atualizaUsuarioPorEmail(@Param("primeiroNome")String primeiroNome,
+			@Param("ultimoNome") String ultimoNome, @Param("uf") String uf,
+			@Param("municipio") String municipio, @Param("emailAtual") String emailAtual);
 	
 //	List<User> findUserByAtividadeId();
 }

@@ -8,15 +8,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import com.example.demo.model.User;
-import com.example.demo.repository.AtividadeRepository;
 import com.example.demo.repository.UserRepository;
 
 @Controller
 public class ErrorController {
 
-	@Autowired
-	private AtividadeRepository atividadeRepository;
-	
 	@Autowired
 	private UserRepository userRepository;
 	

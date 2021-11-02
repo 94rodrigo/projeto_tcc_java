@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.demo.model.Atividade;
 import com.example.demo.model.User;
-import com.example.demo.service.AtividadeService;
 import com.example.demo.service.UserService;
 
 @Controller
@@ -21,9 +20,6 @@ public class UltimasAtividadesController {
 
 	@Autowired
 	private UserService userService;
-	
-	@Autowired
-	private AtividadeService atividadeService;
 	
 	@GetMapping
 	public String paginaUltimasAtividades(Principal principal, Model model) {

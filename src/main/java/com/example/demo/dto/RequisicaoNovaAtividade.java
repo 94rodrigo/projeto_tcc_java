@@ -3,8 +3,6 @@ package com.example.demo.dto;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
@@ -20,8 +18,6 @@ import com.example.demo.model.Atividade;
 import com.example.demo.model.EstadoAtividade;
 
 public class RequisicaoNovaAtividade {
-
-	private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 	
 	@Id
 	private Long id;

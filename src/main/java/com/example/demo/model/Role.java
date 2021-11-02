@@ -20,6 +20,12 @@ public class Role {
 	
 	@Enumerated(EnumType.STRING)
 	private RolesEnum nome;
+	
+	public Role() {}
+
+	public Role(RolesEnum nome) {
+		this.nome = nome;
+	}
 
 	public Integer getId() {
 		return id;

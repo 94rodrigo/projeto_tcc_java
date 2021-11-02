@@ -3,6 +3,8 @@ package com.example.demo.controller;
 import java.io.IOException;
 import java.security.Principal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -62,15 +64,25 @@ public class CadastroController {
 		User usuarioExiste = userService.findByEmail(user.getEmail());
 
 		if (usuarioExiste != null) {
-			usuarioExiste.setPrimeiroNome(user.getPrimeiroNome());
-			usuarioExiste.setUltimoNome(user.getUltimoNome());
-			usuarioExiste.setEmail(user.getEmail());
-			usuarioExiste.setUf(user.getUf());
-			usuarioExiste.setMunicipio(user.getMunicipio());
-			usuarioExiste.setEnabled(true);
-			userService.saveUser(usuarioExiste);
-			logRepository.save(new LogDeAcoes(usuarioExiste, "Atualizou informações de cadastro"));
-			return "redirect:/dashboard";
+			if (result.hasErrors()) {
+				System.out.println(result.hasErrors());
+				List<ObjectError> allErrors = result.getAllErrors();
+				for (ObjectError objectError : allErrors) {
+					System.out.println(objectError.getDefaultMessage());
+				}
+				model.addAttribute("user", usuarioExiste);
+				return null;
+			 } else {
+				 model.addAttribute("message", true);
+				 userRepository.atualizaUsuarioPorEmail(
+						 user.getPrimeiroNome(),
+						 user.getUltimoNome(),
+						 user.getUf(),
+						 user.getMunicipio(),
+						 usuarioExiste.getEmail());
+				 logRepository.save(new LogDeAcoes(user, "Atualizou informações de cadastro"));
+				 return "redirect:/dashboard";
+			}
 		}
 
 		if (result.hasErrors()) {
@@ -158,4 +170,5 @@ public class CadastroController {
 
 		return "redirect:/todas";
 	}
+	
 }

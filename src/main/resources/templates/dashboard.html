@@ -63,6 +63,15 @@
                     </div>
 
                     <!-- Content Row -->
+                    	<p th:if="${alterou}" class="error"><script type="text/javascript">alert('Dados do usuário foram alterados');</script></p>
+                    	<p th:if="${erroAoAlterarUsuario}" class="error">
+                    		<script th:inline="javascript">
+                    			/*<![CDATA[*/
+                    		    var camposErro = /*[[${mensagemErroCampoVazio}]]*/ 'Não foi possível gravar devido aos seguintes erros: \n';
+                    			alert(camposErro);
+                    			/*]]>*/
+                    		</script>
+                    	</p>
                     <div class="row">
                         <div class="col-xl-3 col-md-6 mb-4">
                         	<form th:action="@{/atualizaCoordenadas}" th:object="${user}" method="post">
@@ -307,21 +316,16 @@
     </script>
     
     <!-- Bootstrap core JavaScript-->
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/vendor/jquery/jquery.min.js"></script>
+    <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
     <!-- Core plugin JavaScript-->
-    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="/vendor/jquery-easing/jquery.easing.min.js"></script>
 
     <!-- Custom scripts for all pages-->
-    <script src="js/sb-admin-2.min.js"></script>
+    <script src="/js/sb-admin-2.min.js"></script>
 
-    <!-- Page level plugins -->
-    <script src="vendor/chart.js/Chart.min.js"></script>
 
-    <!-- Page level custom scripts -->
-    <script src="js/demo/chart-area-demo.js"></script>
-    <script src="js/demo/chart-pie-demo.js"></script>
 
 </body>
 
