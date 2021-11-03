@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import com.example.demo.model.User;
 import com.example.demo.repository.RoleRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.UserService;
+import com.google.maps.errors.ApiException;
 
 @Controller
 @Component
@@ -49,9 +51,17 @@ public class CadastraUsuarioAdministrador {
 			user.setMunicipio("Santos");
 			user.setUf("SP");
 			user.setEnabled(true);
+			user.setPermitiuLocalizacao(false);
 			user.setCadastrado(LocalDateTime.now());
 			user.setSenha(bCryptPasswordEncoder.encode("Q1w2e3r4t5y6"));
 			user.setConfirmacaoSenha(bCryptPasswordEncoder.encode("Q1w2e3r4t5y6"));
+			try {
+				user.setUserCoordenadas(user.getCoordenadas());
+				user.setUserLatitude(user.getLatitudeApi());
+				user.setUserLongitude(user.getLongitudeApi());
+			} catch (ApiException | InterruptedException | IOException e) {
+				e.printStackTrace();
+			}
 			user.getRoles().add(roleRepository.findByNome(RolesEnum.ADMIN));
 			userService.saveUser(user);
 			System.out.println("\n\n****************************************************************************\n\n");

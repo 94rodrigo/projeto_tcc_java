@@ -2,9 +2,10 @@
 
 Procedimentos para executar o projeto:
 
-- Para utilizar o Google Maps:
+- Para realizar cálculos de coordenadas do usuário e utilizar o Google Maps:
   - Coloque a sua chave do Google Maps obtida pelo cadastro do site https://developers.google.com/maps na constante "API_KEY" da classe "CoordenadasApi".
     - Esta classe está localizada no caminho: /src/main/java/com/example/demo/api/CoordenadasApi.java
+  - OBS.: A ausência desta chave no projeto pode causar erros na execução da aplicação e impossibilidade de uso.
 
 - Para utilizar o resurso "Esqueci minha senha":
   - Insira um e-mail e senha nas seguintes linhas do arquivo application.properties:
