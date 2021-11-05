@@ -46,6 +46,7 @@ public class CadastroController {
 	
 	@Autowired
 	private LogRepository logRepository;
+	
 
 	@Autowired
 	public CadastroController(BCryptPasswordEncoder bCryptPasswordEncoder, UserService userService) {
@@ -121,34 +122,6 @@ public class CadastroController {
 		}
 
 		return "login";
-	}
-
-	@PostMapping("/adminCadastro")
-	public String adminNovoUsuario(@Valid User novoUser, BindingResult result, HttpServletRequest request,
-			Model model) {
-
-		if (result.hasErrors()) {
-			System.out.println(result.hasErrors());
-			List<ObjectError> allErrors = result.getAllErrors();
-			for (ObjectError objectError : allErrors) {
-				System.out.println(objectError.getDefaultMessage());
-			}
-			return "dashboard";
-		}
-
-		if (novoUser.getRoles().isEmpty()) {
-			novoUser.getRoles().add(roleRepository.findById(2).get());
-		}
-
-		model.addAttribute("message", "Valid form");
-		System.out.println("Controller: " + novoUser.getSenha().equals(novoUser.getConfirmacaoSenha()));
-		String encodedPassword = bCryptPasswordEncoder.encode(novoUser.getSenha());
-		novoUser.setSenha(encodedPassword);
-		novoUser.setConfirmacaoSenha(encodedPassword);
-		novoUser.setEnabled(true);
-		userService.saveUser(novoUser);
-
-		return "dashboard";
 	}
 	
 	@PostMapping("/atualizaCoordenadas")

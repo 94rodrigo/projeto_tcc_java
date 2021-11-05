@@ -10,9 +10,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +25,7 @@ import com.example.demo.model.LogDeAcoes;
 import com.example.demo.model.User;
 import com.example.demo.repository.AtividadeRepository;
 import com.example.demo.repository.LogRepository;
+import com.example.demo.repository.RoleRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.UserService;
 
@@ -42,9 +45,15 @@ public class DashboardController {
 	@Autowired
 	private LogRepository logRepository;
 	
+	@Autowired
+	private RoleRepository roleRepository;
+	
+	private BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 	private Boolean alterouUsuario = false;
 	private Boolean erroAoAlterarUsuario = false;
 	private String mensagemErroCampoVazio = "";
+	private Boolean cadastroAdmin = false;
+	private Boolean administradorAtualizou = false;
 	
 	@GetMapping("/dashboard")
 	public String home(Model model, Principal principal) {
@@ -97,12 +106,15 @@ public class DashboardController {
 		model.addAttribute("atividadesConfirmadasUsuario", atividadesConfirmadasUsuario);
 		model.addAttribute("atividadesPendentesUsuario", atividadesPendentesUsuario);
 		model.addAttribute("alterou", alterouUsuario);
+		model.addAttribute("cadastroAdmin", cadastroAdmin);
 		
 		model.addAttribute("erroAoAlterarUsuario", erroAoAlterarUsuario);
 		if(erroAoAlterarUsuario) model.addAttribute("mensagemErroCampoVazio", mensagemErroCampoVazio);
+		if(cadastroAdmin) 		 model.addAttribute("administradorAtualizou", administradorAtualizou);
 		
 		alterouUsuario = false;
 		erroAoAlterarUsuario = false;
+		cadastroAdmin = false;
 		mensagemErroCampoVazio = "";
 		
 		return "dashboard";
@@ -135,5 +147,35 @@ public class DashboardController {
 		}
 
 		 return "redirect:/dashboard";
+	}
+	
+	
+	@PostMapping("/adminCadastro")
+	public String adminNovoUsuario(@Valid User novoUser, BindingResult result, HttpServletRequest request, Model model) {
+
+		this.cadastroAdmin = true;
+		if (result.hasErrors()) {
+			System.out.println(result.hasErrors());
+			List<ObjectError> allErrors = result.getAllErrors();
+			for (ObjectError objectError : allErrors) {
+				System.out.println(objectError.getDefaultMessage());
+			}
+			administradorAtualizou = false;
+			return "redirect:/dashboard";
+		}
+
+		if (novoUser.getRoles().isEmpty()) {
+			novoUser.getRoles().add(roleRepository.findById(2).get());
+		}
+
+		model.addAttribute("message", "Valid form");
+		System.out.println("Controller: " + novoUser.getSenha().equals(novoUser.getConfirmacaoSenha()));
+		String encodedPassword = bCryptPasswordEncoder.encode(novoUser.getSenha());
+		novoUser.setSenha(encodedPassword);
+		novoUser.setConfirmacaoSenha(encodedPassword);
+		administradorAtualizou = true;
+		userService.saveUser(novoUser);
+		
+		return "redirect:/dashboard";
 	}
 }

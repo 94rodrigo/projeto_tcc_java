@@ -120,6 +120,9 @@ public class User {
 	private List<LogDeAcoes> listaDeLogs;
 	
 	public User() {
+		this.enabled = true;
+		this.cadastrado = LocalDateTime.now();
+		this.permitiuLocalizacao = false;
 	}
 	
 	public Long getId() {

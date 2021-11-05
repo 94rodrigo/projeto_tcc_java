@@ -64,6 +64,10 @@
 
                     <!-- Content Row -->
                     	<p th:if="${alterou}" class="error"><script type="text/javascript">alert('Dados do usuário foram alterados');</script></p>
+                    	<div th:if="${cadastroAdmin}" class="error">
+	                    	<p th:if="${administradorAtualizou}" class="error"><script type="text/javascript">alert('Usuário cadastrado com sucesso!');</script></p>
+	                    	<p th:unless="${administradorAtualizou}" class="error"><script type="text/javascript">alert('Não foi possível cadastrar usuário.\nTodos os campos devem ser preenchidos.');</script></p>
+                    	</div>
                     	<p th:if="${erroAoAlterarUsuario}" class="error">
                     		<script th:inline="javascript">
                     			/*<![CDATA[*/
