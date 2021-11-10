@@ -10,16 +10,16 @@ import javax.persistence.Table;
 public class Municipio {
 
 	@Id
-	Integer mun_id;
+	private Integer mun_id;
 	
 	@Column(name = "mun_ibge")
-	Integer munIbge;
+	private Integer munIbge;
 	
 	@Column(name = "mun_nome")
-	String munNome;
+	private String munNome;
 	
 	@Column(name = "mun_uf")
-	String munUf;
+	private String munUf;
 	
 	public Municipio() {
 	}

@@ -3,8 +3,6 @@ package com.example.demo.controller;
 import java.io.IOException;
 import java.security.Principal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -24,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.example.demo.model.LogDeAcoes;
 import com.example.demo.model.User;
 import com.example.demo.repository.LogRepository;
+import com.example.demo.repository.MunicipioRepository;
 import com.example.demo.repository.RoleRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.UserService;
@@ -47,6 +46,9 @@ public class CadastroController {
 	@Autowired
 	private LogRepository logRepository;
 	
+	@Autowired
+	private MunicipioRepository municipioRepository;
+	
 
 	@Autowired
 	public CadastroController(BCryptPasswordEncoder bCryptPasswordEncoder, UserService userService) {
@@ -57,6 +59,7 @@ public class CadastroController {
 	@GetMapping("/cadastro")
 	public String cadastro(Model model, User user) {
 		model.addAttribute("novoUser", user);
+		model.addAttribute("listaCidades", municipioRepository.findByMunUf(user.getUf()));
 		return "cadastro";
 	}
 

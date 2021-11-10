@@ -144,7 +144,6 @@ public class AtividadeController {
 			atividadeRepository.save(atividade2);
 			logRepository.save(new LogDeAcoes(
 					user,
-					atividade2,
 					"Atualizou atividade ".concat(atividade2.getNomeAtividade())));
 			idAtividade = null;
 			return "redirect:/userAtividades";
@@ -174,7 +173,7 @@ public class AtividadeController {
 		
 		atividadeRepository.save(atividade);
 		userRepository.save(user);
-		logRepository.save(new LogDeAcoes(user, atividade, "Cadastrou atividade: ".concat(atividade.getNomeAtividade())));
+		logRepository.save(new LogDeAcoes(user, "Cadastrou atividade: ".concat(atividade.getNomeAtividade())));
 		
 		isAtividadeCadastradaEPendente = true;
 		
@@ -312,13 +311,13 @@ public class AtividadeController {
 		return "atividade/minhas_atividades";
 	}
 	
-	@RequestMapping(path = "delete/{id}", method = RequestMethod.POST)
+	@RequestMapping(path = "/delete/{id}", method = RequestMethod.POST)
 	public String deletar(@PathVariable Long id) {
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		User user = userRepository.findByEmail(username);
 		Atividade atividade = atividadeRepository.findById(id).get();
 		atividadeService.deletarAtividade(id);
-		logRepository.save(new LogDeAcoes(user, atividade, "Apagou atividade ".concat(atividade.getNomeAtividade())));
+		logRepository.save(new LogDeAcoes(user, "Apagou atividade ".concat(atividade.getNomeAtividade())));
 		return "redirect:/userAtividades";
 	}
 	
@@ -340,7 +339,7 @@ public class AtividadeController {
 	public String cancelarAtividade(@PathVariable Long id) {
 		atividadeRepository.alterarEstadoAtividade(EstadoAtividade.CANCELADO, id);
 		Atividade atividade = atividadeRepository.findById(id).get();
-		logRepository.save(new LogDeAcoes(null, atividade, "Alterou o status da atividade ".concat(atividade.getNomeAtividade()).concat(" para ".concat(EstadoAtividade.CANCELADO.name()))));
+		logRepository.save(new LogDeAcoes(null, "Alterou o status da atividade ".concat(atividade.getNomeAtividade()).concat(" para ".concat(EstadoAtividade.CANCELADO.name()))));
 		return "redirect:/userAtividades";
 	}
 	

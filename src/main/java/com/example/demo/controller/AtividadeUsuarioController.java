@@ -34,7 +34,7 @@ public class AtividadeUsuarioController {
 		atividade.incluirUsuario(user);
 		atividadeRepository.save(atividade);
 		userRepository.save(user);
-		logRepository.save(new LogDeAcoes(user, atividade, "Confirmou presença na atividade ".concat(atividade.getNomeAtividade())));
+		logRepository.save(new LogDeAcoes(user, "Confirmou presença na atividade ".concat(atividade.getNomeAtividade())));
 		System.out.println(user.getAtividadesQueUsuariosParticipa());
 		return "redirect:/todas";
 	}
@@ -44,7 +44,7 @@ public class AtividadeUsuarioController {
 		User user = userRepository.findByEmail(principal.getName());
 		Atividade atividade = atividadeRepository.findById(id).get();
 		userRepository.deleteByIdUserAtividades(user.getId(), atividade.getId());
-		logRepository.save(new LogDeAcoes(user, atividade, "Cancelou presença na atividade ".concat(atividade.getNomeAtividade())));
+		logRepository.save(new LogDeAcoes(user, "Cancelou presença na atividade ".concat(atividade.getNomeAtividade())));
 		return "redirect:/todas";
 	}
 	
@@ -57,7 +57,7 @@ public class AtividadeUsuarioController {
 		atividadeRepository.save(atividade);
 		userRepository.save(user);
 		System.out.println(user.getAtividadesQueUsuariosParticipa());
-		logRepository.save(new LogDeAcoes(user, atividade, "Confirmou presença na atividade ".concat(atividade.getNomeAtividade())));
+		logRepository.save(new LogDeAcoes(user, "Confirmou presença na atividade ".concat(atividade.getNomeAtividade())));
 		return "redirect:/atividade/{id}";
 	}
 	
@@ -66,7 +66,7 @@ public class AtividadeUsuarioController {
 		User user = userRepository.findByEmail(principal.getName());
 		Atividade atividade = atividadeRepository.findById(id).get();
 		userRepository.deleteByIdUserAtividades(user.getId(), atividade.getId());
-		logRepository.save(new LogDeAcoes(user, atividade, "Cancelou presença na atividade ".concat(atividade.getNomeAtividade())));
+		logRepository.save(new LogDeAcoes(user, "Cancelou presença na atividade ".concat(atividade.getNomeAtividade())));
 		return "redirect:/atividade/{id}";
 	}
 	

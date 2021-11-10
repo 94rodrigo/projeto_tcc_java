@@ -74,7 +74,7 @@ public class AtividadeService {
 	
 	public void deletarAtividade(Long id) {
 		atividadeRepository.deleteUserAtividadeByAtividadeId(id);
-		atividadeRepository.deleteById(id);
+		atividadeRepository.deleteAtividadeByAtividadeId(id);
 	}
 
 }

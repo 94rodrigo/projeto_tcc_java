@@ -8,7 +8,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 
 @Entity
 public class LogDeAcoes {
@@ -21,21 +20,10 @@ public class LogDeAcoes {
 	@JoinColumn(name = "user_id", referencedColumnName = "id")
 	private User user;
 	
-	@OneToOne
-	@JoinColumn(name = "atividade_id", referencedColumnName = "id")
-	private Atividade atividade;
-	
 	private String acao;
 	
 	private LocalDateTime horarioAcao;
 
-	public LogDeAcoes(User user, Atividade atividade, String acao) {
-		this.user = user;
-		this.atividade = atividade;
-		this.horarioAcao = LocalDateTime.now();
-		this.acao = acao;
-	}
-	
 	public LogDeAcoes(User user, String acao) {
 		this.user = user;
 		this.horarioAcao = LocalDateTime.now();
@@ -58,10 +46,6 @@ public class LogDeAcoes {
 
 	public User getUser() {
 		return user;
-	}
-
-	public Atividade getAtividade() {
-		return atividade;
 	}
 
 	public String getAcao() {

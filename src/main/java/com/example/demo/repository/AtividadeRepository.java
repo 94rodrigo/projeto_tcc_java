@@ -81,4 +81,9 @@ public interface AtividadeRepository extends JpaRepository<Atividade, Long>{
 	@Modifying
 	@Query(value = "delete from user_atividades where atividade_id = ?1", nativeQuery = true)
 	void deleteUserAtividadeByAtividadeId(Long id_atividade);
+	
+	@Transactional
+	@Modifying
+	@Query("delete from Atividade a where a.id = :id")
+	void deleteAtividadeByAtividadeId(@Param("id") Long id);
 }
