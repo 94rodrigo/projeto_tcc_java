@@ -125,6 +125,9 @@ public class User {
 		this.permitiuLocalizacao = false;
 	}
 	
+	public User() {
+	}
+	
 	public Long getId() {
 		return id;
 	}
