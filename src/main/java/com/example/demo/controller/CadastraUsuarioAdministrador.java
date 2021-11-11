@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -20,7 +21,6 @@ import com.google.maps.errors.ApiException;
 
 @Controller
 @Component
-@DependsOn({"CoordenadasApi"})
 public class CadastraUsuarioAdministrador {
 
 	@Autowired
@@ -36,6 +36,7 @@ public class CadastraUsuarioAdministrador {
 	
 	@Bean
 	@Scope("singleton")
+	@DependsOn({"CoordenadasApi"})
 	public void cargaInicial() {
 		cadastraRoles();
 		cadastraAdmin();
