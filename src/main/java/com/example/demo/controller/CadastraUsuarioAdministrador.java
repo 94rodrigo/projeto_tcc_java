@@ -20,6 +20,7 @@ import com.google.maps.errors.ApiException;
 
 @Controller
 @Component
+@DependsOn("CoordenadasApi")
 public class CadastraUsuarioAdministrador {
 
 	@Autowired
