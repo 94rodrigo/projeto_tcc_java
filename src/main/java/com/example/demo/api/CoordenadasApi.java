@@ -15,7 +15,7 @@ public class CoordenadasApi {
 	private static final String API_KEY = "GOOGLE_API_KEY";
 	private static GeoApiContext contexto = null;
 	
-	@Bean
+	@Bean(name = "CoordenadasApi")
 	@Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
 	public GeoApiContext getGeoApiContext() {
 		if (contexto == null) {
