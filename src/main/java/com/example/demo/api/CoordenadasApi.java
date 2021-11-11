@@ -12,7 +12,7 @@ import com.google.maps.GeoApiContext;
 @Configuration
 public class CoordenadasApi {
 
-	private static final String API_KEY = "GOOGLE_API_KEY";
+	private static final String API_KEY = System.getenv("GOOGLE_API_KEY");
 	private static GeoApiContext contexto = null;
 	
 	@Bean(name = "CoordenadasApi")
