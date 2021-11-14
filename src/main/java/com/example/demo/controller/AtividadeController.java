@@ -78,6 +78,8 @@ public class AtividadeController {
 		
 		if (usuarioLogado.getPermitiuLocalizacao()) {
 			List<Atividade> findAllByEstado = atividadeRepository.findAllByEstado(EstadoAtividade.CONFIRMADO);
+			atividadeService.atualizaEstadoAtividade(findAllByEstado);
+			findAllByEstado = atividadeRepository.findAllByEstado(EstadoAtividade.CONFIRMADO);
 			for (Iterator<Atividade> iterator = findAllByEstado.iterator(); iterator.hasNext();) {
 				Atividade atividade = iterator.next();
 				y1 = Double.valueOf(atividade.getLatitude());
@@ -96,6 +98,8 @@ public class AtividadeController {
 		String municipio = usuarioLogado.getMunicipio();
 		String uf = usuarioLogado.getUf();
 		List<Atividade> atividades = atividadeRepository.findAllByDataAtualMunicipioUf(EstadoAtividade.CONFIRMADO, municipio, uf);
+		atividadeService.atualizaEstadoAtividade(atividades);
+		atividades = atividadeRepository.findAllByDataAtualMunicipioUf(EstadoAtividade.CONFIRMADO, municipio, uf);
 		atividades.sort(Comparator.comparing(Atividade::getDataHorarioAtividade));
 		
 		for (Atividade atividade : atividades) {

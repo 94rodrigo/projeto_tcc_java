@@ -1,5 +1,7 @@
 package com.example.demo.service;
 
+import java.time.LocalDateTime;
+import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,4 +79,12 @@ public class AtividadeService {
 		atividadeRepository.deleteAtividadeByAtividadeId(id);
 	}
 
+	public void atualizaEstadoAtividade(List<Atividade> atividades) {
+		for (Iterator<Atividade> iterator = atividades.iterator(); iterator.hasNext();) {
+			Atividade atividade = iterator.next();
+			if (atividade.getDataHorarioAtividade().isBefore(LocalDateTime.now())) {
+				atividadeRepository.alterarEstadoAtividade(EstadoAtividade.JÁ_OCORRIDO, atividade.getId());
+			}
+		}
+	}
 }
