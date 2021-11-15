@@ -375,12 +375,19 @@ public class AtividadeController {
 			break;
 		case "2":
 			this.buscandoPorLocal = true;
+			atividades = atividadeService.listarResultadosPorLocal(keyword);
 			if(this.buscandoPorLocal) {
+				int numeroResultado = 0;
+				double somaLatitude = 0, somaLongitude = 0;
+				for(Atividade atividade : atividades) {
+					somaLatitude += Double.parseDouble(atividade.getLatitude());
+					somaLongitude += Double.parseDouble(atividade.getLongitude());
+					numeroResultado++;
+				}
 				model.addAttribute("isBuscaLocal", this.buscandoPorLocal);
-				model.addAttribute("centroMapa", Atividade.getCoordenadasPorNomeLocal(keyword));
+				model.addAttribute("centroMapa", mediaCoordenadas(somaLatitude, somaLongitude, numeroResultado));
 			}
 			this.buscandoPorLocal = false;
-			atividades = atividadeService.listarResultadosPorLocal(keyword);
 			break;
 		default:
 			return null;
@@ -412,5 +419,11 @@ public class AtividadeController {
 		Double a = Math.pow((a2 - b2), 2);
 		Double b = Math.pow((a1 - b1), 2);
 		return Math.sqrt(a + b);
+	}
+	
+	private String mediaCoordenadas(Double somaLatitude, Double somaLongitude, int total) {
+		Double latitude = somaLatitude / total;
+		Double longitude = somaLongitude / total;
+		return "{ \"lat\": " + latitude.toString() + ", \"lng\": " + longitude.toString() + " }";
 	}
 }

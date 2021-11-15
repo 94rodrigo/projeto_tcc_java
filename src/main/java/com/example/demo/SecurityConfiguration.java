@@ -10,6 +10,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.csrf.CsrfFilter;
+import org.springframework.web.filter.CharacterEncodingFilter;
 
 import com.example.demo.model.RolesEnum;
 import com.example.demo.service.CustomUserDetailsService;
@@ -39,6 +41,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
+		CharacterEncodingFilter encodingFilter = new CharacterEncodingFilter();
+		encodingFilter.setEncoding("UTF-8");
+		encodingFilter.setForceEncoding(true);
+		http.addFilterBefore(encodingFilter, CsrfFilter.class);
+		
 		http
 			.authorizeRequests().antMatchers("/", "/login/**", "/cadastro/**", "../static/**", "/forgot_password/**", "/reset_password/**", "/message/**")
 			.permitAll()
