@@ -77,6 +77,8 @@ public interface AtividadeRepository extends JpaRepository<Atividade, Long>{
 			@Param("uf") String uf, @Param("cidade") String cidade, @Param("enderecoLocal") String enderecoLocal,
 			@Param("dataAtividade") LocalDate dataAtividade, @Param("descricao") String descricao);
 	
+	List<Atividade> findAllByCidadeOrLocalAndEstadoAtividadeIgnoreCase(String cidade, String local, EstadoAtividade estadoAtividade);
+	
 	@Transactional
 	@Modifying
 	@Query(value = "delete from user_atividades where atividade_id = ?1", nativeQuery = true)
