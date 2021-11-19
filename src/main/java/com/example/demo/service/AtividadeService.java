@@ -70,7 +70,7 @@ public class AtividadeService {
 	public List<Atividade> listarResultadosPorLocal(String keyword){
 		if (keyword != null) {
 //			atividadeRepository.buscaLocalIgnoreCase(keyword, EstadoAtividade.CONFIRMADO)
-			return atividadeRepository.findByCidadeOrEnderecolocalAndEstadoatividadeIgnoreCase(keyword, keyword, EstadoAtividade.CONFIRMADO);
+			return atividadeRepository.findByCidadeOrEnderecoLocalAndEstadoAtividade(keyword, keyword, EstadoAtividade.CONFIRMADO);
 		}
 		return atividadeRepository.findAll();
 	}
