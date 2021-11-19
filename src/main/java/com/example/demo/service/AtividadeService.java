@@ -19,7 +19,7 @@ public class AtividadeService {
 	
 	public List<Atividade> listarResultadosPorNomeOuDescricao(String keyword){
 		if (keyword != null) {
-			return atividadeRepository.findByNomeOrDescricaoAndEstadoAtividadeAllIgnoreCase(keyword, keyword, EstadoAtividade.CONFIRMADO);
+			return atividadeRepository.findByNomeAtividadeOrDescricaoAndEstadoAtividadeAllIgnoreCase(keyword, keyword, EstadoAtividade.CONFIRMADO);
 		}
 		return atividadeRepository.findAll();
 	}
