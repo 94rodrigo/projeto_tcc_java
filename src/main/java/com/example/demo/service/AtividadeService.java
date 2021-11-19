@@ -19,7 +19,7 @@ public class AtividadeService {
 	
 	public List<Atividade> listarResultadosPorNomeOuDescricao(String keyword){
 		if (keyword != null) {
-			return atividadeRepository.buscaNomeAtividadeOuDescricao(keyword);
+			return atividadeRepository.findAllByNomeOrDescricaoAndEstadoAtividadeAllIgnoreCase(keyword, keyword, EstadoAtividade.CONFIRMADO);
 		}
 		return atividadeRepository.findAll();
 	}
@@ -70,7 +70,7 @@ public class AtividadeService {
 	public List<Atividade> listarResultadosPorLocal(String keyword){
 		if (keyword != null) {
 //			atividadeRepository.buscaLocalIgnoreCase(keyword, EstadoAtividade.CONFIRMADO)
-			return atividadeRepository.findByCidadeOrEnderecoLocalAndEstadoAtividadeAllIgnoreCase(keyword, keyword, EstadoAtividade.CONFIRMADO);
+			return atividadeRepository.findAllByCidadeOrEnderecoLocalAndEstadoAtividadeAllIgnoreCase(keyword, keyword, EstadoAtividade.CONFIRMADO);
 		}
 		return atividadeRepository.findAll();
 	}
