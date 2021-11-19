@@ -77,7 +77,7 @@ public interface AtividadeRepository extends JpaRepository<Atividade, Long>{
 			@Param("uf") String uf, @Param("cidade") String cidade, @Param("enderecoLocal") String enderecoLocal,
 			@Param("dataAtividade") LocalDate dataAtividade, @Param("descricao") String descricao);
 	
-	List<Atividade> findAllByCidadeOrLocalAndEstadoAtividadeIgnoreCase(String cidade, String local, EstadoAtividade estadoAtividade);
+	List<Atividade> findByCidadeOrLocalAndEstadoAtividadeIgnoreCase(String cidade, String local, EstadoAtividade estadoAtividade);
 	
 	@Transactional
 	@Modifying
