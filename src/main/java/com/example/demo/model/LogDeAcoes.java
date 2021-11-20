@@ -26,7 +26,7 @@ public class LogDeAcoes {
 
 	public LogDeAcoes(User user, String acao) {
 		this.user = user;
-		this.horarioAcao = LocalDateTime.now();
+		this.horarioAcao = LocalDateTime.now().minusHours(3);
 		this.acao = acao;
 	}
 	

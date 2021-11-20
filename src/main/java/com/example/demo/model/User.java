@@ -324,7 +324,7 @@ public class User {
 	}
 
 	public void setCadastrado(LocalDateTime cadastrado) {
-		this.cadastrado = cadastrado;
+		this.cadastrado = cadastrado.minusHours(3);
 	}
 	
 	public Boolean getHorarioNulo() {
