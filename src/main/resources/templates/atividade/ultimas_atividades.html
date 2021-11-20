@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 
 <head>
 
@@ -144,13 +144,13 @@
                                         </tr>
                                     </tfoot>
                                     <tbody>
-	                                    <div th:each="atividade : ${atividadesQueUsuariosParticipou}">
+	                                    <div th:each="atividade2 : ${atividadesQueUsuariosParticipou}">
                                         <tr>
-											<td th:text="${atividade.nomeAtividade}"></td>
-											<td th:text="${atividade.nomeTipoAtividade}"></td>
-											<td th:text="${#temporals.format(atividade.dataAtividade, 'dd/MM/yyyy')} + ' - '  + ${#temporals.format(atividade.dataAtividade, 'HH:mm')}"></td>
-											<td th:text="${atividade.cidade} + ', ' + ${atividade.uf}"></td>
-											<td th:text="${atividade.usuariosAtividade}"></td>
+											<td th:text="${atividade2.nomeAtividade}"></td>
+											<td th:text="${atividade2.nomeTipoAtividade}"></td>
+											<td th:text="${#temporals.format(atividade2.dataAtividade, 'dd/MM/yyyy')} + ' - '  + ${#temporals.format(atividade2.dataAtividade, 'HH:mm')}"></td>
+											<td th:text="${atividade2.cidade} + ', ' + ${atividade2.uf}"></td>
+											<td th:text="${atividade2.usuariosAtividade}"></td>
 										</tr>
 										</div>
                                     </tbody>
