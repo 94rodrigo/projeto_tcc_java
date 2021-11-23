@@ -175,6 +175,7 @@ public class DashboardController {
 		novoUser.setSenha(encodedPassword);
 		novoUser.setConfirmacaoSenha(encodedPassword);
 		novoUser.setEnabled(true);
+		novoUser.setPermitiuLocalizacao(false);
 		novoUser.setCadastrado(LocalDateTime.now());
 		administradorAtualizou = true;
 		userService.saveUser(novoUser);
