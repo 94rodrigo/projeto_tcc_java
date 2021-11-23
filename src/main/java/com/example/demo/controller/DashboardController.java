@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -173,6 +174,8 @@ public class DashboardController {
 		String encodedPassword = bCryptPasswordEncoder.encode(novoUser.getSenha());
 		novoUser.setSenha(encodedPassword);
 		novoUser.setConfirmacaoSenha(encodedPassword);
+		novoUser.setEnabled(true);
+		novoUser.setCadastrado(LocalDateTime.now());
 		administradorAtualizou = true;
 		userService.saveUser(novoUser);
 		
