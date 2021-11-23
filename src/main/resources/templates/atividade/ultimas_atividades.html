@@ -105,7 +105,7 @@
                                     <tbody>
 	                                    <div th:each="atividade : ${atividadesQueUsuariosParticipa}">
                                         <tr>
-											<td th:text="${atividade.nomeAtividade}"><a th:href="@{'/atividade/{id}'(id=${atividade.id})}" th:text="${atividade.nomeAtividade}"></a></td>
+											<td><a th:href="@{'/atividade/{id}'(id=${atividade.id})}" th:text="${atividade.nomeAtividade}"></a></td>
 											<td th:text="${atividade.nomeTipoAtividade}"></td>
 											<td th:text="${#temporals.format(atividade.dataAtividade, 'dd/MM/yyyy')} + ' - '  + ${#temporals.format(atividade.dataAtividade, 'HH:mm')}"></td>
 											<td th:text="${atividade.cidade} + ', ' + ${atividade.uf}"></td>
