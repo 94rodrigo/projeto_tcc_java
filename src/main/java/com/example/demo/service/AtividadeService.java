@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.Iterator;
 import java.util.List;
@@ -10,12 +11,16 @@ import org.springframework.stereotype.Service;
 import com.example.demo.model.Atividade;
 import com.example.demo.model.EstadoAtividade;
 import com.example.demo.repository.AtividadeRepository;
+import com.example.demo.repository.UserRepository;
 
 @Service
 public class AtividadeService {
 	
 	@Autowired
 	private AtividadeRepository atividadeRepository;
+	
+	@Autowired
+	private UserRepository userRepository;
 	
 	public List<Atividade> listarResultadosPorNomeOuDescricao(String keyword){
 		if (keyword != null) {
@@ -61,18 +66,18 @@ public class AtividadeService {
 				return atividadeRepository.findAll();
 			}
 			System.out.println("Número da atividade: " + keyword);
-			return atividadeRepository.buscaPorTipoAtividade(keyword);
+			return atividadeRepository.buscaPorTipoAtividade(keyword, EstadoAtividade.CONFIRMADO);
 		}
 		System.out.println("Número da atividade: " + keyword);
 		return atividadeRepository.findAll();
 	}
 	
-	public List<Atividade> listarResultadosPorLocal(String keyword){
+	public List<Atividade> listarResultadosPorLocal(String keyword, Principal principal){
 		if (keyword != null) {
 //			atividadeRepository.buscaLocalIgnoreCase(keyword, EstadoAtividade.CONFIRMADO)
 			return atividadeRepository.findByCidadeContainingOrEnderecoLocalContainingAndEstadoAtividadeAllIgnoreCase(keyword, keyword, EstadoAtividade.CONFIRMADO);
 		}
-		return atividadeRepository.findAll();
+		return atividadeRepository.findByCidadeContainingAndEstadoAtividadeAllIgnoreCase(userRepository.findByEmail(principal.getName()).getMunicipio(), EstadoAtividade.CONFIRMADO);
 	}
 	
 	public void deletarAtividade(Long id) {

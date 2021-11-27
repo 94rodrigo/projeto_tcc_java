@@ -375,7 +375,7 @@ public class AtividadeController {
 			break;
 		case "2":
 			this.buscandoPorLocal = true;
-			atividades = atividadeService.listarResultadosPorLocal(keyword);
+			atividades = atividadeService.listarResultadosPorLocal(keyword, principal);
 			if(this.buscandoPorLocal) {
 				int numeroResultado = 0;
 				double somaLatitude = 0, somaLongitude = 0;

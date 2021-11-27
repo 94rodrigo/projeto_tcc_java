@@ -66,8 +66,8 @@ public interface AtividadeRepository extends JpaRepository<Atividade, Long>{
 	@Query("select a from Atividade a where (a.cidade like %?1% or a.enderecoLocal like %?1% or a.uf like %?1%) and a.estadoAtividade = ?2")
 	List<Atividade> buscaLocalIgnoreCase(String keyword, EstadoAtividade estado);
 	
-	@Query("select a from Atividade a where a.tipoAtividade like %?1%")
-	List<Atividade> buscaPorTipoAtividade(String keyword);
+	@Query("select a from Atividade a where a.tipoAtividade like %?1% and a.estadoAtividade = ?2")
+	List<Atividade> buscaPorTipoAtividade(String keyword, EstadoAtividade estadoAtividade);
 	
 	@Query("select a from Atividade a where a.nomeAtividade = :nomeAtividade and "
 			+ "a.tipoAtividade = :tipoAtividade and a.uf = :uf and a.cidade = :cidade "
@@ -79,8 +79,10 @@ public interface AtividadeRepository extends JpaRepository<Atividade, Long>{
 	
 	List<Atividade> findByCidadeContainingOrEnderecoLocalContainingAndEstadoAtividadeAllIgnoreCase(String cidade, String enderecoLocal, EstadoAtividade estadoAtividade);
 	
-	List<Atividade> findByNomeAtividadeContainingOrDescricaoContainingAndEstadoAtividadeAllIgnoreCase(String nomeAtividade, String descricao, EstadoAtividade estadoAtividade);
+	List<Atividade> findByCidadeContainingAndEstadoAtividadeAllIgnoreCase(String cidade, EstadoAtividade estadoAtividade);
 	
+	List<Atividade> findByNomeAtividadeContainingOrDescricaoContainingAndEstadoAtividadeAllIgnoreCase(String nomeAtividade, String descricao, EstadoAtividade estadoAtividade);
+		
 	@Transactional
 	@Modifying
 	@Query(value = "delete from user_atividades where atividade_id = ?1", nativeQuery = true)

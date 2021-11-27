@@ -94,7 +94,7 @@
                                         <p>Tipo: <span th:text="${atividade.nomeTipoAtividade}"></span></p>
                                         <p>Data: <span th:text="${#temporals.format(atividade.dataAtividade, 'dd/MM/yyyy')} + ' - '  + ${#temporals.format(atividade.dataAtividade, 'HH:mm')}"></span></p>
                                         <p>Descrição: <span th:text="${atividade.descricao}"></span></p>
-                                        <p>Usuário: <span th:text="${atividade.nomeCompletoUsuario}"></span></p>
+                                        <p>Usuário: <a th:href="@{'/informacoesUsuario/{id}'(id=${atividade.user.id})}" th:text="${atividade.nomeCompletoUsuario}"></a></p>
                                         <div class="row mt-3">
                                             <div class="col-sm-6 mt-3">
                                                 <form method="post" th:action="@{'/atividade/{id}/aprovar'(id=${atividade.id})}">
@@ -115,6 +115,7 @@
                                         </div>
                                     </div>
                                 </div>
+                                <br>
                             </div>
                         </div>
 
