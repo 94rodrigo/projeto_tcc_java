@@ -110,6 +110,20 @@
 	                                	</div>
 	                                </div>
                                	</div>
+                               	<div sec:authorize="hasAnyAuthority('ADMIN')">
+                               		<br>
+                               		<div th:if="${atividade.confirmado}">
+							            <form th:action="@{'/atividade/{id}/cancelar/admin'(id=${atividade.id})}" method="post">
+		                                	<button class="btn btn-danger" type="submit">Cancelar atividade</button>
+		                                </form>
+	                                </div>
+                               		<div th:if="${atividade.cancelado}">
+							            <form th:action="@{'/atividade/{id}/confirmar/admin'(id=${atividade.id})}" method="post">
+		                                	<button class="btn btn-success" type="submit">Confirmar atividade</button>
+		                                </form>
+	                                </div>
+	                                <br>
+					            </div>
                            	</div>
                           </div>
                           <div class="card shadow mb-4">

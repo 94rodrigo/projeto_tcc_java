@@ -273,6 +273,10 @@ public class Atividade {
 		return estadoAtividade.equals(EstadoAtividade.CANCELADO);
 	}
 	
+	public Boolean getConfirmado() {
+		return estadoAtividade.equals(EstadoAtividade.CONFIRMADO);
+	}
+	
 	public Boolean getPendente() {
 		return estadoAtividade.equals(EstadoAtividade.PENDENTE);
 	}

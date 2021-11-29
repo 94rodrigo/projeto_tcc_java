@@ -347,6 +347,18 @@ public class AtividadeController {
 		return "redirect:/userAtividades";
 	}
 	
+	@RequestMapping(path = "/atividade/{id}/cancelar/admin", method = RequestMethod.POST)
+	public String cancelarAtividadeAdmin(@PathVariable Long id) {
+		atividadeRepository.alterarEstadoAtividade(EstadoAtividade.CANCELADO, id);
+		return "redirect:/atividade/{id}";
+	}
+	
+	@RequestMapping(path = "/atividade/{id}/confirmar/admin", method = RequestMethod.POST)
+	public String confirmarAtividadeAdmin(@PathVariable Long id) {
+		atividadeRepository.alterarEstadoAtividade(EstadoAtividade.CONFIRMADO, id);
+		return "redirect:/atividade/{id}";
+	}
+	
 	public void obterCoordenadas(String endereco) throws ApiException, InterruptedException, IOException {
 		GeocodingResult[] results = GeocodingApi.geocode(CoordenadasApi.getContexto(), endereco).await();
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
