@@ -102,7 +102,8 @@
 	                                    <div th:each="log : ${logDeAcoes}">
 	                                        <tr>
 												<td th:text="${#temporals.format(log.horarioAcao, 'dd/MM/yyyy')} + ' - ' + ${#temporals.format(log.horarioAcao, 'HH:mm')}"></td>
-												<td><a th:href="@{'/informacoesUsuario/{id}'(id=${log.user.id})}" th:text="${log.nomeUsuario}"></a></td>
+												<td th:text="${log.nomeUsuario}"></td>
+												<!-- <td><a th:href="@{'/informacoesUsuario/{id}'(id=${log.user.id})}" th:text="${log.nomeUsuario}"></a></td> -->
 												<td th:text="${log.acao}"></td>
 											</tr>
 										</div>
