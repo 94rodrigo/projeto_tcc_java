@@ -85,7 +85,12 @@
                                 <p>Quando: <span th:text="${#temporals.format(atividade.dataAtividade, 'dd/MM/yyyy')}"></span></p>
                                 <p>Situação: <span th:text="${atividade.estadoAtividadeNome}"></span></p>
                                 <p>Descrição: <span th:text="${atividade.descricao}"></span></p>
-                                <p>Cadastrado por: <span th:text="${atividade.nomeCompletoUsuario}"></span></p>
+                                <div sec:authorize="hasAnyAuthority('ADMIN')">
+                                	<p>Cadastrado por: <a th:href="@{'/informacoesUsuario/{id}'(id=${atividade.user.id})}" th:text="${atividade.nomeCompletoUsuario}"></a></p>
+                                </div>
+                                <div sec:authorize="hasAnyAuthority('USER')">
+	                                <p>Cadastrado por: <span th:text="${atividade.nomeCompletoUsuario}"></span></p>
+                                </div>
                                 <p>Participantes: <span th:text="${atividade.usuariosAtividade}"></span> confirmados</p>
                                 
                                 <div th:if="${atividade.ocorridoOuCancelado}">
