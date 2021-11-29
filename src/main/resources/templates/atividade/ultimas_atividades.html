@@ -29,7 +29,7 @@
 
 </head>
 
-<body id="page-top" onload="onLoad()">
+<body id="page-top">
 
     <!-- Page Wrapper -->
     <div id="wrapper">
@@ -215,98 +215,6 @@
     <!-- Page level custom scripts -->
     <script src="/js/demo/datatables-demo.js"></script>
     
-    
-	<script>
-	    function onLoad() {
-	        var app = new Vue(
-	            {
-	                el: '#atividades',
-	                data: {
-	                    coordenadas: []
-	                },
-	                mounted() {
-	                    this.coordenadas = coordenadasJson('#coordenadas');
-	                    console.log(this.coordenadas);
-	                    initMap();
-	                }
-	            }
-	        );
-	    }
-	    
-	    function coordenadasJson(seletor){
-	    	let arrayCoordenadas = [];
-	    	let campos = document.querySelectorAll(seletor);
-	    	let arrayCoordenadasJson = [];
-	
-	    	campos.forEach(element => {
-	    	    arrayCoordenadas.push(element.innerText.replace(/[\n ]/g, ''));
-	    	});
-	
-	    	arrayCoordenadas.forEach(element => {
-	    	    arrayCoordenadasJson.push(JSON.parse(element));
-	    	});
-	        
-	        return arrayCoordenadasJson;
-	    }
-	    
-	    function initMap() {
-	        const map = new google.maps.Map(document.getElementById("map"), {
-	            zoom: 13,
-	            center: { lat: coordenadasMedias(coordenadasJson('#coordenadasCentro'))[0], lng: coordenadasMedias(coordenadasJson('#coordenadasCentro'))[1] },
-	        });
-	        // Create an array of alphabetical characters used to label the markers.
-	        const labels = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-	        // Add some markers to the map.
-	        // Note: The code uses the JavaScript Array.prototype.map() method to
-	        // create an array of markers based on a given "locations" array.
-	        // The map() method here has nothing to do with the Google Maps API.
-	        const markers = coordenadasJson('#coordenadas').map((location, i) => {
-	            return new google.maps.Marker({
-	                position: location,
-	                label: labels[i % labels.length],
-	            });
-	        });
-	
-	        // Add a marker clusterer to manage the markers.
-	        new MarkerClusterer(map, markers, {
-	            imagePath:
-	                "img/marcadores/m",
-	        });
-	    }
-	    
-	    var markerCluster = new MarkerClusterer(map, markers,
-	            {imagePath: `img/marcadores/m`});
-	    
-	    function coordenadasMedias(locations) {
-	        let coordenadas = [];
-	        
-	        let longitude = 0;
-	        let latitude = 0;
-	        locations.forEach(element => {
-	            latitude += element.lat;
-	            longitude += element.lng;
-	        });
-
-	        coordenadas.push(latitude / locations.length);
-	        coordenadas.push(longitude / locations.length);
-	        return coordenadas;
-	    }
-	    
-	    function success(pos){
-	        let crd = pos.coords;
-	        let vetor = [];
-	        vetor.push(crd.latitude);
-	        vetor.push(crd.longitude);
-	        return vetor;
-	    }
-	    
-	    function error(err){
-	        console.warn(`ERROR ${err.code}: ${err.message}`);
-	        return null;
-	    }
-	    
-		
-	</script>
     
     <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
